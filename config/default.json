@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://ruaridh:Mong0ose@cluster0.tovyc.mongodb.net/EdMiliano?retryWrites=true&w=majority",
+  "jwtSecret": "Secret"
+}
