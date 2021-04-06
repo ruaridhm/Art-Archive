@@ -1,7 +1,7 @@
 {
-  "name": "vinyl-library",
+  "name": "Ed-Miliano-Archive",
   "version": "1.0.0",
-  "description": "Vinyl Library App",
+  "description": "Ed Miliano Archive",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

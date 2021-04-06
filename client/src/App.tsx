@@ -3,9 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PrivateRoute from './components/routing/PrivateRoute.js';
 import Navbar from './components/layout/Navbar/Navbar';
 import Home from './components/pages/Home/Home';
-import Library from './components/pages/Library/Library';
 import User from './components/pages/User/User';
-
+import Gallery from './components/pages/Gallery/Gallery';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Alerts from './components/layout/Alerts/Alerts';
@@ -40,12 +39,12 @@ const App = () => {
             <Router>
               <Fragment>
                 <SideBar pageWrapId='page-wrap' outerContainerId='App' />
-                <Navbar title='Vinyl Library' toggleTheme={toggleTheme} />
+                <Navbar title='Ed Miliano' toggleTheme={toggleTheme} />
                 <Alerts />
                 <Switch>
                   <PrivateRoute exact path='/' component={Home} />
                   <PrivateRoute exact path='/user' component={User} />
-                  <PrivateRoute exact path='/library' component={Library} />
+                  <PrivateRoute exact path='/gallery' component={Gallery} />
                   <PrivateRoute exact path='/register' component={Register} />
                   <Route exact path='/login' component={Login} />
                 </Switch>

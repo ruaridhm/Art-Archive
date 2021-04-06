@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   DropdownContainer,
@@ -10,6 +10,7 @@ import {
   DropdownList,
   DropdownListItem,
   DropdownListItemButton,
+  Scrollbar,
 } from './Style';
 
 interface itemInterface {
@@ -23,6 +24,8 @@ interface DropdownProps {
   multiSelect?: boolean;
   selection: Array<{ id: number; title: string }>;
   setSelection: React.Dispatch<React.SetStateAction<any[]>>;
+  open: string;
+  setOpen: any;
 }
 
 const Dropdown = ({
@@ -30,17 +33,19 @@ const Dropdown = ({
   items,
   multiSelect = false,
   selection,
+  open,
+  setOpen,
   setSelection,
 }: DropdownProps) => {
-  const [open, setOpen] = useState<boolean>(false);
-
-  const toggle = () => setOpen(!open);
+  const toggle = () => {
+    open === title ? setOpen('') : setOpen(title);
+  };
 
   const handleOnClick = (item) => {
     if (!selection.some((current) => current.id === item.id)) {
       if (!multiSelect) {
         setSelection([item]);
-        setOpen(false);
+        setOpen('');
       } else if (multiSelect) {
         setSelection([...selection, item]);
       }
@@ -74,22 +79,24 @@ const Dropdown = ({
             {selection.length > 0 ? selection[0].title : ''}
           </DropdownHeaderTitle>
           <DropdownHeaderAction>
-            <p>{open ? 'Close' : 'Open'}</p>
+            <p>{open === title ? 'Close' : 'Open'}</p>
           </DropdownHeaderAction>
         </DropdownHeader>
-        {open && (
+        {open === title && (
           <DropdownList>
-            {items.map((item) => (
-              <DropdownListItem key={item.id}>
-                <DropdownListItemButton
-                  type='button'
-                  onClick={() => handleOnClick(item)}
-                >
-                  <span>{item.title}</span>
-                  <span>{isItemInSelection(item) && 'Selected'}</span>
-                </DropdownListItemButton>
-              </DropdownListItem>
-            ))}
+            <Scrollbar>
+              {items.map((item) => (
+                <DropdownListItem key={item.id}>
+                  <DropdownListItemButton
+                    type='button'
+                    onClick={() => handleOnClick(item)}
+                  >
+                    <span>{item.title}</span>
+                    <span>{isItemInSelection(item) && 'Selected'}</span>
+                  </DropdownListItemButton>
+                </DropdownListItem>
+              ))}
+            </Scrollbar>
           </DropdownList>
         )}
       </DropdownWrapper>

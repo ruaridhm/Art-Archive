@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 
 interface StyledButtonInterface {
+  solidPlain?: boolean;
   solidPrimary?: boolean;
   solidWarning?: boolean;
   solidDanger?: boolean;
@@ -14,6 +15,7 @@ interface StyledButtonInterface {
   circleDanger?: boolean;
   circleSuccess?: boolean;
   small?: boolean;
+  mediumSmall?: boolean;
   medium?: boolean;
   large?: boolean;
 }
@@ -27,10 +29,20 @@ export const StyledButton = styled.button<StyledButtonInterface>`
   transition: transform 0.4s ease;
   margin: 1rem 0.1rem;
   position: relative;
+
   &:hover {
     filter: brightness(90%);
     color: ${({ theme }) => theme.white};
   }
+
+  ${({ solidPlain }) =>
+    solidPlain &&
+    css`
+      border-radius: 2px;
+      border: none;
+      background-color: ${({ theme }) => theme.darkGrey};
+      color: ${({ theme }) => theme.white};
+    `}
 
   ${({ solidPrimary }) =>
     solidPrimary &&
@@ -120,11 +132,19 @@ export const StyledButton = styled.button<StyledButtonInterface>`
       color: ${({ theme }) => theme.lightColor};
     `}
 
+  
+
     ${({ small }) =>
     small &&
     css`
       padding: 0.3em 0.7em;
       font-size: 1rem;
+    `}
+    ${({ mediumSmall }) =>
+    mediumSmall &&
+    css`
+      padding: 0.315em 1em;
+      font-size: 1.15rem;
     `}
 
     ${({ medium }) =>

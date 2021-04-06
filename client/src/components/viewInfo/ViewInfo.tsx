@@ -12,26 +12,24 @@ import {
 const ViewInfo = ({
   title,
   artist,
-  label,
-  catalogNumber,
-  releaseDate,
-  recordCondition,
-  sleeveCondition,
-  country,
-  locationPrimary,
-  locationSecondary,
-  barcode,
-  coverFront,
-  genre,
-  style,
-  comment,
-  rating,
-  cover,
-  innerSleeve,
-  outerSleeve,
-  wishList,
-  want,
-  have,
+  reference,
+  collectionName,
+  image,
+  date,
+  size,
+  medium,
+  price,
+  currentLocation,
+  mediaLinks,
+  notes,
+  firstExhibitedDate,
+  firstExhibitedTitle,
+  firstExhibitedAddress,
+  exhibited,
+  submission,
+  salesHistorySoldTo,
+  salesHistorySoldBy,
+  salesHistoryDateSold,
 }: RecordInterface) => {
   return (
     <ViewInfoContainer>
@@ -48,123 +46,111 @@ const ViewInfo = ({
             {artist}
           </Stat>
         )}
-        {label && (
+        {reference && (
           <Stat>
-            <strong>Label: </strong>
-            {label}
+            <strong>Ref: </strong>
+            {reference}
           </Stat>
         )}
-        {catalogNumber && (
+        {collectionName && (
           <Stat>
-            <strong>Catalog Number: </strong>
-            {catalogNumber}
+            <strong>Collection Name: </strong>
+            {collectionName}
           </Stat>
         )}
-        {releaseDate && (
+        {date && (
           <Stat>
-            <strong>Release Date: </strong>
-            {releaseDate}
+            <strong>Date: </strong>
+            {date}
           </Stat>
         )}
-        {recordCondition && (
+        {size && (
           <Stat>
-            <strong>Record Condition: </strong>
-            {recordCondition}
+            <strong>Size: </strong>
+            {size}
           </Stat>
         )}
-        {sleeveCondition && (
+        {medium && (
           <Stat>
-            <strong>Sleeve Condition: </strong>
-            {sleeveCondition}
+            <strong>Medium: </strong>
+            {medium}
           </Stat>
         )}
-        {country && (
+        {price && (
           <Stat>
-            <strong>Country: </strong>
-            {country}
+            <strong>Price: </strong>
+            {price}
           </Stat>
         )}
-        {locationPrimary && (
+        {currentLocation && (
           <Stat>
-            <strong>Location Primary: </strong>
-            {locationPrimary}
+            <strong>Current Location: </strong>
+            {currentLocation}
           </Stat>
         )}
-        {locationSecondary && (
+        {mediaLinks && (
           <Stat>
-            <strong>Location Secondary: </strong>
-            {locationSecondary}
+            <strong>Media Links: </strong>
+            {mediaLinks}
           </Stat>
         )}
-        {barcode && (
+        {notes && (
           <Stat>
-            <strong>Barcode: </strong>
-            {barcode}
+            <strong>Notes: </strong>
+            {notes}
           </Stat>
         )}
-        {genre[0] !== '' && (
+        {firstExhibitedDate && (
           <Stat>
-            <strong>Genre: </strong>
-            {genre}
+            <strong>Date First Exhibited: </strong>
+            {firstExhibitedDate}
           </Stat>
         )}
-        {style[0] !== '' && (
+        {firstExhibitedTitle && (
           <Stat>
-            <strong>Style: </strong>
-            {style}
+            <strong>First Exhibition Title: </strong>
+            {firstExhibitedTitle}
           </Stat>
         )}
-        {comment && (
+        {firstExhibitedAddress && (
           <Stat>
-            <strong>Comment: </strong>
-            {comment}
+            <strong>First Venue Address: </strong>
+            {firstExhibitedAddress}
           </Stat>
         )}
-        {rating && (
+        {exhibited && (
           <Stat>
-            <strong>Rating: </strong>
-            {rating}
+            <strong>Exhibited: </strong>
+            {exhibited}
           </Stat>
         )}
-        {cover && (
+        {submission && (
           <Stat>
-            <strong>Cover: </strong>
-            {cover}
+            <strong>Submission: </strong>
+            {submission}
           </Stat>
         )}
-        {innerSleeve && (
+        {salesHistorySoldTo && (
           <Stat>
-            <strong>Inner Sleeve: </strong>
-            {innerSleeve}
+            <strong>Sold To: </strong>
+            {salesHistorySoldTo}
           </Stat>
         )}
-        {outerSleeve && (
+        {salesHistorySoldBy && (
           <Stat>
-            <strong>Outer Sleeve: </strong>
-            {outerSleeve}
+            <strong>Sold By: </strong>
+            {salesHistorySoldBy}
           </Stat>
         )}
-        {wishList && (
+        {salesHistoryDateSold && (
           <Stat>
-            <strong>Wishlist: </strong>
-            {wishList}
-          </Stat>
-        )}
-        {want && (
-          <Stat>
-            <strong>Want: </strong>
-            {want}
-          </Stat>
-        )}
-        {have && (
-          <Stat>
-            <strong>Have: </strong>
-            {have}
+            <strong>Date Sold: </strong>
+            {salesHistoryDateSold}
           </Stat>
         )}
       </DetailsContainer>
       <ImageContainer>
-        <ImageSlider coverFront={coverFront} />
+        <ImageSlider coverFront={image} />
       </ImageContainer>
     </ViewInfoContainer>
   );

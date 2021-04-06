@@ -5,21 +5,6 @@ export const HomeContainer = styled.div`
   flex-direction: column;
 `;
 
-export const HomeGrid = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;
-
-export const Spacer = styled.div`
-  width: 22rem;
-  padding: 0.5em;
-  margin: 0.5em;
-  @media (max-width: 1170px) {
-    display: none;
-  }
-`;
-
 export const HomeFilterContainer = styled.div`
   width: 22rem;
   padding: 0.5em;
@@ -79,4 +64,21 @@ export const AddRecordButtonContainer = styled.div`
 export const AddRecordButtonDescription = styled.p`
   margin: 0;
   text-align: center;
+`;
+
+export const SortRecords = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 22rem;
+  padding: 0.5em;
+  margin: 0.5em;
+`;
+
+export const Controls = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  place-items: center;
+  place-content: center;
 `;

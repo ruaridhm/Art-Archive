@@ -29,30 +29,30 @@ import { RecordInterface } from '../RecordItem/RecordItem';
 
 const emptyItemObject = {
   title: '',
-  artist: '',
-  ref: '',
+  artist: 'Ed Miliano',
+  reference: '',
   collectionName: '',
   image: '',
-  date: null,
+  date: '',
   size: '',
   medium: '',
   price: null,
   currentLocation: '',
-  mediaLinks: null,
+  mediaLinks: '',
   notes: '',
-  firstDateExhibited: null,
-  firstExhibitionTitle: '',
-  firstVenueAddress: '',
-  exhibited: {},
-  submission: {},
+  firstExhibitedDate: '',
+  firstExhibitedTitle: '',
+  firstExhibitedAddress: '',
+  exhibited: [],
+  submission: [],
   salesHistorySoldTo: '',
   salesHistorySoldBy: '',
-  salesHistoryDateSold: null,
+  salesHistoryDateSold: '',
 };
 interface Step1Props {
   title?: string;
   artist?: string;
-  ref?: string;
+  reference?: string;
   collectionName?: string;
   image?: string;
   onChange: (e: any) => void;
@@ -61,7 +61,7 @@ interface Step1Props {
 const Step1 = ({
   title,
   artist,
-  ref,
+  reference,
   collectionName,
   image,
   onChange,
@@ -91,8 +91,8 @@ const Step1 = ({
         outline
         type='text'
         title='Ref'
-        name='ref'
-        value={ref}
+        name='reference'
+        value={reference}
         onChange={onChange}
       />
       <TextField
@@ -118,10 +118,10 @@ const Step1 = ({
 };
 
 interface Step2Props {
-  date?: string;
+  date?: Date;
   size?: string;
   medium?: string;
-  price?: string;
+  price?: Number;
   currentLocation?: string;
   onChange: (e: any) => void;
 }
@@ -139,7 +139,7 @@ const Step2 = ({
       <TextField
         medium
         outline
-        type='text'
+        type='date'
         title='Date'
         name='date'
         value={date}
@@ -166,7 +166,7 @@ const Step2 = ({
       <TextField
         medium
         outline
-        type='text'
+        type='number'
         title='Price'
         name='price'
         value={price}
@@ -190,7 +190,7 @@ interface Step3Props {
   notes?: string;
   salesHistorySoldTo?: string;
   salesHistorySoldBy?: string;
-  salesHistoryDateSold?: string;
+  salesHistoryDateSold?: Date;
   onChange: (e: any) => void;
 }
 
@@ -243,7 +243,7 @@ const Step3 = ({
       <TextField
         medium
         outline
-        type='text'
+        type='date'
         title='Date Sold'
         name='salesHistoryDateSold'
         value={salesHistoryDateSold}
@@ -254,15 +254,20 @@ const Step3 = ({
 };
 
 interface Step4Props {
+  firstExhibitedDate?: string;
+  firstExhibitedTitle?: string;
+  firstExhibitedAddress?: string;
   exhibited?: any;
   submission?: any;
   onChange: (e: any) => void;
 }
 
 const Step4 = ({
+  firstExhibitedDate,
+  firstExhibitedTitle,
+  firstExhibitedAddress,
   exhibited,
   submission,
-
   onChange,
 }: Step4Props) => {
   return (
@@ -270,34 +275,34 @@ const Step4 = ({
       <TextField
         medium
         outline
-        type='text'
-        title='Exhibition Date'
-        name='exhibitionDate'
-        value={exhibited.exhibitionDate}
+        type='date'
+        title='First Exhibition Date'
+        name='firstExhibitedDate'
+        value={firstExhibitedDate}
         onChange={onChange}
       />
       <TextField
         medium
         outline
         type='text'
-        title='Exhibition Title'
-        name='exhibitionTitle'
-        value={exhibited.exhibitionTitle}
+        title='First Exhibition Title'
+        name='firstExhibitedTitle'
+        value={firstExhibitedTitle}
         onChange={onChange}
       />
       <TextField
         medium
         outline
         type='text'
-        title='Exhibition Address'
-        name='exhibitionAddress'
-        value={exhibited.exhibitionAddress}
+        title='First Exhibition Address'
+        name='firstExhibitedAddress'
+        value={firstExhibitedAddress}
         onChange={onChange}
       />
       <TextField
         medium
         outline
-        type='text'
+        type='date'
         title='Submission Date'
         name='submissionDate'
         value={submission.submissionDate}
@@ -357,69 +362,50 @@ const RecordForm = ({
 
   useEffect(() => {
     if (current !== null) {
-      setRecord(current);
+      setItem(current);
     } else {
-      setRecord(emptyItemObject);
+      setItem(emptyItemObject);
     }
   }, [recordContext, current]);
 
-  const [record, setRecord] = useState<RecordInterface>(emptyItemObject);
+  const [item, setItem] = useState<RecordInterface>(emptyItemObject);
 
   const {
     title,
     artist,
-    label,
-    catalogNumber,
-    releaseDate,
-    // format,
-    country,
-    coverFront,
-    // coverBack,
-    // coverLp,
-    recordCondition,
-    sleeveCondition,
-    barcode,
-    locationPrimary,
-    locationSecondary,
-    // want,
-    // have,
-    genre,
-    style,
-    cover,
-    innerSleeve,
-    outerSleeve,
-    comment,
-    rating,
-    wishList,
-  } = record;
+    reference,
+    collectionName,
+    image,
+    date,
+    size,
+    medium,
+    price,
+    currentLocation,
+    mediaLinks,
+    notes,
+    firstExhibitedDate,
+    firstExhibitedTitle,
+    firstExhibitedAddress,
+    exhibited,
+    submission,
+    salesHistorySoldTo,
+    salesHistorySoldBy,
+    salesHistoryDateSold,
+  } = item;
 
-  const onChange = (e: { target: { type: string; name: any; value: any } }) => {
-    if (e.target.type !== undefined && e.target.type === 'text') {
-      setRecord({ ...record, [e.target.name]: e.target.value });
-    }
-  };
-
-  const handleChecked = (e: {
-    current: { type: string; checked: boolean; name: any };
-  }) => {
-    if (e.current.type === 'checkbox') {
-      console.log(e.current.checked);
-      e.current.checked = !e.current.checked;
-      console.log(e.current.checked);
-      setRecord({ ...record, [e.current.name]: e.current.checked });
-    }
-  };
-  const handleRating = (e: any) => {
-    setRecord({ ...record, rating: e });
+  const onChange = (e: { target: { type: any; name: string; value: any } }) => {
+    // if (e.target.type !== undefined && e.target.type === 'text') {
+    setItem({ ...item, [e.target.name]: e.target.value });
+    // }
   };
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (current === null) {
-      addRecord(record);
+      addRecord(item);
     } else {
-      updateRecord(record);
+      updateRecord(item);
       clearCurrent();
       setDisplayAddRecord(false);
     }
@@ -434,21 +420,6 @@ const RecordForm = ({
   };
 
   useKey('Escape', close);
-  // useKey('Digit1', () => {
-  //   setCurrentStep(1);
-  // });
-  // useKey('Digit2', () => {
-  //   setCurrentStep(2);
-  // });
-  // useKey('Digit3', () => {
-  //   setCurrentStep(3);
-  // });
-  // useKey('Digit4', () => {
-  //   setCurrentStep(4);
-  // });
-  // useKey('KeyA', () => {
-  //   setShowAllSteps(!showAllSteps);
-  // });
 
   if (showAllSteps === true) {
     return (
@@ -457,7 +428,7 @@ const RecordForm = ({
           <FormHeader>
             <IconContainer></IconContainer>
             <FormHeaderText>
-              {current ? 'Edit Record' : 'Add Record'}
+              {current ? 'Edit Item' : 'Add Item'}
             </FormHeaderText>
             <RecordFormCloseButton onClick={close}>
               <RecordFormCloseButtonIcon className='fas fa-times'></RecordFormCloseButtonIcon>
@@ -467,38 +438,37 @@ const RecordForm = ({
             <Step1
               title={title}
               artist={artist}
-              label={label}
-              catalogNumber={catalogNumber}
-              releaseDate={releaseDate}
+              reference={reference}
+              collectionName={collectionName}
+              image={image}
               onChange={onChange}
             />
 
             <Step2
-              recordCondition={recordCondition}
-              sleeveCondition={sleeveCondition}
-              country={country}
-              locationPrimary={locationPrimary}
-              locationSecondary={locationSecondary}
+              date={date}
+              size={size}
+              medium={medium}
+              price={price}
+              currentLocation={currentLocation}
               onChange={onChange}
             />
 
             <Step3
-              barcode={barcode}
-              coverFront={coverFront}
-              genre={genre}
-              style={style}
-              comment={comment}
+              mediaLinks={mediaLinks}
+              notes={notes}
+              salesHistorySoldTo={salesHistorySoldTo}
+              salesHistorySoldBy={salesHistorySoldBy}
+              salesHistoryDateSold={salesHistoryDateSold}
               onChange={onChange}
             />
 
             <Step4
-              rating={rating}
-              cover={cover}
-              innerSleeve={innerSleeve}
-              outerSleeve={outerSleeve}
-              wishList={wishList}
-              handleChecked={handleChecked}
-              handleRating={handleRating}
+              firstExhibitedDate={firstExhibitedDate}
+              firstExhibitedTitle={firstExhibitedTitle}
+              firstExhibitedAddress={firstExhibitedAddress}
+              exhibited={exhibited}
+              submission={submission}
+              onChange={onChange}
             />
           </ShowAllRecordForm>
           <RecordFormStepButtonContainer>
@@ -518,7 +488,7 @@ const RecordForm = ({
               type='submit'
               small
               solidSuccess
-              label={current ? 'Update Record' : 'Add Record'}
+              label={current ? 'Update Item' : 'Add Item'}
             />
 
             {current && (
@@ -541,7 +511,7 @@ const RecordForm = ({
           <FormHeader>
             <IconContainer></IconContainer>
             <FormHeaderText>
-              {current ? 'Edit Record' : 'Add Record'}
+              {current ? 'Edit Item' : 'Add Item'}
             </FormHeaderText>
             <RecordFormCloseButton onClick={close}>
               <RecordFormCloseButtonIcon className='fas fa-times'></RecordFormCloseButtonIcon>
@@ -551,38 +521,37 @@ const RecordForm = ({
             <Step1
               title={title}
               artist={artist}
-              label={label}
-              catalogNumber={catalogNumber}
-              releaseDate={releaseDate}
+              reference={reference}
+              collectionName={collectionName}
+              image={image}
               onChange={onChange}
             />
           ) : currentStep === 2 ? (
             <Step2
-              recordCondition={recordCondition}
-              sleeveCondition={sleeveCondition}
-              country={country}
-              locationPrimary={locationPrimary}
-              locationSecondary={locationSecondary}
+              date={date}
+              size={size}
+              medium={medium}
+              price={price}
+              currentLocation={currentLocation}
               onChange={onChange}
             />
           ) : currentStep === 3 ? (
             <Step3
-              barcode={barcode}
-              coverFront={coverFront}
-              genre={genre}
-              style={style}
-              comment={comment}
+              mediaLinks={mediaLinks}
+              notes={notes}
+              salesHistorySoldTo={salesHistorySoldTo}
+              salesHistorySoldBy={salesHistorySoldBy}
+              salesHistoryDateSold={salesHistoryDateSold}
               onChange={onChange}
             />
           ) : currentStep === 4 ? (
             <Step4
-              rating={rating}
-              cover={cover}
-              innerSleeve={innerSleeve}
-              outerSleeve={outerSleeve}
-              wishList={wishList}
-              handleChecked={handleChecked}
-              handleRating={handleRating}
+              firstExhibitedDate={firstExhibitedDate}
+              firstExhibitedTitle={firstExhibitedTitle}
+              firstExhibitedAddress={firstExhibitedAddress}
+              exhibited={exhibited}
+              submission={submission}
+              onChange={onChange}
             />
           ) : null}
 
@@ -640,7 +609,7 @@ const RecordForm = ({
               type='submit'
               small
               solidSuccess
-              label={current ? 'Update Record' : 'Add Record'}
+              label={current ? 'Update Item' : 'Add Item'}
             />
 
             {current && (

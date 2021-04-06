@@ -19,7 +19,7 @@ export const NavLinkList = styled.ul`
   display: flex;
   list-style: none;
   font-weight: bold;
-  color: ${({ theme }) => theme.backgroundLight};
+  color: ${({ theme }) => theme.white};
   margin: 0;
   @media (max-width: 380px) {
     padding-left: 0;
@@ -43,15 +43,15 @@ export const ThemeToggleContainer = styled.div`
 
 export const NavListItem = styled.li`
   margin: 1em;
-  color: ${({ theme }) => theme.backgroundLight};
+  color: ${({ theme }) => theme.white};
   display: flex;
   align-items: center;
   a {
-    color: ${({ theme }) => theme.backgroundLight};
+    color: ${({ theme }) => theme.white};
     text-decoration: none;
     &:hover {
       text-decoration: underline;
-      color: ${({ theme }) => theme.lightColor};
+      color: ${({ theme }) => theme.lighterGrey};
     }
   }
 `;
@@ -61,5 +61,5 @@ export const NavTitle = styled.h1`
   align-items: center;
   margin: 0;
   white-space: nowrap;
-  color: ${({ theme }) => theme.lightColor};
+  color: ${({ theme }) => theme.white};
 `;

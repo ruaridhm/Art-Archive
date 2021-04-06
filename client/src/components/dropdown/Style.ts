@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
 export const DropdownContainer = styled.div`
-  max-width: 1140px;
-  width: 100%;
+  width: 20em;
   margin: auto;
 `;
 
@@ -41,8 +40,40 @@ export const DropdownList = styled.ul`
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
   padding: 0;
   margin: 0;
+  width: 19.9em;
+  height: 10rem;
+  margin-top: 55px;
+  position: absolute;
+`;
+
+export const Scrollbar = styled.div`
+  float: left;
+  height: fit-content;
+  max-height: 15em;
   width: 100%;
-  margin-top: 1em;
+  background: #999;
+  overflow-y: scroll;
+  margin-bottom: 25px;
+  border-bottom: 1px solid grey;
+
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #f5f5f5;
+  }
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    background-color: #f5f5f5;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #999;
+  }
 `;
 
 export const DropdownListItem = styled.li`

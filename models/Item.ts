@@ -12,7 +12,7 @@ const ItemSchema = mongoose.Schema({
     type: String,
     default: 'Ed Miliano',
   },
-  ref: {
+  reference: {
     type: String,
   },
   collectionName: {
@@ -36,23 +36,22 @@ const ItemSchema = mongoose.Schema({
   currentLocation: {
     type: String,
   },
-  mediaLinks: [
-    {
-      type: String,
-    },
-  ],
+  mediaLinks: {
+    type: String,
+  },
+
   notes: {
     type: String,
   },
 
   //Exhibition History
-  firstDateExhibited: {
+  firstExhibitedDate: {
     type: Date,
   },
-  firstExhibitionTitle: {
+  firstExhibitedTitle: {
     type: String,
   },
-  firstVenueAddress: {
+  firstExhibitedAddress: {
     type: String,
   },
   exhibited: [

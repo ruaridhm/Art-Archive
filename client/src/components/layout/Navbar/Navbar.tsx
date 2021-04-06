@@ -2,7 +2,6 @@ import React, { Fragment, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
-import mainLogo from '../../../images/Logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../../modal/Modal';
@@ -11,7 +10,6 @@ import ModalPortal from '../../modal/ModalPortal';
 
 import {
   NavbarContainer,
-  NavLogo,
   NavLinkList,
   NavLinkListRight,
   NavListItem,
@@ -30,7 +28,7 @@ const Navbar = ({ title, toggleTheme }: NavbarProps) => {
   const [showLogoutConfirmModal, setShowLogoutConfirmModal] = useState<boolean>(
     false
   );
-  const { isAuthenticated, logout, user } = authContext;
+  const { isAuthenticated, logout } = authContext;
   const { clearRecords } = recordContext;
 
   const [mode, setMode] = useState(false);
@@ -53,7 +51,7 @@ const Navbar = ({ title, toggleTheme }: NavbarProps) => {
         <Link to='/user'>Collection Stats.</Link>
       </NavListItem>
       <NavListItem>
-        <Link to='/library'>Library</Link>
+        <Link to='/gallery'>Gallery</Link>
       </NavListItem>
       <NavListItem>
         <ToggleSwitch
@@ -113,14 +111,7 @@ const Navbar = ({ title, toggleTheme }: NavbarProps) => {
         <NavLinkList>
           <NavListItem>
             <Link to='/'>
-              <NavTitle>
-                <NavLogo
-                  src={mainLogo}
-                  alt='Ed Miliano Archive'
-                  className='main-logo'
-                />
-                {title}
-              </NavTitle>
+              <NavTitle>{title}</NavTitle>
             </Link>
           </NavListItem>
         </NavLinkList>

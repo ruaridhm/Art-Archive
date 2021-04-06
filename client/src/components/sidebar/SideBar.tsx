@@ -27,14 +27,14 @@ const SideBar = () => {
     return (
       <Menu right>
         <Link to='/'>
-          <SideBarLogo src={mainLogo} alt='Vinyl Library Logo' />
+          <SideBarLogo src={mainLogo} alt='Ed Miliano Archive' />
         </Link>
 
-        <Link to='/user'>Hello {user && user.name}</Link>
+        <Link to='/register'>Register New User</Link>
 
-        <Link to='/library'>Library</Link>
+        <Link to='/user'>Collection Stats. {user && user.name}</Link>
 
-        <Link to='/sort'>Sort Library</Link>
+        <Link to='/gallery'>Gallery</Link>
 
         <Link onClick={onLogout} to='#!'>
           <i className='fas fa-sign-out-alt'></i> <span>Logout</span>
@@ -45,12 +45,8 @@ const SideBar = () => {
     return (
       <Menu right>
         <Link to='/'>
-          <SideBarLogo src={mainLogo} alt='Vinyl Library Logo' />
+          <SideBarLogo src={mainLogo} alt='Ed Miliano Archive' />
         </Link>
-
-        <Link to='/about'>About</Link>
-
-        <Link to='/register'>Register</Link>
 
         <Link to='/login'>Login</Link>
       </Menu>

@@ -6,6 +6,7 @@ interface ButtonProps {
   type: 'submit' | 'reset' | 'button';
   children?: string | JSX.Element;
   label: string | JSX.Element;
+  solidPlain?: boolean;
   solidPrimary?: boolean;
   solidWarning?: boolean;
   solidDanger?: boolean;
@@ -19,6 +20,7 @@ interface ButtonProps {
   circleDanger?: boolean;
   circleSuccess?: boolean;
   small?: boolean;
+  mediumSmall?: boolean;
   medium?: boolean;
   large?: boolean;
   keyPressNumber?: number;

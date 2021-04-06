@@ -32,7 +32,7 @@ const RecordState: React.FC = ({ children }) => {
   // Get Records
   const getRecords = async () => {
     try {
-      const res = await axios.get('/api/records');
+      const res = await axios.get('/api/collection');
       dispatch({ type: GET_RECORDS, payload: res.data });
     } catch (err) {
       dispatch({
@@ -50,7 +50,7 @@ const RecordState: React.FC = ({ children }) => {
       },
     };
     try {
-      const res = await axios.post('/api/records', record, config);
+      const res = await axios.post('/api/collection', record, config);
       dispatch({ type: ADD_RECORD, payload: res.data });
     } catch (err) {
       dispatch({
@@ -62,7 +62,7 @@ const RecordState: React.FC = ({ children }) => {
   //Delete Record
   const deleteRecord = async (id: string) => {
     try {
-      await axios.delete(`/api/records/${id}`);
+      await axios.delete(`/api/collection/${id}`);
       dispatch({
         type: DELETE_RECORD,
         payload: id,
@@ -82,7 +82,11 @@ const RecordState: React.FC = ({ children }) => {
       },
     };
     try {
-      const res = await axios.put(`/api/records/${record._id}`, record, config);
+      const res = await axios.put(
+        `/api/collection/${record._id}`,
+        record,
+        config
+      );
       dispatch({
         type: UPDATE_RECORD,
         payload: res.data,

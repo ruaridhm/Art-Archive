@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 export const Card = styled.div`
   background-color: ${({ theme }) => theme.white};
-  border-radius: 0.5em;
+  border-radius: 2px;
+  border: 2px solid black;
   padding: 0.5em;
   margin: 0.5em;
   width: 22rem;
-  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.5);
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 0.75fr 0.5fr 4fr 1fr;

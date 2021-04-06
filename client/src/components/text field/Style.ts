@@ -7,9 +7,7 @@ export const TextFieldInputGroup = styled.div<TextFieldProps>`
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
+  max-width: 15vw;
 
   ${({ standard }) =>
     standard &&

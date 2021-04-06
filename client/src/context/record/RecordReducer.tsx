@@ -130,12 +130,17 @@ const RecordReducer = (state: State, action: Actions) => {
           return (
             record.title.match(regex) ||
             record.artist.match(regex) ||
-            record.label.match(regex) ||
-            record.catalogNumber.match(regex) ||
-            record.releaseDate.match(regex) ||
-            record.country.match(regex) //||
-            //  record.condition.match(regex) ||
-            //  record.barcode.match(regex)
+            record.reference.match(regex) ||
+            record.collectionName.match(regex) ||
+            record.size.match(regex) ||
+            record.medium.match(regex) ||
+            // record.price.match(regex) ||
+            record.currentLocation.match(regex) ||
+            record.firstExhibitedTitle.match(regex) ||
+            record.salesHistorySoldTo.match(regex) ||
+            record.salesHistorySoldBy.match(regex)
+
+            //TODO complete parameters to search by
           );
         }),
       };

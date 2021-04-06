@@ -4,7 +4,6 @@ import AuthContext from '../../context/auth/AuthContext';
 import TextField from '../text field/TextField';
 import Form from '../form/Form';
 import { FormGroup } from '../form/Style';
-import { AltAuthCTA, AuthCTALink } from './Style';
 interface RegisterProps {
   history: {
     push: (arg0: string) => void;
@@ -121,18 +120,12 @@ const Register = ({ history }: RegisterProps) => {
   };
 
   return (
-    <>
-      <Form
-        title='Account Register'
-        onSubmit={onSubmit}
-        formInputs={RegisterInputs}
-        confirm='Register'
-      />
-      <AltAuthCTA>
-        Already have an Account?
-        <AuthCTALink to='/login'>Login Here</AuthCTALink>
-      </AltAuthCTA>
-    </>
+    <Form
+      title='Account Register'
+      onSubmit={onSubmit}
+      formInputs={RegisterInputs}
+      confirm='Register'
+    />
   );
 };
 

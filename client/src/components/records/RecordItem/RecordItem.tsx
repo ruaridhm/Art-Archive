@@ -23,29 +23,24 @@ export interface RecordInterface {
   _id?: string;
   title?: string;
   artist?: string;
-  label?: string;
-  catalogNumber?: string;
-  releaseDate?: string;
-  format?: string;
-  country?: string;
-  coverFront?: string;
-  coverBack?: string;
-  coverLp?: string;
-  recordCondition?: string;
-  sleeveCondition?: string;
-  barcode?: string;
-  locationPrimary?: string;
-  locationSecondary?: string;
-  want?: number;
-  have?: number;
-  genre?: string;
-  style?: string;
-  cover?: boolean;
-  innerSleeve?: boolean;
-  outerSleeve?: boolean;
-  comment?: string;
-  rating?: number;
-  wishList?: boolean;
+  reference?: string;
+  collectionName?: string;
+  image?: string;
+  date?: any;
+  size?: string;
+  medium?: string;
+  price?: Number;
+  currentLocation?: string;
+  mediaLinks?: string;
+  notes?: string;
+  firstExhibitedDate?: any;
+  firstExhibitedTitle?: string;
+  firstExhibitedAddress?: string;
+  exhibited?: Array<Object>;
+  submission?: Array<Object>;
+  salesHistorySoldTo?: string;
+  salesHistorySoldBy?: string;
+  salesHistoryDateSold?: any;
 }
 
 interface RecordItemProps {
@@ -66,29 +61,24 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
     _id,
     title,
     artist,
-    label,
-    catalogNumber,
-    releaseDate,
-    format,
-    country,
-    coverFront,
-    coverBack,
-    coverLp,
-    barcode,
-    locationPrimary,
-    locationSecondary,
-    recordCondition,
-    sleeveCondition,
-    // want,
-    // have,
-    genre,
-    style,
-    cover,
-    innerSleeve,
-    outerSleeve,
-    comment,
-    rating,
-    wishList,
+    reference,
+    collectionName,
+    image,
+    date,
+    size,
+    medium,
+    price,
+    currentLocation,
+    mediaLinks,
+    notes,
+    firstExhibitedDate,
+    firstExhibitedTitle,
+    firstExhibitedAddress,
+    exhibited,
+    submission,
+    salesHistorySoldTo,
+    salesHistorySoldBy,
+    salesHistoryDateSold,
   } = record;
 
   const scrollToTop = () => {
@@ -115,15 +105,7 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
   };
 
   const renderImageSlider = () => {
-    if (coverFront || coverBack || coverLp) {
-      return (
-        <ImageSlider
-          coverFront={coverFront}
-          coverBack={coverBack}
-          coverLp={coverLp}
-        />
-      );
-    }
+    return <ImageSlider coverFront={image} />;
   };
 
   return (
@@ -133,51 +115,49 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
         <CardArtist>{artist}</CardArtist>
         <RecordDetailsListContainer>
           <RecordDetailsList>
-            {label && (
+            {reference && (
               <li>
-                <strong>Label:</strong> {label}
+                <strong>Ref:</strong> {reference}
               </li>
             )}
-            {catalogNumber && (
+            {collectionName && (
               <li>
-                <strong>Cat Number:</strong> {catalogNumber}
+                <strong>Collection:</strong> {collectionName}
               </li>
             )}
-            {releaseDate && (
+            {date && (
               <li>
-                <strong>Released:</strong> {releaseDate}
+                <strong>Date:</strong> {date}
               </li>
             )}
-            {format && (
+            {size && (
               <li>
-                <strong>Format:</strong> {format}
+                <strong>Size:</strong> {size}
               </li>
             )}
-            {country && (
+            {medium && (
               <li>
-                <strong>Country:</strong> {country}
+                <strong>Medium:</strong> {medium}
               </li>
             )}
-            {recordCondition && (
+            {price && (
               <li>
-                <strong>Record Condition:</strong> {recordCondition}
+                <strong>Price:</strong> {price}
               </li>
             )}
-            {sleeveCondition && (
+            {currentLocation && (
               <li>
-                <strong>Sleeve Condition:</strong> {sleeveCondition}
+                <strong>Current Location:</strong> {currentLocation}
               </li>
             )}
-            {barcode && (
+            {mediaLinks && (
               <li>
-                <strong>Barcode:</strong> {barcode}
+                <strong>Media Links:</strong> {mediaLinks}
               </li>
             )}
-
-            {locationPrimary && locationSecondary && (
+            {notes && (
               <li>
-                <strong>Location:</strong> {locationPrimary},{' '}
-                <strong>Index:</strong> {locationSecondary}
+                <strong>Notes:</strong> {notes}
               </li>
             )}
           </RecordDetailsList>
@@ -187,28 +167,20 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
 
         <ButtonContainer>
           <Button
-            solidPrimary
-            small
+            solidPlain
+            mediumSmall
             type='button'
             onClick={editRecord}
             label='Edit'
             children={<FontAwesomeIcon icon={faEdit} />}
           />
           <Button
-            solidSuccess
-            small
+            solidPlain
+            mediumSmall
             type='button'
             label='Show Info'
             onClick={showInfoModalHandler}
             children={<FontAwesomeIcon icon={faInfo} />}
-          />
-          <Button
-            solidDanger
-            small
-            onClick={showDeleteModalHandler}
-            label='Delete'
-            type='button'
-            children={<FontAwesomeIcon icon={faTrashAlt} />}
           />
         </ButtonContainer>
       </Card>
@@ -235,28 +207,38 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
             confirm={() => {}}
             headerText='Record Info'
             bodyText={
-              <ViewInfo
-                title={title}
-                artist={artist}
-                label={label}
-                catalogNumber={catalogNumber}
-                releaseDate={releaseDate}
-                country={country}
-                coverFront={coverFront}
-                barcode={barcode}
-                locationPrimary={locationPrimary}
-                locationSecondary={locationSecondary}
-                recordCondition={recordCondition}
-                sleeveCondition={sleeveCondition}
-                genre={genre}
-                style={style}
-                comment={comment}
-                rating={rating}
-                cover={cover}
-                innerSleeve={innerSleeve}
-                outerSleeve={outerSleeve}
-                wishList={wishList}
-              />
+              <>
+                <ViewInfo
+                  title={title}
+                  artist={artist}
+                  reference={reference}
+                  collectionName={collectionName}
+                  image={image}
+                  date={date}
+                  size={size}
+                  medium={medium}
+                  price={price}
+                  currentLocation={currentLocation}
+                  mediaLinks={mediaLinks}
+                  notes={notes}
+                  firstExhibitedDate={firstExhibitedDate}
+                  firstExhibitedTitle={firstExhibitedTitle}
+                  firstExhibitedAddress={firstExhibitedAddress}
+                  exhibited={exhibited}
+                  submission={submission}
+                  salesHistorySoldTo={salesHistorySoldTo}
+                  salesHistorySoldBy={salesHistorySoldBy}
+                  salesHistoryDateSold={salesHistoryDateSold}
+                />
+                <Button
+                  solidPlain
+                  mediumSmall
+                  onClick={showDeleteModalHandler}
+                  label='Delete'
+                  type='button'
+                  children={<FontAwesomeIcon icon={faTrashAlt} />}
+                />
+              </>
             }
             showCancel={false}
             showConfirm={false}

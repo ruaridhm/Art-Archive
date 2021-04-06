@@ -5,8 +5,6 @@ import TextField from '../text field/TextField';
 import Form from '../form/Form';
 import { FormGroup } from '../form/Style';
 
-import { AltAuthCTA, AuthCTALink } from './Style';
-
 interface LoginProps {
   history: {
     push: (arg0: string) => void;
@@ -80,18 +78,12 @@ const Login = ({ history }: LoginProps) => {
     );
   };
   return (
-    <>
-      <Form
-        title='Account Login'
-        onSubmit={onSubmit}
-        formInputs={LoginInputs}
-        confirm='Login'
-      />
-      <AltAuthCTA>
-        Don't have an Account?
-        <AuthCTALink to='/register'>Register Here</AuthCTALink>
-      </AltAuthCTA>
-    </>
+    <Form
+      title='Account Login'
+      onSubmit={onSubmit}
+      formInputs={LoginInputs}
+      confirm='Login'
+    />
   );
 };
 

@@ -18,7 +18,7 @@ const SideBar = ({
 }: SidebarInterface) => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
-  const { isAuthenticated, logout, user } = authContext;
+  const { isAuthenticated, logout } = authContext;
   const { clearRecords } = recordContext;
 
   const onLogout = () => {
@@ -29,15 +29,13 @@ const SideBar = ({
   if (isAuthenticated) {
     return (
       <Menu right>
-        <Link to='/'>
-          <SideBarLogo src={mainLogo} alt='Vinyl Library Logo' />
-        </Link>
+        <Link to='/'>Home</Link>
 
-        <Link to='/user'>Hello {user && user.name}</Link>
+        <Link to='/register'>Register New User</Link>
 
-        <Link to='/library'>Library</Link>
+        <Link to='/user'>Collection Stats.</Link>
 
-        <Link to='/sort'>Sort Library</Link>
+        <Link to='/gallery'>Gallery</Link>
 
         <a onClick={onLogout} href='#!'>
           <i className='fas fa-sign-out-alt'></i> <span>Logout</span>
@@ -48,12 +46,8 @@ const SideBar = ({
     return (
       <Menu right>
         <Link to='/'>
-          <SideBarLogo src={mainLogo} alt='Vinyl Library Logo' />
+          <SideBarLogo src={mainLogo} alt='Ed Miliano Archive' />
         </Link>
-
-        <Link to='/about'>About</Link>
-
-        <Link to='/register'>Register</Link>
 
         <Link to='/login'>Login</Link>
       </Menu>

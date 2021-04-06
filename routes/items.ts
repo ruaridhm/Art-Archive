@@ -35,7 +35,7 @@ router.post('/', [auth], async (req, res) => {
   const {
     title,
     artist,
-    ref,
+    reference,
     collectionName,
     image,
     date,
@@ -45,9 +45,9 @@ router.post('/', [auth], async (req, res) => {
     currentLocation,
     mediaLinks,
     notes,
-    firstDateExhibited,
-    firstExhibitionTitle,
-    firstVenueAddress,
+    firstExhibitedDate,
+    firstExhibitedTitle,
+    firstExhibitedAddress,
     exhibited,
     submission,
     salesHistorySoldTo,
@@ -59,7 +59,7 @@ router.post('/', [auth], async (req, res) => {
     const newItem = new CollectionItem({
       title,
       artist,
-      ref,
+      reference,
       collectionName,
       image,
       date,
@@ -69,9 +69,9 @@ router.post('/', [auth], async (req, res) => {
       currentLocation,
       mediaLinks,
       notes,
-      firstDateExhibited,
-      firstExhibitionTitle,
-      firstVenueAddress,
+      firstExhibitedDate,
+      firstExhibitedTitle,
+      firstExhibitedAddress,
       exhibited,
       submission,
       salesHistorySoldTo,
@@ -96,7 +96,7 @@ router.put('/:id', auth, async (req, res) => {
   const {
     title,
     artist,
-    ref,
+    reference,
     collectionName,
     image,
     date,
@@ -106,9 +106,9 @@ router.put('/:id', auth, async (req, res) => {
     currentLocation,
     mediaLinks,
     notes,
-    firstDateExhibited,
-    firstExhibitionTitle,
-    firstVenueAddress,
+    firstExhibitedDate,
+    firstExhibitedTitle,
+    firstExhibitedAddress,
     exhibited,
     submission,
     salesHistorySoldTo,
@@ -116,7 +116,7 @@ router.put('/:id', auth, async (req, res) => {
     salesHistoryDateSold,
   } = req.body;
 
-  // interface RecordFields {
+  // interface ItemFields {
   //   title?: string;
   //   artist?: string;
   //   label?: string;
@@ -149,7 +149,7 @@ router.put('/:id', auth, async (req, res) => {
 
   if (title) itemFields.title = title;
   if (artist) itemFields.artist = artist;
-  if (ref) itemFields.ref = ref;
+  if (reference) itemFields.reference = reference;
   if (collectionName) itemFields.collectionName = collectionName;
   if (image) itemFields.image = image;
   if (date) itemFields.date = date;
@@ -159,10 +159,10 @@ router.put('/:id', auth, async (req, res) => {
   if (currentLocation) itemFields.currentLocation = currentLocation;
   if (mediaLinks) itemFields.mediaLinks = mediaLinks;
   if (notes) itemFields.notes = notes;
-  if (firstDateExhibited) itemFields.firstDateExhibited = firstDateExhibited;
-  if (firstExhibitionTitle)
-    itemFields.firstExhibitionTitle = firstExhibitionTitle;
-  if (firstVenueAddress) itemFields.firstVenueAddress = firstVenueAddress;
+  if (firstExhibitedDate) itemFields.firstExhibitedDate = firstExhibitedDate;
+  if (firstExhibitedTitle) itemFields.firstExhibitedTitle = firstExhibitedTitle;
+  if (firstExhibitedAddress)
+    itemFields.firstExhibitedAddress = firstExhibitedAddress;
   if (exhibited) itemFields.exhibited = exhibited;
   if (submission) itemFields.submission = submission;
   if (salesHistorySoldTo) itemFields.salesHistorySoldTo = salesHistorySoldTo;
