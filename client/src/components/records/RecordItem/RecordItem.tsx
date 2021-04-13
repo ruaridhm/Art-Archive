@@ -223,7 +223,7 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
                   reference={reference}
                   collectionName={collectionName}
                   image={image}
-                  date={date}
+                  date={getFormattedDate(date)}
                   size={size}
                   medium={medium}
                   price={price}
