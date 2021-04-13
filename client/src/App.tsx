@@ -39,7 +39,7 @@ const App = () => {
             <Router>
               <Fragment>
                 <SideBar pageWrapId='page-wrap' outerContainerId='App' />
-                <Navbar title='Ed Miliano' toggleTheme={toggleTheme} />
+                <Navbar title='Ed Miliano Archive' toggleTheme={toggleTheme} />
                 <Alerts />
                 <Switch>
                   <PrivateRoute exact path='/' component={Home} />

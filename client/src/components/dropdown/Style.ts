@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const DropdownContainer = styled.div`
   width: 20em;
-  margin: auto;
+  margin: 1rem auto 0 auto;
 `;
 
 export const DropdownWrapper = styled.div`
@@ -44,6 +44,7 @@ export const DropdownList = styled.ul`
   height: 10rem;
   margin-top: 55px;
   position: absolute;
+  z-index: 1;
 `;
 
 export const Scrollbar = styled.div`

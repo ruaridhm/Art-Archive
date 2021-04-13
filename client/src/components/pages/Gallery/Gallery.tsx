@@ -1,9 +1,12 @@
 import React, { useEffect, useContext } from 'react';
-import AwesomeSlider from 'react-awesome-slider';
-import 'react-awesome-slider/dist/custom-animations/cube-animation.css';
 import Button from '../../button/Button';
 import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
+import Carousel from 'react-gallery-carousel';
+import 'react-gallery-carousel/dist/index.css';
+import { GalleryContainer, ButtonContainer } from './Style';
+
+//https://github.com/yifaneye/react-gallery-carousel
 
 const Gallery = () => {
   const authContext = useContext(AuthContext);
@@ -16,17 +19,18 @@ const Gallery = () => {
 
     // eslint-disable-next-line
   }, []);
+
+  const images = [900, 800, 700, 600, 500].map((size) => ({
+    src: `https://placedog.net/${size}/${size}`,
+  }));
+
   return (
-    <>
-      <AwesomeSlider
-        animation='cubeAnimation'
-        customContent={<Button type='button' label='Info' solidPlain medium />}
-      >
-        <div data-src='/path/to/image-0.png' />
-        <div data-src='/path/to/image-1.png' />
-        <div data-src='/path/to/image-2.jpg' />
-      </AwesomeSlider>
-    </>
+    <GalleryContainer>
+      <Carousel images={images} hasThumbnails={false} />
+      <ButtonContainer>
+        <Button type='button' solidPlain medium label='Info' />
+      </ButtonContainer>
+    </GalleryContainer>
   );
 };
 

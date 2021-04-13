@@ -1,5 +1,6 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useRef } from 'react';
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKey from '../../hooks/useKey';
 import { ReactElement } from 'react';
 import Button from '../button/Button';
@@ -70,12 +71,15 @@ const Modal = ({
   confirmIcon,
 }: ModalProps): ReactElement => {
   useKey('Escape', close);
+  const outsideClickRef = useRef();
+
+  useOnClickOutside(outsideClickRef, () => close());
 
   return (
     // <TransitionGroup>
     //   <CSSTransition timeout={500} classNames='item'>
     <ModalBackground>
-      <ModalWrapper>
+      <ModalWrapper ref={outsideClickRef} className='wrapper'>
         <ModalHeader>
           <HeaderText>{headerText}</HeaderText>
           <ModalClose onClick={close}>x</ModalClose>

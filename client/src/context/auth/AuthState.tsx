@@ -47,6 +47,7 @@ const AuthState: React.FC = ({ children }) => {
   const register = async (formData: {
     name: string;
     email: string;
+    role: string;
     password: string;
   }) => {
     const config = {
@@ -62,7 +63,7 @@ const AuthState: React.FC = ({ children }) => {
         payload: res.data,
       });
 
-      loadUser();
+      // loadUser();
     } catch (err) {
       dispatch({
         type: REGISTER_FAIL,

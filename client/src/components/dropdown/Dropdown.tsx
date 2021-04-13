@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 
 import {
   DropdownContainer,
@@ -16,6 +17,7 @@ import {
 interface itemInterface {
   id: number;
   title: string;
+  value: string;
 }
 
 interface DropdownProps {
@@ -37,9 +39,12 @@ const Dropdown = ({
   setOpen,
   setSelection,
 }: DropdownProps) => {
+  const outsideClickRef = useRef();
+
   const toggle = () => {
-    open === title ? setOpen('') : setOpen(title);
+    open === '' && setOpen(title);
   };
+  useOnClickOutside(outsideClickRef, () => setOpen(''));
 
   const handleOnClick = (item) => {
     if (!selection.some((current) => current.id === item.id)) {
@@ -66,7 +71,7 @@ const Dropdown = ({
   };
 
   return (
-    <DropdownContainer>
+    <DropdownContainer ref={outsideClickRef}>
       <DropdownWrapper>
         <DropdownHeader
           tabIndex={0}

@@ -5,6 +5,7 @@ type authContextType = {
   register: (formData: {
     name: string;
     email: string;
+    role: string;
     password: string;
   }) => Promise<void>;
   login: (formData: { email: string; password: string }) => Promise<void>;
