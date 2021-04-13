@@ -504,7 +504,7 @@ const RecordForm = ({
           <RecordFormButtonContainer>
             <Button
               type='submit'
-              small
+              medium
               solidSuccess
               label={current ? 'Update Item' : 'Add Item'}
             />
@@ -625,7 +625,7 @@ const RecordForm = ({
           <RecordFormButtonContainer>
             <Button
               type='submit'
-              small
+              medium
               solidSuccess
               label={current ? 'Update Item' : 'Add Item'}
             />
