@@ -29,9 +29,6 @@ const SideBar = () => {
         <Link to='/'>
           <SideBarLogo src={mainLogo} alt='Ed Miliano Archive' />
         </Link>
-
-        <Link to='/register'>Register New User</Link>
-
         <Link to='/user'>Collection Stats. {user && user.name}</Link>
 
         <Link to='/gallery'>Gallery</Link>

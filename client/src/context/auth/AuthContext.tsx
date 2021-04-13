@@ -2,12 +2,6 @@ import { createContext } from 'react';
 
 type authContextType = {
   loadUser: () => Promise<void>;
-  register: (formData: {
-    name: string;
-    email: string;
-    role: string;
-    password: string;
-  }) => Promise<void>;
   login: (formData: { email: string; password: string }) => Promise<void>;
   logout: () => void;
   clearErrors: () => void;

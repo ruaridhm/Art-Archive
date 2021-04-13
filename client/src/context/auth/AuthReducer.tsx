@@ -1,6 +1,4 @@
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
@@ -10,14 +8,6 @@ import {
 } from '../types';
 
 type Actions =
-  | {
-      type: 'REGISTER_SUCCESS';
-      payload: { token: string };
-    }
-  | {
-      type: 'REGISTER_FAIL';
-      payload: string;
-    }
   | {
       type: 'USER_LOADED';
       payload: string;
@@ -62,7 +52,6 @@ const AuthReducer = (state: AuthState, action: Actions) => {
         loading: false,
         user: action.payload,
       };
-    case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem('token', action.payload.token);
       return {
@@ -71,7 +60,6 @@ const AuthReducer = (state: AuthState, action: Actions) => {
         isAuthenticated: true,
         loading: false,
       };
-    case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGIN_FAIL:
     case LOGOUT:

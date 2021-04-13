@@ -45,9 +45,6 @@ const Navbar = ({ title, toggleTheme }: NavbarProps) => {
   const authLinks = (
     <Fragment>
       <NavListItem>
-        <Link to='/register'>Register New User</Link>
-      </NavListItem>
-      <NavListItem>
         <Link to='/user'>Collection Stats.</Link>
       </NavListItem>
       <NavListItem>

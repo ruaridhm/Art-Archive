@@ -30,13 +30,8 @@ const SideBar = ({
     return (
       <Menu right>
         <Link to='/'>Home</Link>
-
-        <Link to='/register'>Register New User</Link>
-
         <Link to='/user'>Collection Stats.</Link>
-
         <Link to='/gallery'>Gallery</Link>
-
         <a onClick={onLogout} href='#!'>
           <i className='fas fa-sign-out-alt'></i> <span>Logout</span>
         </a>
