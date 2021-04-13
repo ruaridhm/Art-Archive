@@ -36,7 +36,7 @@ const emptyItemObject = {
   date: '',
   size: '',
   medium: '',
-  price: null,
+  price: 0,
   currentLocation: '',
   mediaLinks: '',
   notes: '',
