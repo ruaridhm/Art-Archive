@@ -26,7 +26,7 @@ export interface RecordInterface {
   reference?: string;
   collectionName?: string;
   image?: string;
-  date?: any;
+  date?: Date | string;
   size?: string;
   medium?: string;
   price?: Number;
@@ -108,6 +108,15 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
     return <ImageSlider coverFront={image} />;
   };
 
+  const getFormattedDate = (date) => {
+    const dateStr = date.toString();
+
+    return `${dateStr.substring(8, 10)}-${dateStr.substring(
+      5,
+      7
+    )}-${dateStr.substring(0, 4)} `;
+  };
+
   return (
     <>
       <Card className='card'>
@@ -127,7 +136,7 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
             )}
             {date && (
               <li>
-                <strong>Date:</strong> {date}
+                <strong>Date:</strong> {getFormattedDate(date)}
               </li>
             )}
             {size && (
