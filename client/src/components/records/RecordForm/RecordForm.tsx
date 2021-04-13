@@ -27,13 +27,31 @@ import {
 } from './Style';
 import { RecordInterface } from '../RecordItem/RecordItem';
 
+const getFormattedCurrentDate = () => {
+  const padDates = (dates) => {
+    if (dates <= 9) {
+      return `0${dates}`;
+    }
+    return dates.toString();
+  };
+
+  const todaysDate = new Date();
+  let day = padDates(todaysDate.getDate());
+  let month = padDates(todaysDate.getMonth());
+  let year = todaysDate.getFullYear();
+
+  return `${year}-${month}-${day}`;
+};
+
+const currentDate = getFormattedCurrentDate();
+
 const emptyItemObject = {
   title: '',
   artist: 'Ed Miliano',
   reference: '',
   collectionName: '',
   image: '',
-  date: '',
+  date: currentDate,
   size: '',
   medium: '',
   price: 0,
@@ -118,7 +136,7 @@ const Step1 = ({
 };
 
 interface Step2Props {
-  date?: Date;
+  date?: Date | string;
   size?: string;
   medium?: string;
   price?: Number;
