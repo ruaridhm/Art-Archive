@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import Records from '../../records/Records/Records';
 import RecordFilter from '../../records/RecordFilter/RecordFilter';
 import AuthContext from '../../../context/auth/AuthContext';
-import Button from '../../button/Button';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Dropdown from '../../dropdown/Dropdown';
 import RecordForm from '../../records/RecordForm/RecordForm';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 import {
   HomeContainer,
   HomeFilterContainer,
@@ -14,8 +16,6 @@ import {
   AddRecordButtonWrapper,
   MobileControlsContainer,
   MobileRecordFilterContainer,
-  AddRecordButtonContainer,
-  AddRecordButtonDescription,
   SortRecords,
   Controls,
 } from './Style';
@@ -143,13 +143,15 @@ const Home = () => {
               <RecordFilter />
             </MobileRecordFilterContainer>
           </MobileFilterContainer>
-          <Button
-            medium
-            circleSuccess
+
+          <IconButton
+            aria-label='Add Item'
+            color='primary'
             onClick={() => setDisplayAddRecord(!displayAddRecord)}
-            label={<FontAwesomeIcon icon={faPlus} />}
-            type='button'
-          />
+            size='medium'
+          >
+            <AddCircleIcon />
+          </IconButton>
         </MobileControlsContainer>
       )}
 
@@ -176,16 +178,15 @@ const Home = () => {
           <RecordFilter />
         </HomeFilterContainer>
         <AddRecordButtonWrapper>
-          <AddRecordButtonContainer>
-            <Button
-              medium
-              circleSuccess
-              onClick={() => setDisplayAddRecord(!displayAddRecord)}
-              label={<FontAwesomeIcon icon={faPlus} />}
-              type='button'
-            />
-            <AddRecordButtonDescription>Add Record</AddRecordButtonDescription>
-          </AddRecordButtonContainer>
+          <Button
+            variant='contained'
+            color='primary'
+            size='large'
+            startIcon={<AddIcon />}
+            onClick={() => setDisplayAddRecord(!displayAddRecord)}
+          >
+            Add Record
+          </Button>
         </AddRecordButtonWrapper>
       </Controls>
 

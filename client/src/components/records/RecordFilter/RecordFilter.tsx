@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import RecordContext from '../../../context/record/RecordContext';
-import Textfield from '../../text field/TextField';
+import TextField from '@material-ui/core/TextField';
+
 import { FilterFormContainer } from './Style';
 
 const RecordFilter = () => {
@@ -8,7 +9,7 @@ const RecordFilter = () => {
   const text = useRef<HTMLInputElement>(null);
   const { filterRecords, clearFilter } = recordContext;
 
-  const onChange = (e: { target: { value: string } }) => {
+  const handleOnChange = (e: { target: { value: string } }) => {
     if (e.target.value !== '') {
       filterRecords(e.target.value);
     } else {
@@ -19,14 +20,10 @@ const RecordFilter = () => {
   return (
     <FilterFormContainer>
       <form>
-        <Textfield
-          name='Filter Records'
-          ref={text}
-          type='text'
-          title='Filter Records'
-          onChange={onChange}
-          medium
-          standard
+        <TextField
+          label='Filter Records'
+          onChange={handleOnChange}
+          size='medium'
         />
       </form>
     </FilterFormContainer>

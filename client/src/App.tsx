@@ -17,6 +17,10 @@ import SideBar from './components/hamburger/SideBar';
 import { ThemeProvider } from 'styled-components';
 import { ColorVariables, DarkModeColorVariables } from './variables';
 
+import 'date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+
 import './App.scss';
 
 localStorage.token && setAuthToken(localStorage.token);
@@ -32,25 +36,30 @@ const App = () => {
     <ThemeProvider
       theme={theme === 'light' ? ColorVariables : DarkModeColorVariables}
     >
-      <AuthState>
-        <RecordState>
-          <AlertState>
-            <Router>
-              <Fragment>
-                <SideBar pageWrapId='page-wrap' outerContainerId='App' />
-                <Navbar title='Ed Miliano Archive' toggleTheme={toggleTheme} />
-                <Alerts />
-                <Switch>
-                  <PrivateRoute exact path='/' component={Home} />
-                  <PrivateRoute exact path='/user' component={User} />
-                  <PrivateRoute exact path='/gallery' component={Gallery} />
-                  <Route exact path='/login' component={Login} />
-                </Switch>
-              </Fragment>
-            </Router>
-          </AlertState>
-        </RecordState>
-      </AuthState>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <AuthState>
+          <RecordState>
+            <AlertState>
+              <Router>
+                <Fragment>
+                  <SideBar pageWrapId='page-wrap' outerContainerId='App' />
+                  <Navbar
+                    title='Ed Miliano Archive'
+                    toggleTheme={toggleTheme}
+                  />
+                  <Alerts />
+                  <Switch>
+                    <PrivateRoute exact path='/' component={Home} />
+                    <PrivateRoute exact path='/user' component={User} />
+                    <PrivateRoute exact path='/gallery' component={Gallery} />
+                    <Route exact path='/login' component={Login} />
+                  </Switch>
+                </Fragment>
+              </Router>
+            </AlertState>
+          </RecordState>
+        </AuthState>
+      </MuiPickersUtilsProvider>
     </ThemeProvider>
   );
 };

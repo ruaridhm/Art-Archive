@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react';
-import Button from '../../button/Button';
+import Button from '@material-ui/core/Button';
+import InfoIcon from '@material-ui/icons/Info';
 import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
 import Carousel from 'react-gallery-carousel';
@@ -28,7 +29,9 @@ const Gallery = () => {
     <GalleryContainer>
       <Carousel images={images} hasThumbnails={false} />
       <ButtonContainer>
-        <Button type='button' solidPlain medium label='Info' />
+        <Button variant='contained' color='primary' startIcon={<InfoIcon />}>
+          Info
+        </Button>
       </ButtonContainer>
     </GalleryContainer>
   );

@@ -3,7 +3,8 @@ import React, { ReactNode, useRef } from 'react';
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 import useKey from '../../hooks/useKey';
 import { ReactElement } from 'react';
-import Button from '../button/Button';
+import Button from '@material-ui/core/Button';
+
 import {
   ModalWrapper,
   ModalHeader,
@@ -16,27 +17,6 @@ import {
   ModalFooter,
   ModalBackground,
 } from './Style';
-
-interface StyleOptions {
-  solidSuccess?: boolean;
-  solidPrimary?: boolean;
-  solidWarning?: boolean;
-  solidDanger?: boolean;
-  outlinePrimary?: boolean;
-  outlineWarning?: boolean;
-  outlineDanger?: boolean;
-  outlineSuccess?: boolean;
-  circlePrimary?: boolean;
-  circleWarning?: boolean;
-  circleDanger?: boolean;
-  circleSuccess?: boolean;
-}
-interface SizeOptions {
-  small?: boolean;
-  medium?: boolean;
-  large?: boolean;
-}
-
 interface ModalProps {
   headerText: string;
   bodyHeaderText?: string;
@@ -44,14 +24,14 @@ interface ModalProps {
   close: () => void;
   confirm: () => void;
   confirmText?: string;
-  confirmStyle?: StyleOptions;
-  cancelStyle?: StyleOptions;
+  confirmStyle?: string;
+  cancelStyle?: string;
   showCancel?: boolean;
   showConfirm?: boolean;
   cancelIcon?: JSX.Element;
   confirmIcon?: JSX.Element;
-  confirmSize?: SizeOptions;
-  cancelSize?: SizeOptions;
+  confirmSize?: string;
+  cancelSize?: string;
 }
 
 const Modal = ({
@@ -61,10 +41,6 @@ const Modal = ({
   close,
   confirm,
   confirmText,
-  confirmStyle = { solidSuccess: true },
-  cancelStyle = { solidDanger: true },
-  confirmSize = { medium: true },
-  cancelSize = { medium: true },
   showCancel = true,
   showConfirm = true,
   cancelIcon,
@@ -93,22 +69,21 @@ const Modal = ({
             {showCancel && (
               <Button
                 onClick={close}
-                {...cancelStyle}
-                type='button'
-                {...cancelSize}
-                label='Cancel'
-                children={cancelIcon}
-              />
+                variant='contained'
+                startIcon={cancelIcon}
+              >
+                Cancel
+              </Button>
             )}
             {showConfirm && (
               <Button
                 onClick={confirm}
-                {...confirmStyle}
-                type='button'
-                {...confirmSize}
-                label={confirmText}
-                children={confirmIcon}
-              />
+                variant='contained'
+                size='medium'
+                startIcon={confirmIcon}
+              >
+                {confirmText}
+              </Button>
             )}
           </ModalFooter>
         </ModalContent>

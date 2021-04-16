@@ -1,13 +1,15 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import RecordContext from '../../../context/record/RecordContext';
-import Button from '../../button/Button';
+import Button from '@material-ui/core/Button';
 import Modal from '../../modal/Modal';
 import ImageSlider from '../../imageSlider/ImageSlider';
 import ViewInfo from '../../viewInfo/ViewInfo';
 import ModalPortal from '../../modal/ModalPortal';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faInfo } from '@fortawesome/free-solid-svg-icons';
+//icons
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import InfoIcon from '@material-ui/icons/Info';
 
 import {
   Card,
@@ -26,21 +28,21 @@ export interface RecordInterface {
   reference?: string;
   collectionName?: string;
   image?: string;
-  date?: Date | string;
+  date?: Date;
   size?: string;
   medium?: string;
   price?: Number;
   currentLocation?: string;
   mediaLinks?: string;
   notes?: string;
-  firstExhibitedDate?: any;
+  firstExhibitedDate?: Date;
   firstExhibitedTitle?: string;
   firstExhibitedAddress?: string;
   exhibited?: Array<Object>;
   submission?: Array<Object>;
   salesHistorySoldTo?: string;
   salesHistorySoldBy?: string;
-  salesHistoryDateSold?: any;
+  salesHistoryDateSold?: Date;
 }
 
 interface RecordItemProps {
@@ -176,21 +178,23 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
 
         <ButtonContainer>
           <Button
-            solidPlain
-            mediumSmall
-            type='button'
             onClick={editRecord}
-            label='Edit'
-            children={<FontAwesomeIcon icon={faEdit} />}
-          />
+            color='primary'
+            variant='contained'
+            startIcon={<EditIcon />}
+            size='medium'
+          >
+            Edit
+          </Button>
+
           <Button
-            solidPlain
-            mediumSmall
-            type='button'
-            label='Show Info'
             onClick={showInfoModalHandler}
-            children={<FontAwesomeIcon icon={faInfo} />}
-          />
+            color='secondary'
+            variant='contained'
+            startIcon={<InfoIcon />}
+          >
+            Show Info
+          </Button>
         </ButtonContainer>
       </Card>
 
@@ -202,9 +206,7 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
             headerText='Confirm Delete'
             bodyText='Are you sure you want to delete this item?'
             confirmText='Delete'
-            confirmStyle={{ solidDanger: true }}
-            cancelStyle={{ solidPrimary: true }}
-            confirmIcon={<FontAwesomeIcon icon={faTrashAlt} />}
+            confirmIcon={<DeleteIcon />}
           />
         </ModalPortal>
       )}
@@ -223,7 +225,7 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
                   reference={reference}
                   collectionName={collectionName}
                   image={image}
-                  date={date && getFormattedDate(date)}
+                  // date={date && getFormattedDate(date)}
                   size={size}
                   medium={medium}
                   price={price}
@@ -239,14 +241,14 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
                   salesHistorySoldBy={salesHistorySoldBy}
                   salesHistoryDateSold={salesHistoryDateSold}
                 />
+
                 <Button
-                  solidPlain
-                  mediumSmall
+                  variant='contained'
                   onClick={showDeleteModalHandler}
-                  label='Delete'
-                  type='button'
-                  children={<FontAwesomeIcon icon={faTrashAlt} />}
-                />
+                  startIcon={<DeleteIcon />}
+                >
+                  Delete
+                </Button>
               </>
             }
             showCancel={false}

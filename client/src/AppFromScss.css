@@ -1,21 +1,4 @@
 @font-face {
-  font-family: 'GoogleSans';
-  src: local('GoogleSans'), url(./fonts/GoogleSans.woff2) format('truetype');
-}
-
-@font-face {
-  font-family: 'GoogleSansMedium';
-  src: local('GoogleSansMedium'),
-    url(./fonts/GoogleSansMedium.woff2) format('truetype');
-}
-
-@font-face {
-  font-family: 'GoogleSansBold';
-  src: local('GoogleSansBold'),
-    url(./fonts/GoogleSansBold.woff2) format('truetype');
-}
-
-@font-face {
   font-family: 'Roboto';
   src: local('Roboto'), url(./fonts/Roboto.woff2) format('truetype');
 }

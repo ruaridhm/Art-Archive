@@ -5,9 +5,17 @@ import React, {
   Dispatch,
   SetStateAction,
 } from 'react';
+
 import RecordContext from '../../../context/record/RecordContext';
-import Button from '../../button/Button';
-import TextField from '../../text field/TextField';
+import Button from '@material-ui/core/Button';
+//Icons
+import ClearAllIcon from '@material-ui/icons/ClearAll';
+import AddIcon from '@material-ui/icons/Add';
+import UpdateIcon from '@material-ui/icons/Update';
+
+import TextField from '@material-ui/core/TextField';
+import { KeyboardDatePicker } from '@material-ui/pickers';
+
 import useKey from '../../../hooks/useKey';
 import {
   RecordFormContainer,
@@ -51,21 +59,21 @@ const emptyItemObject = {
   reference: '',
   collectionName: '',
   image: '',
-  date: currentDate,
+  date: null,
   size: '',
   medium: '',
   price: 0,
   currentLocation: '',
   mediaLinks: '',
   notes: '',
-  firstExhibitedDate: '',
+  firstExhibitedDate: null,
   firstExhibitedTitle: '',
   firstExhibitedAddress: '',
   exhibited: [],
   submission: [],
   salesHistorySoldTo: '',
   salesHistorySoldBy: '',
-  salesHistoryDateSold: '',
+  salesHistoryDateSold: null,
 };
 interface Step1Props {
   title?: string;
@@ -87,46 +95,45 @@ const Step1 = ({
   return (
     <StepContainer>
       <TextField
-        medium
-        outline
-        type='text'
-        title='Title'
+        size='medium'
+        variant='outlined'
+        label='Title'
         name='title'
         value={title}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Artist'
+        label='Artist'
         name='artist'
         value={artist}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Ref'
+        label='Ref'
         name='reference'
         value={reference}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Collection'
+        label='Collection'
         name='collectionName'
         value={collectionName}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Image'
+        label='Image'
         name='image'
         value={image}
         onChange={onChange}
@@ -136,12 +143,13 @@ const Step1 = ({
 };
 
 interface Step2Props {
-  date?: Date | string;
+  date?: Date;
   size?: string;
   medium?: string;
   price?: Number;
   currentLocation?: string;
   onChange: (e: any) => void;
+  handleDateChange: (date: Date | null, name: string) => void;
 }
 
 const Step2 = ({
@@ -151,50 +159,56 @@ const Step2 = ({
   price,
   currentLocation,
   onChange,
+  handleDateChange,
 }: Step2Props) => {
   return (
     <StepContainer>
-      <TextField
-        medium
-        outline
-        type='date'
-        title='Date'
-        name='date'
+      <KeyboardDatePicker
+        margin='normal'
+        id='date'
+        label='Date'
+        format='dd/MM/yyyy'
         value={date}
-        onChange={onChange}
+        onChange={() => {
+          handleDateChange(date, 'date');
+        }}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
       />
+
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Size'
+        label='Size'
         name='size'
         value={size}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Medium'
+        label='Medium'
         name='medium'
         value={medium}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='number'
-        title='Price'
+        label='Price'
         name='price'
         value={price}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Current Location'
+        label='Current Location'
         name='currentLocation'
         value={currentLocation}
         onChange={onChange}
@@ -210,6 +224,7 @@ interface Step3Props {
   salesHistorySoldBy?: string;
   salesHistoryDateSold?: Date;
   onChange: (e: any) => void;
+  handleDateChange: (date: Date | null, name: string) => void;
 }
 
 const Step3 = ({
@@ -219,65 +234,71 @@ const Step3 = ({
   salesHistorySoldBy,
   salesHistoryDateSold,
   onChange,
+  handleDateChange,
 }: Step3Props) => {
   return (
     <StepContainer>
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Media Links'
+        label='Media Links'
         name='mediaLinks'
         value={mediaLinks}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Notes'
+        label='Notes'
         name='notes'
         value={notes}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Sold To'
+        label='Sold To'
         name='salesHistorySoldTo'
         value={salesHistorySoldTo}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Sold By'
+        label='Sold By'
         name='salesHistorySoldBy'
         value={salesHistorySoldBy}
         onChange={onChange}
       />
-      <TextField
-        medium
-        outline
-        type='date'
-        title='Date Sold'
-        name='salesHistoryDateSold'
+      <KeyboardDatePicker
+        margin='normal'
+        id='date-sold'
+        label='Date Sold'
+        format='MM/dd/yyyy'
         value={salesHistoryDateSold}
-        onChange={onChange}
+        onChange={() => {
+          handleDateChange(salesHistoryDateSold, 'salesHistoryDateSold');
+        }}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
       />
     </StepContainer>
   );
 };
 
 interface Step4Props {
-  firstExhibitedDate?: string;
+  firstExhibitedDate?: Date;
   firstExhibitedTitle?: string;
   firstExhibitedAddress?: string;
   exhibited?: any;
   submission?: any;
   onChange: (e: any) => void;
+  handleDateChange: (date: Date | null, name: string) => void;
 }
 
 const Step4 = ({
@@ -287,59 +308,70 @@ const Step4 = ({
   exhibited,
   submission,
   onChange,
+  handleDateChange,
 }: Step4Props) => {
   return (
     <StepContainer>
-      <TextField
-        medium
-        outline
-        type='date'
-        title='First Exhibition Date'
-        name='firstExhibitedDate'
+      <KeyboardDatePicker
+        margin='normal'
+        id='date-first-exhibited'
+        label='First Exhibition Date'
+        format='MM/dd/yyyy'
         value={firstExhibitedDate}
-        onChange={onChange}
+        onChange={() => {
+          handleDateChange(firstExhibitedDate, 'firstExhibitedDate');
+        }}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='First Exhibition Title'
+        label='First Exhibition Title'
         name='firstExhibitedTitle'
         value={firstExhibitedTitle}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='First Exhibition Address'
+        label='First Exhibition Address'
         name='firstExhibitedAddress'
         value={firstExhibitedAddress}
         onChange={onChange}
       />
-      <TextField
-        medium
-        outline
-        type='date'
-        title='Submission Date'
-        name='submissionDate'
+
+      <KeyboardDatePicker
+        margin='normal'
+        id='submission-date'
+        label='Submission Date'
+        format='MM/dd/yyyy'
         value={submission.submissionDate}
-        onChange={onChange}
+        onChange={() => {
+          handleDateChange(submission.submissionDate, 'submissionDate');
+        }}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
       />
+
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Submission Exhibition Title'
+        label='Submission Exhibition Title'
         name='submissionExhibitionTitle'
         value={submission.submissionExhibitionTitle}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        size='medium'
+        variant='outlined'
         type='text'
-        title='Submission Venue Address'
+        label='Submission Venue Address'
         name='submissionVenueAddress'
         value={submission.submissionVenueAddress}
         onChange={onChange}
@@ -414,12 +446,17 @@ const RecordForm = ({
   const onChange = (e: { target: { type: any; name: string; value: any } }) => {
     // if (e.target.type !== undefined && e.target.type === 'text') {
     setItem({ ...item, [e.target.name]: e.target.value });
+    console.log('on change set item called');
     // }
+  };
+
+  const handleDateChange = (date: Date | null, name: string) => {
+    setItem({ ...item, [name]: date });
+    console.log('date change set item called');
   };
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
     if (current === null) {
       addRecord(item);
     } else {
@@ -469,6 +506,7 @@ const RecordForm = ({
               price={price}
               currentLocation={currentLocation}
               onChange={onChange}
+              handleDateChange={handleDateChange}
             />
 
             <Step3
@@ -478,6 +516,7 @@ const RecordForm = ({
               salesHistorySoldBy={salesHistorySoldBy}
               salesHistoryDateSold={salesHistoryDateSold}
               onChange={onChange}
+              handleDateChange={handleDateChange}
             />
 
             <Step4
@@ -487,6 +526,7 @@ const RecordForm = ({
               exhibited={exhibited}
               submission={submission}
               onChange={onChange}
+              handleDateChange={handleDateChange}
             />
           </ShowAllRecordForm>
           <RecordFormStepButtonContainer>
@@ -504,19 +544,23 @@ const RecordForm = ({
           <RecordFormButtonContainer>
             <Button
               type='submit'
-              medium
-              solidSuccess
-              label={current ? 'Update Item' : 'Add Item'}
-            />
+              variant='contained'
+              color='primary'
+              onClick={clearAll}
+              startIcon={current ? <UpdateIcon /> : <AddIcon />}
+            >
+              {current ? 'Update Item' : 'Add Item'}
+            </Button>
 
             {current && (
               <Button
-                medium
-                solidDanger
-                type='button'
+                variant='contained'
+                color='secondary'
+                startIcon={<ClearAllIcon />}
                 onClick={clearAll}
-                label='Clear'
-              />
+              >
+                Clear
+              </Button>
             )}
           </RecordFormButtonContainer>
         </ShowAllRecordFormForm>
@@ -552,6 +596,7 @@ const RecordForm = ({
               price={price}
               currentLocation={currentLocation}
               onChange={onChange}
+              handleDateChange={handleDateChange}
             />
           ) : currentStep === 3 ? (
             <Step3
@@ -561,6 +606,7 @@ const RecordForm = ({
               salesHistorySoldBy={salesHistorySoldBy}
               salesHistoryDateSold={salesHistoryDateSold}
               onChange={onChange}
+              handleDateChange={handleDateChange}
             />
           ) : currentStep === 4 ? (
             <Step4
@@ -570,6 +616,7 @@ const RecordForm = ({
               exhibited={exhibited}
               submission={submission}
               onChange={onChange}
+              handleDateChange={handleDateChange}
             />
           ) : null}
 
@@ -625,19 +672,22 @@ const RecordForm = ({
           <RecordFormButtonContainer>
             <Button
               type='submit'
-              medium
-              solidSuccess
-              label={current ? 'Update Item' : 'Add Item'}
-            />
-
+              variant='contained'
+              color='primary'
+              startIcon={current ? <UpdateIcon /> : <AddIcon />}
+              onClick={clearAll}
+            >
+              {current ? 'Update Item' : 'Add Item'}
+            </Button>
             {current && (
               <Button
-                medium
-                solidDanger
-                type='button'
+                variant='contained'
+                color='secondary'
+                startIcon={<ClearAllIcon />}
                 onClick={clearAll}
-                label='Clear'
-              />
+              >
+                Clear
+              </Button>
             )}
           </RecordFormButtonContainer>
         </RecordFormForm>
