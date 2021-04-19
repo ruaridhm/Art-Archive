@@ -1,10 +1,8 @@
 import React, { Fragment, useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../../context/auth/AuthContext';
-import RecordContext from '../../../context/record/RecordContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
-import Modal from '../../modal/Modal';
 import ToggleSwitch from '../../toggleSwitch/ToggleSwitch';
 import ModalPortal from '../../modal/ModalPortal';
 
@@ -16,6 +14,7 @@ import {
   NavTitle,
   ThemeToggleContainer,
 } from './Style';
+import LogoutDialog from '../../modal/LogoutDialog';
 
 interface NavbarProps {
   title: string;
@@ -24,19 +23,12 @@ interface NavbarProps {
 
 const Navbar = ({ title, toggleTheme }: NavbarProps) => {
   const authContext = useContext(AuthContext);
-  const recordContext = useContext(RecordContext);
   const [showLogoutConfirmModal, setShowLogoutConfirmModal] = useState<boolean>(
     false
   );
-  const { isAuthenticated, logout } = authContext;
-  const { clearRecords } = recordContext;
+  const { isAuthenticated } = authContext;
 
   const [mode, setMode] = useState(false);
-
-  const onLogout = () => {
-    logout();
-    clearRecords();
-  };
 
   const toggleModal = () => {
     setShowLogoutConfirmModal(!showLogoutConfirmModal);
@@ -137,19 +129,7 @@ const Navbar = ({ title, toggleTheme }: NavbarProps) => {
 
       {showLogoutConfirmModal && (
         <ModalPortal>
-          <Modal
-            bodyText='Are you sure you want to logout?'
-            confirm={() => {
-              onLogout();
-              toggleModal();
-            }}
-            confirmIcon={<FontAwesomeIcon icon={faSignOutAlt} />}
-            confirmText='Logout'
-            headerText='Confirm Logout'
-            close={() => {
-              toggleModal();
-            }}
-          />
+          <LogoutDialog toggleModal={toggleModal} />
         </ModalPortal>
       )}
     </>
