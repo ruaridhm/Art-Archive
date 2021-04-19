@@ -10,6 +10,10 @@ const UserSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  role: {
+    type: String,
+    required: true,
+  },
   password: {
     type: String,
     required: true,
@@ -17,6 +21,9 @@ const UserSchema = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now,
+  },
+  admin: {
+    type: Boolean,
   },
 });
 
