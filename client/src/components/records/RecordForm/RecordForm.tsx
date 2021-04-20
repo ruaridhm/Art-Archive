@@ -51,21 +51,21 @@ const emptyItemObject = {
   reference: '',
   collectionName: '',
   image: '',
-  date: currentDate,
+  date: null,
   size: '',
   medium: '',
   price: 0,
   currentLocation: '',
   mediaLinks: '',
   notes: '',
-  firstExhibitedDate: '',
+  firstExhibitedDate: null,
   firstExhibitedTitle: '',
   firstExhibitedAddress: '',
   exhibited: [],
   submission: [],
   salesHistorySoldTo: '',
   salesHistorySoldBy: '',
-  salesHistoryDateSold: '',
+  salesHistoryDateSold: null,
 };
 interface Step1Props {
   title?: string;
@@ -272,7 +272,7 @@ const Step3 = ({
 };
 
 interface Step4Props {
-  firstExhibitedDate?: string;
+  firstExhibitedDate?: Date | null;
   firstExhibitedTitle?: string;
   firstExhibitedAddress?: string;
   exhibited?: any;

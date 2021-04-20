@@ -26,21 +26,21 @@ export interface RecordInterface {
   reference?: string;
   collectionName?: string;
   image?: string;
-  date?: Date;
+  date?: Date | null;
   size?: string;
   medium?: string;
   price?: Number;
   currentLocation?: string;
   mediaLinks?: string;
   notes?: string;
-  firstExhibitedDate?: Date;
+  firstExhibitedDate?: Date | null;
   firstExhibitedTitle?: string;
   firstExhibitedAddress?: string;
   exhibited?: Array<Object>;
   submission?: Array<Object>;
   salesHistorySoldTo?: string;
   salesHistorySoldBy?: string;
-  salesHistoryDateSold?: Date;
+  salesHistoryDateSold?: Date | null;
 }
 
 interface RecordItemProps {
