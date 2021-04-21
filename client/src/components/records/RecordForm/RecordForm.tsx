@@ -6,8 +6,10 @@ import React, {
   SetStateAction,
 } from 'react';
 import RecordContext from '../../../context/record/RecordContext';
-import Button from '../../button/Button';
-import TextField from '../../text field/TextField';
+
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
 import useKey from '../../../hooks/useKey';
 import {
   RecordFormContainer,
@@ -19,31 +21,12 @@ import {
   ShowAllRecordForm,
   RecordFormCloseButton,
   RecordFormButtonContainer,
-  RecordFormCloseButtonIcon,
   RecordFormStepButtonContainer,
-  RecordFormStepButton,
-  ShowAllRecordFormStepButton,
   StepContainer,
 } from './Style';
 import { RecordInterface } from '../RecordItem/RecordItem';
 
-const getFormattedCurrentDate = () => {
-  const padDates = (dates) => {
-    if (dates <= 9) {
-      return `0${dates}`;
-    }
-    return dates.toString();
-  };
-
-  const todaysDate = new Date();
-  let day = padDates(todaysDate.getDate());
-  let month = padDates(todaysDate.getMonth());
-  let year = todaysDate.getFullYear();
-
-  return `${year}-${month}-${day}`;
-};
-
-const currentDate = getFormattedCurrentDate();
+import CloseIcon from '@material-ui/icons/Close';
 
 const emptyItemObject = {
   title: '',
@@ -87,46 +70,41 @@ const Step1 = ({
   return (
     <StepContainer>
       <TextField
-        medium
-        outline
+        label='Title'
+        variant='outlined'
         type='text'
-        title='Title'
         name='title'
         value={title}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Artist'
+        label='Artist'
         name='artist'
         value={artist}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Ref'
+        label='Ref'
         name='reference'
         value={reference}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Collection'
+        label='Collection'
         name='collectionName'
         value={collectionName}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Image'
+        label='Image'
         name='image'
         value={image}
         onChange={onChange}
@@ -155,46 +133,41 @@ const Step2 = ({
   return (
     <StepContainer>
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='date'
-        title='Date'
+        label='Date'
         name='date'
         value={date}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Size'
+        label='Size'
         name='size'
         value={size}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Medium'
+        label='Medium'
         name='medium'
         value={medium}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='number'
-        title='Price'
+        label='Price'
         name='price'
         value={price}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Current Location'
+        label='Current Location'
         name='currentLocation'
         value={currentLocation}
         onChange={onChange}
@@ -223,46 +196,43 @@ const Step3 = ({
   return (
     <StepContainer>
       <TextField
-        medium
-        outline
+        multiline
+        variant='outlined'
         type='text'
-        title='Media Links'
+        label='Media Links'
         name='mediaLinks'
         value={mediaLinks}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        multiline
+        variant='outlined'
         type='text'
-        title='Notes'
+        label='Notes'
         name='notes'
         value={notes}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Sold To'
+        label='Sold To'
         name='salesHistorySoldTo'
         value={salesHistorySoldTo}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Sold By'
+        label='Sold By'
         name='salesHistorySoldBy'
         value={salesHistorySoldBy}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='date'
-        title='Date Sold'
+        label='Date Sold'
         name='salesHistoryDateSold'
         value={salesHistoryDateSold}
         onChange={onChange}
@@ -291,55 +261,49 @@ const Step4 = ({
   return (
     <StepContainer>
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='date'
-        title='First Exhibition Date'
+        label='First Exhibition Date'
         name='firstExhibitedDate'
         value={firstExhibitedDate}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='First Exhibition Title'
+        label='First Exhibition Title'
         name='firstExhibitedTitle'
         value={firstExhibitedTitle}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='First Exhibition Address'
+        label='First Exhibition Address'
         name='firstExhibitedAddress'
         value={firstExhibitedAddress}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='date'
-        title='Submission Date'
+        label='Submission Date'
         name='submissionDate'
         value={submission.submissionDate}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Submission Exhibition Title'
+        label='Submission Exhibition Title'
         name='submissionExhibitionTitle'
         value={submission.submissionExhibitionTitle}
         onChange={onChange}
       />
       <TextField
-        medium
-        outline
+        variant='outlined'
         type='text'
-        title='Submission Venue Address'
+        label='Submission Venue Address'
         name='submissionVenueAddress'
         value={submission.submissionVenueAddress}
         onChange={onChange}
@@ -449,7 +413,9 @@ const RecordForm = ({
               {current ? 'Edit Item' : 'Add Item'}
             </FormHeaderText>
             <RecordFormCloseButton onClick={close}>
-              <RecordFormCloseButtonIcon className='fas fa-times'></RecordFormCloseButtonIcon>
+              <IconButton>
+                <CloseIcon />
+              </IconButton>
             </RecordFormCloseButton>
           </FormHeader>
           <ShowAllRecordForm>
@@ -490,7 +456,8 @@ const RecordForm = ({
             />
           </ShowAllRecordForm>
           <RecordFormStepButtonContainer>
-            <RecordFormStepButton
+            <IconButton
+              color='secondary'
               onClick={() => {
                 setShowAllSteps(!showAllSteps);
                 setCurrentStep(1);
@@ -499,24 +466,17 @@ const RecordForm = ({
               aria-label='Show all steps'
             >
               All
-            </RecordFormStepButton>
+            </IconButton>
           </RecordFormStepButtonContainer>
           <RecordFormButtonContainer>
-            <Button
-              type='submit'
-              medium
-              solidSuccess
-              label={current ? 'Update Item' : 'Add Item'}
-            />
+            <Button type='submit' variant='contained' color='primary'>
+              {current ? 'Update Item' : 'Add Item'}
+            </Button>
 
             {current && (
-              <Button
-                medium
-                solidDanger
-                type='button'
-                onClick={clearAll}
-                label='Clear'
-              />
+              <Button variant='contained' onClick={clearAll} color='secondary'>
+                Clear
+              </Button>
             )}
           </RecordFormButtonContainer>
         </ShowAllRecordFormForm>
@@ -532,7 +492,9 @@ const RecordForm = ({
               {current ? 'Edit Item' : 'Add Item'}
             </FormHeaderText>
             <RecordFormCloseButton onClick={close}>
-              <RecordFormCloseButtonIcon className='fas fa-times'></RecordFormCloseButtonIcon>
+              <IconButton>
+                <CloseIcon />
+              </IconButton>
             </RecordFormCloseButton>
           </FormHeader>
           {currentStep === 1 ? (
@@ -574,7 +536,8 @@ const RecordForm = ({
           ) : null}
 
           <RecordFormStepButtonContainer>
-            <RecordFormStepButton
+            <IconButton
+              color='primary'
               onClick={() => {
                 setCurrentStep(1);
               }}
@@ -582,8 +545,9 @@ const RecordForm = ({
               aria-label='Form Step 1'
             >
               1
-            </RecordFormStepButton>
-            <RecordFormStepButton
+            </IconButton>
+            <IconButton
+              color='primary'
               onClick={() => {
                 setCurrentStep(2);
               }}
@@ -591,8 +555,9 @@ const RecordForm = ({
               aria-label='Form Step 2'
             >
               2
-            </RecordFormStepButton>
-            <RecordFormStepButton
+            </IconButton>
+            <IconButton
+              color='primary'
               onClick={() => {
                 setCurrentStep(3);
               }}
@@ -600,8 +565,9 @@ const RecordForm = ({
               aria-label='Form Step 3'
             >
               3
-            </RecordFormStepButton>
-            <RecordFormStepButton
+            </IconButton>
+            <IconButton
+              color='primary'
               onClick={() => {
                 setCurrentStep(4);
               }}
@@ -609,9 +575,10 @@ const RecordForm = ({
               aria-label='Form Step 4'
             >
               4
-            </RecordFormStepButton>
+            </IconButton>
 
-            <ShowAllRecordFormStepButton
+            <IconButton
+              color='secondary'
               onClick={() => {
                 setShowAllSteps(!showAllSteps);
                 setCurrentStep(null);
@@ -620,24 +587,17 @@ const RecordForm = ({
               aria-label='Show all steps'
             >
               All
-            </ShowAllRecordFormStepButton>
+            </IconButton>
           </RecordFormStepButtonContainer>
           <RecordFormButtonContainer>
-            <Button
-              type='submit'
-              medium
-              solidSuccess
-              label={current ? 'Update Item' : 'Add Item'}
-            />
+            <Button type='submit' variant='contained' color='primary'>
+              {current ? 'Update Item' : 'Add Item'}
+            </Button>
 
             {current && (
-              <Button
-                medium
-                solidDanger
-                type='button'
-                onClick={clearAll}
-                label='Clear'
-              />
+              <Button variant='contained' onClick={clearAll} color='secondary'>
+                Clear
+              </Button>
             )}
           </RecordFormButtonContainer>
         </RecordFormForm>

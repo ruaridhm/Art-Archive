@@ -1,24 +1,33 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-//Material-UI
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-//Context
 import RecordContext from '../../../context/record/RecordContext';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import RecordItemDialog from './RecordItemDialog';
+import ModalPortal from '../../modal/ModalPortal';
+
 //icons
 import EditIcon from '@material-ui/icons/Edit';
-//Material-UI
+
 import {
+  Card,
   CardActionArea,
-  CardHeader,
+  CardActions,
+  CardContent,
   CardMedia,
-  Grid,
+  Typography,
   List,
   ListItem,
   ListItemText,
 } from '@material-ui/core';
 
+const useStyles = makeStyles({
+  root: {
+    minWidth: 345,
+  },
+  media: {
+    height: 140,
+  },
+});
 export interface RecordInterface {
   _id?: string;
   title?: string;
@@ -48,12 +57,15 @@ interface RecordItemProps {
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
 }
 
-const RecordItemNew = ({ record, setDisplayAddRecord }: RecordItemProps) => {
-  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
-  const recordContext = useContext(RecordContext);
-  const { setCurrent, clearCurrent } = recordContext;
+const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
+  const classes = useStyles();
 
-  const toggleInfoModalHandler = () => setShowInfoModal(!showInfoModal);
+  const [showInfoDialog, setShowInfoDialog] = useState<boolean>(false);
+  const recordContext = useContext(RecordContext);
+  const { setCurrent } = recordContext;
+
+  const { title, reference, collectionName, image, medium, price } = record;
+
   const scrollToTop = () => {
     document.documentElement.scrollTop = 110;
   };
@@ -64,53 +76,35 @@ const RecordItemNew = ({ record, setDisplayAddRecord }: RecordItemProps) => {
     scrollToTop();
   };
 
-  const getFormattedDate = (date) => {
-    const dateStr = date.toString();
-
-    return `${dateStr.substring(8, 10)}-${dateStr.substring(
-      5,
-      7
-    )}-${dateStr.substring(0, 4)} `;
+  const showRecordInfoDialogHandler = () => {
+    setShowInfoDialog(true);
   };
 
-  const {
-    title,
-    reference,
-    collectionName,
-    image,
-    date,
-    size,
-    medium,
-    price,
-    currentLocation,
-  } = record;
-
   return (
-    <Card variant='outlined'>
-      <CardActionArea onClick={toggleInfoModalHandler}>
-        <CardMedia image={image} title={title} />
-        <CardHeader>{title}</CardHeader>
-        <CardContent>
-          <Grid item xs={12} md={6}>
+    <>
+      <Card className={classes.root}>
+        <CardActionArea onClick={showRecordInfoDialogHandler}>
+          <CardMedia
+            className={classes.media}
+            component='img'
+            alt={title}
+            height='140'
+            image={image}
+            title={title}
+          />
+          <CardContent>
+            <Typography gutterBottom variant='h5' component='h2'>
+              {title}
+            </Typography>
             <List>
               {reference && (
                 <ListItem>
-                  <ListItemText primary={`Ref: ${reference}`} />
+                  <ListItemText primary={`Reference: ${reference}`} />
                 </ListItem>
               )}
               {collectionName && (
                 <ListItem>
                   <ListItemText primary={`Collection: ${collectionName}`} />
-                </ListItem>
-              )}
-              {date && (
-                <ListItem>
-                  <ListItemText primary={`Date: ${getFormattedDate(date)}`} />
-                </ListItem>
-              )}
-              {size && (
-                <ListItem>
-                  <ListItemText primary={`Size: ${size}`} />
                 </ListItem>
               )}
               {medium && (
@@ -123,30 +117,33 @@ const RecordItemNew = ({ record, setDisplayAddRecord }: RecordItemProps) => {
                   <ListItemText primary={`Price: ${price}`} />
                 </ListItem>
               )}
-              {currentLocation && (
-                <ListItem>
-                  <ListItemText
-                    primary={`CurrentLocation: ${currentLocation}`}
-                  />
-                </ListItem>
-              )}
             </List>
-          </Grid>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button
-          onClick={editRecord}
-          color='primary'
-          variant='contained'
-          startIcon={<EditIcon />}
-          size='medium'
-        >
-          Edit
-        </Button>
-      </CardActions>
-    </Card>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button
+            onClick={editRecord}
+            color='primary'
+            variant='contained'
+            startIcon={<EditIcon />}
+            size='medium'
+          >
+            Edit
+          </Button>
+        </CardActions>
+      </Card>
+
+      {showInfoDialog && (
+        <ModalPortal>
+          <RecordItemDialog
+            record={record}
+            open={showInfoDialog}
+            setOpen={setShowInfoDialog}
+          />
+        </ModalPortal>
+      )}
+    </>
   );
 };
 
-export default RecordItemNew;
+export default RecordItem;
