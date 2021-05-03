@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { DialogTitle } from './RecordItemDialog';
 import React from 'react';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,16 +32,25 @@ interface inputState {
   address: string;
 }
 
+const emptyInput = {
+  name: '',
+  date: null,
+  address: '',
+};
+
 const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
   const classes = useStyles();
-  const [state, setState] = React.useState<inputState | null>(null);
+  const [state, setState] = React.useState<inputState | null>(emptyInput);
 
   const handleChange = (e: {
     target: { type: any; name: string; value: any };
   }) => {
-    // if (e.target.type !== undefined && e.target.type === 'text') {
     setState({ ...state, [e.target.name]: e.target.value });
+
     // }
+  };
+  const handleDateChange = (date: Date | null) => {
+    setState({ ...state, date: date });
   };
 
   const handleClose = () => {
@@ -59,16 +69,25 @@ const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
               label={`${detail} Title`}
               variant='outlined'
               onChange={handleChange}
+              name='name'
             />
-            <TextField
+            <KeyboardDatePicker
+              margin='normal'
+              id='date-picker-dialog'
               label={`${detail} Date`}
-              variant='outlined'
-              onChange={handleChange}
+              format='dd/MM/yyyy'
+              value={state.date}
+              onChange={handleDateChange}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+              inputVariant='outlined'
             />
             <TextField
               label={`${detail} Address`}
               variant='outlined'
               onChange={handleChange}
+              name='address'
             />
           </FormControl>
         </form>

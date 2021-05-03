@@ -1,13 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
+//Context
+import AuthContext from '../../../context/auth/AuthContext';
+//Material-UI
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Fab from '@material-ui/core/Fab';
+import Button from '@material-ui/core/Button';
+//Material-UI Icons
+import AddIcon from '@material-ui/icons/Add';
+
+import RecordForm from '../../records/RecordForm/RecordForm';
+import RecordFormDialog from '../../records/RecordForm/RecordFormDialog';
 import Records from '../../records/Records/Records';
 import RecordFilter from '../../records/RecordFilter/RecordFilter';
-import AuthContext from '../../../context/auth/AuthContext';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Dropdown from '../../dropdown/Dropdown';
-import RecordForm from '../../records/RecordForm/RecordForm';
 
 import {
   HomeContainer,
@@ -22,82 +30,66 @@ import {
 
 const sortOptions = [
   {
-    id: 1,
     title: 'Title',
     value: 'title',
   },
   {
-    id: 2,
     title: 'Artist',
     value: 'artist',
   },
   {
-    id: 3,
     title: 'Ref',
     value: 'ref',
   },
   {
-    id: 4,
     title: 'Collection',
     value: 'collection',
   },
   {
-    id: 5,
     title: 'Date',
     value: 'date',
   },
   {
-    id: 6,
     title: 'Size',
     value: 'size',
   },
   {
-    id: 7,
     title: 'Medium',
     value: 'medium',
   },
   {
-    id: 8,
     title: 'Price',
     value: 'price',
   },
   {
-    id: 9,
     title: 'Current Location',
     value: 'currentLocation',
   },
   {
-    id: 10,
     title: 'Sold To',
     value: 'soldTo',
   },
   {
-    id: 11,
     title: 'Sold By',
     value: 'soldBy',
   },
   {
-    id: 12,
     title: 'Date Sold',
     value: 'dateSold',
   },
   {
-    id: 13,
     title: 'First Exhibition Date',
     value: 'firstExhibitionDate',
   },
   {
-    id: 14,
     title: 'First Exhibition Title',
     value: 'firstExhibitionTitle',
   },
   {
-    id: 15,
     title: 'Submission Date',
     value: 'submissionDate',
   },
   {
-    id: 16,
     title: 'Submission Title',
     value: 'submissionTitle',
   },
@@ -115,22 +107,44 @@ const orderOptions = [
     value: 'descending',
   },
 ];
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 200,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+  })
+);
+
 const Home = () => {
   const authContext = useContext(AuthContext);
   const [displayAddRecord, setDisplayAddRecord] = useState<boolean>(false);
-  const [sort, setSort] = useState([]);
-  const [order, setOrder] = useState([]);
-  const [open, setOpen] = useState<string>('');
+  const [sort, setSort] = useState<string>('');
+  const [order, setOrder] = useState<string>('');
+
+  const classes = useStyles();
 
   useEffect(() => {
     authContext.loadUser();
     // eslint-disable-next-line
   }, []);
 
+  const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSort(event.target.value as string);
+  };
+
+  const handleOrderChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setOrder(event.target.value as string);
+  };
+
   return (
     <HomeContainer>
       {displayAddRecord ? (
-        <RecordForm
+        <RecordFormDialog
           displayAddRecord={displayAddRecord}
           setDisplayAddRecord={setDisplayAddRecord}
         />
@@ -144,35 +158,60 @@ const Home = () => {
             </MobileRecordFilterContainer>
           </MobileFilterContainer>
 
-          <IconButton
-            aria-label='Add Item'
+          <Fab
             color='primary'
+            aria-label='add Item'
             onClick={() => setDisplayAddRecord(!displayAddRecord)}
-            size='medium'
           >
-            <AddCircleIcon />
-          </IconButton>
+            <AddIcon />
+          </Fab>
         </MobileControlsContainer>
       )}
 
       <Controls>
         <SortRecords>
-          <Dropdown
-            title='Sort by:'
-            items={sortOptions}
-            selection={sort}
-            setSelection={setSort}
-            open={open}
-            setOpen={setOpen}
-          />
-          <Dropdown
-            title='Order by:'
-            items={orderOptions}
-            selection={order}
-            setSelection={setOrder}
-            open={open}
-            setOpen={setOpen}
-          />
+          <FormControl variant='outlined' className={classes.formControl}>
+            <InputLabel id='demo-simple-select-outlined-label'>
+              Sort By:
+            </InputLabel>
+            <Select
+              labelId='demo-simple-select-outlined-label'
+              id='demo-simple-select-outlined'
+              value={sort}
+              onChange={handleSortChange}
+              label='Sort By'
+            >
+              <MenuItem value=''>
+                <em>None</em>
+              </MenuItem>
+              {sortOptions.map((e) => (
+                <MenuItem value={e.value} key={e.value}>
+                  {e.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl variant='outlined' className={classes.formControl}>
+            <InputLabel id='demo-simple-select-outlined-label'>
+              Order By:
+            </InputLabel>
+            <Select
+              labelId='demo-simple-select-outlined-label'
+              id='demo-simple-select-outlined'
+              value={order}
+              onChange={handleOrderChange}
+              label='Order By'
+            >
+              <MenuItem value=''>
+                <em>None</em>
+              </MenuItem>
+              {orderOptions.map((e) => (
+                <MenuItem value={e.value} key={e.value}>
+                  {e.title}{' '}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </SortRecords>
         <HomeFilterContainer>
           <RecordFilter />

@@ -54,7 +54,7 @@ const User = () => {
       </UserStatsContainer>
     );
   } else {
-    return <Spinner />;
+    return <Spinner description='Loading User' />;
   }
 };
 

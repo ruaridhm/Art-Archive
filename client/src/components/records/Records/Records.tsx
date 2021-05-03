@@ -1,55 +1,84 @@
 import React, { Dispatch, SetStateAction, useContext, useEffect } from 'react';
-import { CSSTransition } from 'react-transition-group';
 import RecordContext from '../../../context/record/RecordContext';
 import RecordItem from '../RecordItem/RecordItem';
 import Spinner from '../../layout/Spinner/Spinner';
-import { StyledTransitionGroup } from './Style';
+//Material-UI
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 interface RecordsProps {
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
 }
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      paddingLeft: '1em',
+      paddingRight: '1em',
+    },
+    item: {
+      flexWrap: 'wrap',
+      maxWidth: '16%',
+      minWidth: '16%',
+    },
+  })
+);
 
-const Records = ({ setDisplayAddRecord }: RecordsProps) => {
+const Records2 = ({ setDisplayAddRecord }: RecordsProps) => {
   const recordContext = useContext(RecordContext);
-
   const { records, filtered, getRecords, loading } = recordContext;
+  const classes = useStyles();
 
   useEffect(() => {
     getRecords();
     // eslint-disable-next-line
   }, []);
-
-  if (records !== null && records.length === 0 && !loading) {
-    return <h4>Please add a record</h4>;
-  }
-
-  return (
-    <>
+  return records !== null && records.length === 0 && !loading ? (
+    <h4>Please add a record</h4>
+  ) : (
+    <div className={classes.root}>
       {records !== null && !loading ? (
-        <StyledTransitionGroup>
+        <Grid
+          spacing={3}
+          container
+          alignContent='space-around'
+          alignItems='center'
+          justify='center'
+        >
           {filtered !== null
             ? filtered.map((record) => (
-                <CSSTransition key={record._id} timeout={500} classNames='item'>
+                <Grid
+                  item
+                  xs={6}
+                  sm={3}
+                  className={classes.item}
+                  key={record._id}
+                >
                   <RecordItem
                     record={record}
                     setDisplayAddRecord={setDisplayAddRecord}
                   />
-                </CSSTransition>
+                </Grid>
               ))
             : records.map((record) => (
-                <CSSTransition key={record._id} timeout={500} classNames='item'>
+                <Grid
+                  item
+                  xs={6}
+                  sm={3}
+                  className={classes.item}
+                  key={record._id}
+                >
                   <RecordItem
                     record={record}
                     setDisplayAddRecord={setDisplayAddRecord}
                   />
-                </CSSTransition>
+                </Grid>
               ))}
-        </StyledTransitionGroup>
+        </Grid>
       ) : (
-        <Spinner />
+        <Spinner description='Loading Items' />
       )}
-    </>
+    </div>
   );
 };
 
-export default Records;
+export default Records2;

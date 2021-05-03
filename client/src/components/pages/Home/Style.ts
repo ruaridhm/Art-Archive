@@ -68,7 +68,7 @@ export const AddRecordButtonDescription = styled.p`
 
 export const SortRecords = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 22rem;

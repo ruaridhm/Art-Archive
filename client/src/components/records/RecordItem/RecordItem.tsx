@@ -22,10 +22,14 @@ import {
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 345,
+    maxWidth: 345,
+    height: 500,
   },
   media: {
     height: 140,
+  },
+  actionArea: {
+    height: '90%',
   },
 });
 export interface RecordInterface {
@@ -40,6 +44,7 @@ export interface RecordInterface {
   medium?: string;
   price?: Number;
   currentLocation?: string;
+  editions?: Number;
   mediaLinks?: string;
   notes?: string;
   firstExhibitedDate?: Date | null;
@@ -83,7 +88,10 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
   return (
     <>
       <Card className={classes.root}>
-        <CardActionArea onClick={showRecordInfoDialogHandler}>
+        <CardActionArea
+          onClick={showRecordInfoDialogHandler}
+          className={classes.actionArea}
+        >
           <CardMedia
             className={classes.media}
             component='img'

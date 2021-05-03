@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import {
   createStyles,
-  makeStyles,
   Theme,
   withStyles,
   WithStyles,
@@ -14,14 +13,8 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import {
-  FormControl,
-  InputLabel,
-  List,
-  ListItem,
-  ListItemText,
-  TextField,
-} from '@material-ui/core';
+import Image from 'material-ui-image';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 
 import RecordContext from '../../../context/record/RecordContext';
 import ModalPortal from '../../modal/ModalPortal';
@@ -38,6 +31,10 @@ const styles = (theme: Theme) =>
       right: theme.spacing(1),
       top: theme.spacing(1),
       color: theme.palette.grey[500],
+    },
+    content: {
+      display: 'flex',
+      flexDirection: 'row',
     },
   });
 
@@ -68,6 +65,8 @@ export const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
 const DialogContent = withStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'row',
   },
 }))(MuiDialogContent);
 
@@ -231,6 +230,7 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
               </ListItem>
             )}
           </List>
+          <Image src={image} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDelete} color='secondary'>

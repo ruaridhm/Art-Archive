@@ -26,14 +26,16 @@ const Gallery = () => {
   }));
 
   return (
-    <GalleryContainer>
-      <Carousel images={images} hasThumbnails={false} />
-      <ButtonContainer>
-        <Button variant='contained' color='primary' startIcon={<InfoIcon />}>
-          Info
-        </Button>
-      </ButtonContainer>
-    </GalleryContainer>
+    !loading && (
+      <GalleryContainer>
+        <Carousel images={images} hasThumbnails={false} />
+        <ButtonContainer>
+          <Button variant='contained' color='primary' startIcon={<InfoIcon />}>
+            Info
+          </Button>
+        </ButtonContainer>
+      </GalleryContainer>
+    )
   );
 };
 
