@@ -32,29 +32,43 @@ const useStyles = makeStyles({
     height: '90%',
   },
 });
+
+export interface MediaLinksInterface {
+  title?: string;
+  address?: string;
+}
+
+export interface DisplayedInterface {
+  title?: string;
+  date: Date | null;
+  address?: string;
+}
+export interface SalesInterface {
+  soldTo?: string;
+  soldBy?: string;
+  soldDate?: Date | null;
+  sold?: Boolean;
+}
+
 export interface RecordInterface {
   _id?: string;
   title?: string;
   artist?: string;
   reference?: string;
   collectionName?: string;
-  image?: string;
+  image?: { url: string }[] | [];
   date?: Date | null;
   size?: string;
   medium?: string;
   price?: Number;
   currentLocation?: string;
   editions?: Number;
-  mediaLinks?: string;
+  mediaLinks?: MediaLinksInterface[] | [];
   notes?: string;
-  firstExhibitedDate?: Date | null;
-  firstExhibitedTitle?: string;
-  firstExhibitedAddress?: string;
-  exhibited?: Array<Object>;
-  submission?: Array<Object>;
-  salesHistorySoldTo?: string;
-  salesHistorySoldBy?: string;
-  salesHistoryDateSold?: Date | null;
+  exhibited: DisplayedInterface[];
+  submission?: DisplayedInterface[] | [];
+  sales?: SalesInterface;
+  lastEdited?: Date | null;
 }
 
 interface RecordItemProps {
@@ -92,14 +106,16 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
           onClick={showRecordInfoDialogHandler}
           className={classes.actionArea}
         >
-          <CardMedia
-            className={classes.media}
-            component='img'
-            alt={title}
-            height='140'
-            image={image}
-            title={title}
-          />
+          {image !== null && (
+            <CardMedia
+              className={classes.media}
+              component='img'
+              alt={title}
+              height='140'
+              image={image[0].url}
+              title={title}
+            />
+          )}
           <CardContent>
             <Typography gutterBottom variant='h5' component='h2'>
               {title}

@@ -43,16 +43,13 @@ router.post('/', [auth], async (req, res) => {
     medium,
     price,
     currentLocation,
+    editions,
     mediaLinks,
     notes,
-    firstExhibitedDate,
-    firstExhibitedTitle,
-    firstExhibitedAddress,
     exhibited,
     submission,
-    salesHistorySoldTo,
-    salesHistorySoldBy,
-    salesHistoryDateSold,
+    sales,
+    lastEdited,
   } = req.body;
 
   try {
@@ -67,16 +64,13 @@ router.post('/', [auth], async (req, res) => {
       medium,
       price,
       currentLocation,
+      editions,
       mediaLinks,
       notes,
-      firstExhibitedDate,
-      firstExhibitedTitle,
-      firstExhibitedAddress,
       exhibited,
       submission,
-      salesHistorySoldTo,
-      salesHistorySoldBy,
-      salesHistoryDateSold,
+      sales,
+      lastEdited,
       user: req.user.id,
     });
 
@@ -104,45 +98,14 @@ router.put('/:id', auth, async (req, res) => {
     medium,
     price,
     currentLocation,
+    editions,
     mediaLinks,
     notes,
-    firstExhibitedDate,
-    firstExhibitedTitle,
-    firstExhibitedAddress,
     exhibited,
     submission,
-    salesHistorySoldTo,
-    salesHistorySoldBy,
-    salesHistoryDateSold,
+    sales,
+    lastEdited,
   } = req.body;
-
-  // interface ItemFields {
-  //   title?: string;
-  //   artist?: string;
-  //   label?: string;
-  //   catalogNumber?: string;
-  //   releaseDate?: string;
-  //   format?: string;
-  //   country?: string;
-  //   coverFront?: string;
-  //   coverBack?: string;
-  //   coverLp?: string;
-  //   recordCondition?: string;
-  //   sleeveCondition?: string;
-  //   barcode?: string;
-  //   locationPrimary?: string;
-  //   locationSecondary?: string;
-  //   want?: number;
-  //   have?: number;
-  //   genre?: string;
-  //   style?: string;
-  //   cover?: string;
-  //   innerSleeve?: string;
-  //   outerSleeve?: string;
-  //   wishList?: boolean;
-  //   rating?: string;
-  //   comment?: string;
-  // }
 
   //Build record object
   const itemFields = {};
@@ -157,18 +120,13 @@ router.put('/:id', auth, async (req, res) => {
   if (medium) itemFields.medium = medium;
   if (price) itemFields.price = price;
   if (currentLocation) itemFields.currentLocation = currentLocation;
+  if (editions) itemFields.editions = editions;
   if (mediaLinks) itemFields.mediaLinks = mediaLinks;
   if (notes) itemFields.notes = notes;
-  if (firstExhibitedDate) itemFields.firstExhibitedDate = firstExhibitedDate;
-  if (firstExhibitedTitle) itemFields.firstExhibitedTitle = firstExhibitedTitle;
-  if (firstExhibitedAddress)
-    itemFields.firstExhibitedAddress = firstExhibitedAddress;
   if (exhibited) itemFields.exhibited = exhibited;
   if (submission) itemFields.submission = submission;
-  if (salesHistorySoldTo) itemFields.salesHistorySoldTo = salesHistorySoldTo;
-  if (salesHistorySoldBy) itemFields.salesHistorySoldBy = salesHistorySoldBy;
-  if (salesHistoryDateSold)
-    itemFields.salesHistoryDateSold = salesHistoryDateSold;
+  if (sales) itemFields.sales = sales;
+  if (lastEdited) itemFields.lastEdited = lastEdited;
 
   try {
     let collectionItem = await CollectionItem.findById(req.params.id);

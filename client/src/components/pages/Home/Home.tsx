@@ -12,7 +12,6 @@ import Button from '@material-ui/core/Button';
 //Material-UI Icons
 import AddIcon from '@material-ui/icons/Add';
 
-import RecordForm from '../../records/RecordForm/RecordForm';
 import RecordFormDialog from '../../records/RecordForm/RecordFormDialog';
 import Records from '../../records/Records/Records';
 import RecordFilter from '../../records/RecordFilter/RecordFilter';

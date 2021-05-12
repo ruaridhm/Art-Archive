@@ -18,9 +18,11 @@ const ItemSchema = mongoose.Schema({
   collectionName: {
     type: String,
   },
-  image: {
-    type: String,
-  },
+  image: [
+    {
+      url: { type: String },
+    },
+  ],
   date: {
     type: Date,
   },
@@ -36,33 +38,33 @@ const ItemSchema = mongoose.Schema({
   currentLocation: {
     type: String,
   },
-  mediaLinks: {
-    type: String,
+  editions: {
+    type: Number,
   },
+  mediaLinks: [
+    {
+      title: {
+        type: String,
+      },
+      address: {
+        type: String,
+      },
+    },
+  ],
 
   notes: {
     type: String,
   },
 
-  //Exhibition History
-  firstExhibitedDate: {
-    type: Date,
-  },
-  firstExhibitedTitle: {
-    type: String,
-  },
-  firstExhibitedAddress: {
-    type: String,
-  },
   exhibited: [
     {
-      exhibitionDate: {
+      date: {
         type: Date,
       },
-      exhibitionTitle: {
+      title: {
         type: String,
       },
-      exhibitionAddress: {
+      address: {
         type: String,
       },
     },
@@ -71,30 +73,36 @@ const ItemSchema = mongoose.Schema({
   //Submission History
   submission: [
     {
-      submissionDate: {
+      date: {
         type: Date,
       },
-      submissionExhibitionTitle: {
+      title: {
         type: String,
       },
-      submissionVenueAddress: {
+      address: {
         type: String,
       },
     },
   ],
 
   //Sales History
-  salesHistorySoldTo: {
-    type: String,
+  sales: {
+    soldTo: {
+      type: String,
+    },
+    soldBy: {
+      type: String,
+    },
+    soldDate: {
+      type: Date,
+    },
+    sold: {
+      type: Boolean,
+    },
   },
-  salesHistorySoldBy: {
-    type: String,
-  },
-  salesHistoryDateSold: {
+  lastEdited: {
     type: Date,
   },
 });
 
 module.exports = mongoose.model('collectionItem', ItemSchema);
-
-//TODO if marked as sold , display sold icon (red circle) in TR corner of Primary info(top right box)

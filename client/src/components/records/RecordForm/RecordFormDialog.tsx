@@ -17,41 +17,45 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import ImageDialog from './ImageDialog';
-import { Box } from '@material-ui/core';
 import Container from '@material-ui/core/Container/Container';
+
+import PopulateAutoComplete from '../../../utils/populateAutoComplete';
 
 //Material-UI Icons
 import CloseIcon from '@material-ui/icons/Close';
 //Types
 import { RecordInterface } from '../RecordItem/RecordItem';
+import AutoCompleteTextField from './AutoCompleteTextField';
+import setWeekYearWithOptions from 'date-fns/esm/fp/setWeekYearWithOptions/index.js';
 
 interface RecordFormProps {
   displayAddRecord: boolean;
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
 }
 
-const emptyItemObject = {
+const emptyItemObject: RecordInterface = {
   title: '',
   artist: 'Ed Miliano',
   reference: '',
   collectionName: '',
-  image: '',
+  image: [{ url: '' }],
   date: null,
   size: '',
   medium: '',
   price: 0,
   currentLocation: '',
   editions: 1,
-  mediaLinks: '',
+  mediaLinks: [{ title: '', address: '' }],
   notes: '',
-  firstExhibitedDate: null,
-  firstExhibitedTitle: '',
-  firstExhibitedAddress: '',
-  exhibited: [],
-  submission: [],
-  salesHistorySoldTo: '',
-  salesHistorySoldBy: '',
-  salesHistoryDateSold: null,
+  exhibited: [{ title: '', date: null, address: '' }],
+  submission: [{ title: '', date: null, address: '' }],
+  sales: {
+    soldTo: '',
+    soldBy: '',
+    soldDate: null,
+    sold: false,
+  },
+  lastEdited: null,
 };
 
 const RecordFormDialog = ({
@@ -60,12 +64,15 @@ const RecordFormDialog = ({
 }: RecordFormProps) => {
   const recordContext = useContext(RecordContext);
   const { addRecord, current, clearCurrent, updateRecord } = recordContext;
-  const [item, setItem] = useState<RecordInterface>(emptyItemObject);
+  const [item, setItem] = useState(emptyItemObject);
+  const [exhibitedDate, setExhibitedDate] = useState(item.exhibited[0].date);
+  const [submissionDate, setSubmissionDate] = useState(item.submission[0].date);
+  const [soldDate, setSoldDate] = useState(item.sales.soldDate);
+  const autoCompleteOptions = PopulateAutoComplete();
 
   //Destructuring of Item object
   const {
     title,
-    artist,
     reference,
     collectionName,
     image,
@@ -77,14 +84,9 @@ const RecordFormDialog = ({
     editions,
     mediaLinks,
     notes,
-    firstExhibitedDate,
-    firstExhibitedTitle,
-    firstExhibitedAddress,
     exhibited,
     submission,
-    salesHistorySoldTo,
-    salesHistorySoldBy,
-    salesHistoryDateSold,
+    sales,
   } = item;
 
   //if a record is in current assign current to item else initialize item as an empty object
@@ -99,21 +101,51 @@ const RecordFormDialog = ({
   //Functions
 
   const onChange = (e: { target: { type: any; name: string; value: any } }) => {
+    // console.log(e);
     // if (e.target.type !== undefined && e.target.type === 'text') {
     setItem({ ...item, [e.target.name]: e.target.value });
     // }
   };
-  const handleDateChange = (date: Date | null, label: string) => {
-    console.log('date = ', date);
-    console.log('label = ', label);
-    if (date !== null) {
-      setItem({ ...item, [label]: date });
+
+  const handleAutocompleteChange = (
+    value,
+    category,
+    subCategory = 'noName'
+  ) => {
+    if (subCategory !== 'noName') {
+      if (Array.isArray(item[category])) {
+        setItem({
+          ...item,
+          [category]: [
+            {
+              ...item[category][0],
+              [subCategory]: value,
+            },
+          ],
+        });
+        console.log(item);
+      } else {
+        setItem({
+          ...item,
+          [category]: { ...item[category], [subCategory]: value },
+        });
+
+        console.log(item);
+      }
+    } else {
+      setItem({ ...item, [category]: value });
     }
+  };
+
+  const handleDateChange = (date: Date | null, label: string) => {
+    console.log('handleDateChange called');
+    setItem({ ...item, [label]: date });
   };
 
   const handleDropzoneChange = (files: File[]) => {};
 
   const onSubmit = (e: { preventDefault: () => void }) => {
+    console.log('onSubmit called');
     e.preventDefault();
 
     if (current === null) {
@@ -133,40 +165,92 @@ const RecordFormDialog = ({
     setDisplayAddRecord(!displayAddRecord);
   };
 
+  useEffect(() => {
+    if (
+      exhibitedDate !== null &&
+      exhibitedDate.getTime() === exhibitedDate.getTime()
+    ) {
+      setItem({
+        ...item,
+        exhibited: [
+          {
+            ...item.exhibited[0],
+            date: exhibitedDate,
+          },
+        ],
+      });
+    }
+  }, [exhibitedDate]);
+  useEffect(() => {
+    if (
+      submissionDate !== null &&
+      submissionDate.getTime() === submissionDate.getTime()
+    ) {
+      setItem({
+        ...item,
+        submission: [
+          {
+            ...item.submission[0],
+            date: submissionDate,
+          },
+        ],
+      });
+    }
+  }, [submissionDate]);
+
+  useEffect(() => {
+    if (soldDate !== null && soldDate.getTime() === soldDate.getTime()) {
+      setItem({
+        ...item,
+        sales: {
+          ...item.sales,
+          soldDate: soldDate,
+        },
+      });
+    }
+  }, [soldDate]);
+
+  const handleExhibitedDateChange = (date: Date | null) => {
+    setExhibitedDate(date);
+  };
+  const handleSubmissionDateChange = (date: Date | null) => {
+    setSubmissionDate(date);
+  };
+
+  const handleSoldDateChange = (date: Date | null) => {
+    setSoldDate(date);
+  };
   return (
     <Dialog
       open={displayAddRecord}
-      onClose={setDisplayAddRecord}
+      onClose={close}
       aria-labelledby='add-record-dialog'
       fullWidth={true}
       maxWidth='md'
     >
-      <DialogTitle id='add-record-dialog-title'>
-        {current ? 'Edit Item' : 'Add Item'}
-      </DialogTitle>
-      <DialogContent>
-        <form
-          style={{ display: 'flex', flexDirection: 'column' }}
-          onSubmit={onSubmit}
+      <>
+        <DialogTitle id='add-record-dialog-title'>
+          {current ? 'Edit Item' : 'Add Item'}
+        </DialogTitle>
+        <IconButton
+          style={{ right: '12px', top: '8px', position: 'absolute' }}
+          onClick={close}
         >
-          <TextField
+          <CloseIcon />
+        </IconButton>
+      </>
+      <form
+        style={{ display: 'flex', flexDirection: 'column' }}
+        onSubmit={onSubmit}
+      >
+        <DialogContent>
+          <AutoCompleteTextField
+            id='title-text-field'
             label='Title'
-            variant='outlined'
-            margin='normal'
-            type='text'
-            name='title'
+            autocompleteOptions={autoCompleteOptions.title}
             value={title}
-            onChange={onChange}
-            autoComplete='true'
-          />
-          <TextField
-            label='Artist'
-            variant='outlined'
-            margin='normal'
-            type='text'
-            name='artist'
-            value={artist}
-            onChange={onChange}
+            onChange={handleAutocompleteChange}
+            name='title'
           />
           <TextField
             label='Reference'
@@ -177,49 +261,50 @@ const RecordFormDialog = ({
             value={reference}
             onChange={onChange}
           />
-          <TextField
+          <AutoCompleteTextField
+            id='collection-text-field'
             label='Collection'
-            variant='outlined'
-            margin='normal'
-            type='text'
-            name='collectionName'
+            autocompleteOptions={autoCompleteOptions.collectionName}
             value={collectionName}
-            onChange={onChange}
+            onChange={handleAutocompleteChange}
+            name='collectionName'
           />
-
           <KeyboardDatePicker
             label='Date'
             margin='normal'
             format='dd/MM/yyyy'
             value={date}
             inputVariant='outlined'
-            onChange={() => {
-              handleDateChange(date, 'date');
-            }}
+            onChange={(date) => setItem({ ...item, date: date })}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
           />
-          <Container>
-            <TextField
-              label='Size'
-              variant='outlined'
-              margin='normal'
-              type='text'
-              name='size'
-              value={size}
-              onChange={onChange}
-            />
-            <TextField
-              label='Medium'
-              variant='outlined'
-              margin='normal'
-              type='text'
-              name='medium'
-              value={medium}
-              onChange={onChange}
-            />
-          </Container>
+
+          <AutoCompleteTextField
+            id='size-text-field'
+            label='Size'
+            autocompleteOptions={autoCompleteOptions.size}
+            value={size}
+            onChange={handleAutocompleteChange}
+            name='size'
+          />
+          <AutoCompleteTextField
+            id='medium-text-field'
+            label='Medium'
+            autocompleteOptions={autoCompleteOptions.medium}
+            value={medium}
+            onChange={handleAutocompleteChange}
+            name='medium'
+          />
+          <AutoCompleteTextField
+            id='current-location-text-field'
+            label='Current Location'
+            autocompleteOptions={autoCompleteOptions.currentLocation}
+            value={currentLocation}
+            onChange={handleAutocompleteChange}
+            name='currentLocation'
+          />
           <TextField
             label='Price'
             variant='outlined'
@@ -231,15 +316,6 @@ const RecordFormDialog = ({
           />
 
           <TextField
-            label='Current Location'
-            variant='outlined'
-            margin='normal'
-            type='text'
-            name='currentLocation'
-            value={currentLocation}
-            onChange={onChange}
-          />
-          <TextField
             label='Editions'
             variant='outlined'
             margin='normal'
@@ -249,47 +325,54 @@ const RecordFormDialog = ({
             onChange={onChange}
           />
           <Container>
-            <TextField
-              label='Exhibition Title'
-              variant='outlined'
-              margin='normal'
-              type='text'
-              name='exhibitionTitle'
+            <AutoCompleteTextField
+              id='exhibited-title-text-field'
+              label='Exhibited Title'
+              autocompleteOptions={autoCompleteOptions.exhibited.title}
               value={exhibited[0].title}
-              onChange={onChange}
+              onChange={handleAutocompleteChange}
+              name='exhibited'
+              subName='title'
+            />
+            <AutoCompleteTextField
+              id='exhibited-address-text-field'
+              label='Exhibited Address'
+              autocompleteOptions={autoCompleteOptions.exhibited.address}
+              value={exhibited[0].address}
+              onChange={handleAutocompleteChange}
+              name='exhibited'
+              subName='address'
             />
             <KeyboardDatePicker
-              label='Exhibition Date'
+              label='Exhibited Date'
               margin='normal'
               format='dd/MM/yyyy'
-              value={exhibited[0].date}
+              value={exhibitedDate}
               inputVariant='outlined'
-              onChange={() => {
-                handleDateChange(exhibition.date, 'exhibitionDate');
-              }}
+              onChange={(date) => handleExhibitedDateChange(date)}
               KeyboardButtonProps={{
                 'aria-label': 'change exhibited date',
               }}
             />
-            <TextField
-              label='Exhibition Address'
-              variant='outlined'
-              margin='normal'
-              type='text'
-              name='exhibitionAddress'
-              value={exhibited[0].address}
-              onChange={onChange}
-            />
           </Container>
           <Container>
-            <TextField
+            <AutoCompleteTextField
+              id='submission-title-text-field'
               label='Submission Title'
-              variant='outlined'
-              margin='normal'
-              type='text'
-              name='submissionTitle'
+              autocompleteOptions={autoCompleteOptions.submission.title}
               value={submission[0].title}
-              onChange={onChange}
+              onChange={handleAutocompleteChange}
+              name='submission'
+              subName='title'
+            />
+            <AutoCompleteTextField
+              id='submission-address-text-field'
+              label='Submission Address'
+              autocompleteOptions={autoCompleteOptions.submission.address}
+              value={submission[0].address}
+              onChange={handleAutocompleteChange}
+              name='submission'
+              subName='address'
             />
             <KeyboardDatePicker
               label='Submission Date'
@@ -297,97 +380,90 @@ const RecordFormDialog = ({
               format='dd/MM/yyyy'
               value={submission[0].date}
               inputVariant='outlined'
-              onChange={() => {
-                handleDateChange(submission.date, 'submissionDate');
-              }}
+              onChange={(date) => handleSubmissionDateChange(date)}
               KeyboardButtonProps={{
                 'aria-label': 'change exhibited date',
               }}
             />
-            <TextField
-              label='Submission Address'
-              variant='outlined'
-              margin='normal'
-              type='text'
-              name='submissionAddress'
-              value={submission[0].address}
-              onChange={onChange}
-            />
           </Container>
           <Container>
-            <TextField
+            <AutoCompleteTextField
+              id='sold-to-text-field'
               label='Sold To'
-              variant='outlined'
-              margin='normal'
-              type='text'
-              name='salesHistorySoldTo'
-              value={salesHistorySoldTo}
-              onChange={onChange}
+              autocompleteOptions={autoCompleteOptions.sales.soldTo}
+              value={sales.soldTo}
+              onChange={handleAutocompleteChange}
+              name='sales'
+              subName='soldTo'
             />
-
-            <TextField
+            <AutoCompleteTextField
+              id='sold-by-text-field'
               label='Sold By'
-              variant='outlined'
-              margin='normal'
-              type='text'
-              name='salesHistorySoldBy'
-              value={salesHistorySoldBy}
-              onChange={onChange}
+              autocompleteOptions={autoCompleteOptions.sales.soldBy}
+              value={sales.soldBy}
+              onChange={handleAutocompleteChange}
+              name='sales'
+              subName='soldBy'
             />
-
             <KeyboardDatePicker
               label='Date Sold'
               margin='normal'
               format='dd/MM/yyyy'
-              value={salesHistoryDateSold}
+              value={sales['soldDate']}
               inputVariant='outlined'
-              onChange={() => {
-                handleDateChange(salesHistoryDateSold, 'salesHistoryDateSold');
-              }}
+              onChange={(date) => handleSoldDateChange(date)}
               KeyboardButtonProps={{
                 'aria-label': 'change date sold',
               }}
             />
           </Container>
-
           <Container>
-            <TextField
-              label='Media Links'
-              variant='outlined'
-              margin='normal'
-              type='text'
+            <AutoCompleteTextField
+              id='media-link-text-field'
+              label='Media Link Title'
+              autocompleteOptions={autoCompleteOptions.mediaLinks.title}
+              value={mediaLinks[0].title}
+              onChange={handleAutocompleteChange}
               name='mediaLinks'
-              value={mediaLinks}
-              onChange={onChange}
-              multiline
+              subName='title'
             />
-            <TextField
-              label='Notes'
-              variant='outlined'
-              margin='normal'
-              type='text'
-              name='notes'
-              value={notes}
-              onChange={onChange}
-              multiline
+
+            <AutoCompleteTextField
+              id='media-link-address-field'
+              label='Media Link Address'
+              autocompleteOptions={autoCompleteOptions.mediaLinks.address}
+              value={mediaLinks[0].address}
+              onChange={handleAutocompleteChange}
+              name='mediaLinks'
+              subName='address'
             />
           </Container>
+          <TextField
+            label='Notes'
+            variant='outlined'
+            margin='normal'
+            type='text'
+            name='notes'
+            value={notes}
+            onChange={onChange}
+            multiline
+          />
           <Container>
             <ImageDialog />
           </Container>
-        </form>
-      </DialogContent>
-      <DialogActions>
-        <Button type='submit' variant='contained' color='primary'>
-          {current ? 'Update Item' : 'Add Item'}
-        </Button>
-
-        {current && (
-          <Button variant='contained' onClick={clearAll} color='secondary'>
-            Clear
+        </DialogContent>
+        <DialogActions>
+          <Button type='submit' variant='contained' color='primary'>
+            {current ? 'Update Item' : 'Add Item'}
           </Button>
-        )}
-      </DialogActions>
+
+          {current && (
+            <Button variant='contained' onClick={clearAll} color='secondary'>
+              Clear
+            </Button>
+          )}
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

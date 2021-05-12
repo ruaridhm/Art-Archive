@@ -1,0 +1,106 @@
+/* eslint-disable no-use-before-define */
+import React, { useState, useEffect } from 'react';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete, {
+  createFilterOptions,
+} from '@material-ui/lab/Autocomplete';
+
+const filter = createFilterOptions<FilmOptionType>();
+
+interface AutoCompleteInterface {
+  id: string;
+  label: string;
+  autocompleteOptions: string[] | [];
+  value: any;
+  name: string;
+  onChange: (value: any, name: any, subName?: string) => void;
+  subName?: string;
+}
+
+const AutoCompleteTextField = ({
+  id,
+  label,
+  autocompleteOptions,
+  value,
+  name,
+  onChange,
+  subName,
+}: AutoCompleteInterface) => {
+  const [val, setVal] = useState(value);
+
+  useEffect(() => {
+    if (val != null && val.hasOwnProperty('title')) {
+      if (subName) {
+        onChange(val.title, name, subName);
+      } else {
+        onChange(val.title, name);
+      }
+    } else {
+      if (subName) {
+        onChange(val, name, subName);
+      } else {
+        onChange(val, name);
+      }
+    }
+  }, [val]);
+
+  return (
+    <Autocomplete
+      value={val}
+      onChange={(event, newValue) => {
+        if (typeof newValue === 'string') {
+          setVal(newValue);
+        } else if (newValue && newValue.inputValue) {
+          // Create a new value from the user input
+          setVal(newValue.inputValue);
+        } else {
+          setVal(newValue);
+        }
+      }}
+      filterOptions={(options, params) => {
+        const filtered = filter(options, params);
+
+        // Suggest the creation of a new value
+        if (params.inputValue !== '') {
+          filtered.push({
+            inputValue: params.inputValue,
+            title: `Add "${params.inputValue}"`,
+          });
+        }
+
+        return filtered;
+      }}
+      selectOnFocus
+      clearOnBlur
+      handleHomeEndKeys
+      id={id}
+      options={autocompleteOptions}
+      getOptionLabel={(option) => {
+        // Value selected with enter, right from the input
+        if (typeof option === 'string') {
+          return option;
+        }
+        // Add "xxx" option created dynamically
+        if (option.inputValue) {
+          return option.inputValue;
+        }
+        // Regular option
+
+        return option.title;
+      }}
+      renderOption={(option) => option.title}
+      style={{ width: 300 }}
+      freeSolo
+      renderInput={(params) => (
+        <TextField {...params} label={label} variant='outlined' />
+      )}
+    />
+  );
+};
+
+interface FilmOptionType {
+  inputValue?: string;
+  title: string;
+}
+
+export default AutoCompleteTextField;
