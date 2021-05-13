@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../../context/auth/AuthContext';
 
@@ -6,14 +6,12 @@ import AuthContext from '../../../context/auth/AuthContext';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import Switch from '@material-ui/core/Switch';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 //Components
 import LogoutDialog from './LogoutDialog';
 
 //Material-UI Icons
-import MenuIcon from '@material-ui/icons/Menu';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import NightsStayIcon from '@material-ui/icons/NightsStay';
 import Portal from '@material-ui/core/Portal/Portal';

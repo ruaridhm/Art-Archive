@@ -32,44 +32,65 @@ const PopulateAutoComplete = (): ValueInterface => {
   const populate = (item: string, subItem: string = 'noItem'): void => {
     records.forEach((record) => {
       if (Array.isArray(record[item])) {
-        //item is  an Array of Objects
-        record[item].forEach((element: { title: any; address: any }) => {
-          if (!values[item].title.includes(element.title)) {
-            values[item].title.push({ title: element.title });
-          }
-          if (!values[item].address.includes(element.address)) {
-            values[item].address.push({ title: element.address });
+        //item is an Array of Objects
+        //eg: Exhibited, Submission, MediaLinks
+
+        record[item].forEach((element: { title: string; address: string }) => {
+          if (element[subItem] !== undefined && element[subItem] !== '') {
+            if (
+              !values[item][subItem].some(
+                (value: { [x: string]: any }) =>
+                  value[subItem] === element[subItem]
+              )
+            ) {
+              values[item][subItem].push({ title: element[subItem] });
+            }
           }
         });
       } else if (typeof record[item] === 'object') {
         //item is  an Objects
-        if (!values[item][subItem].includes(record[item][subItem])) {
+        //eg: Sales
+
+        if (
+          !values[item][subItem].some(
+            (value: { title: string }) => value.title === record[item][subItem]
+          ) &&
+          record[item][subItem] !== ''
+        ) {
           values[item][subItem].push({ title: record[item][subItem] });
         }
       } else if (typeof record[item] === 'string') {
         //item is  a String
-        if (!values[item].includes(record[item])) {
+        //eg: Title, CollectionName, Size, Medium, CurrentLocation,
+
+        if (
+          !values[item].some(
+            (value: { title: string }) => value.title === record[item]
+          ) &&
+          record[item] !== ''
+        ) {
           values[item].push({ title: record[item] });
         }
       } else {
         //Handle Error
+        console.log(item, 'hits else');
       }
     });
   };
 
-  // populate('title');
-  // populate('collectionName');
-  // populate('size');
-  // populate('medium');
-  // populate('currentLocation');
-  // populate('exhibited', 'title');
-  // populate('exhibited', 'address');
-  // populate('submission', 'title');
-  // populate('submission', 'address');
-  // populate('sales', 'soldTo');
-  // populate('sales', 'soldBy');
-  // populate('mediaLinks', 'title');
-  // populate('mediaLinks', 'address');
+  populate('title');
+  populate('collectionName');
+  populate('size');
+  populate('medium');
+  populate('currentLocation');
+  populate('exhibited', 'title');
+  populate('exhibited', 'address');
+  populate('submission', 'title');
+  populate('submission', 'address');
+  populate('sales', 'soldTo');
+  populate('sales', 'soldBy');
+  populate('mediaLinks', 'title');
+  populate('mediaLinks', 'address');
 
   return values;
 };

@@ -26,7 +26,6 @@ import CloseIcon from '@material-ui/icons/Close';
 //Types
 import { RecordInterface } from '../RecordItem/RecordItem';
 import AutoCompleteTextField from './AutoCompleteTextField';
-import setWeekYearWithOptions from 'date-fns/esm/fp/setWeekYearWithOptions/index.js';
 
 interface RecordFormProps {
   displayAddRecord: boolean;
@@ -101,7 +100,6 @@ const RecordFormDialog = ({
   //Functions
 
   const onChange = (e: { target: { type: any; name: string; value: any } }) => {
-    // console.log(e);
     // if (e.target.type !== undefined && e.target.type === 'text') {
     setItem({ ...item, [e.target.name]: e.target.value });
     // }
@@ -123,29 +121,20 @@ const RecordFormDialog = ({
             },
           ],
         });
-        console.log(item);
       } else {
         setItem({
           ...item,
           [category]: { ...item[category], [subCategory]: value },
         });
-
-        console.log(item);
       }
     } else {
       setItem({ ...item, [category]: value });
     }
   };
 
-  const handleDateChange = (date: Date | null, label: string) => {
-    console.log('handleDateChange called');
-    setItem({ ...item, [label]: date });
-  };
-
   const handleDropzoneChange = (files: File[]) => {};
 
   const onSubmit = (e: { preventDefault: () => void }) => {
-    console.log('onSubmit called');
     e.preventDefault();
 
     if (current === null) {
