@@ -15,6 +15,7 @@ interface AutoCompleteInterface {
   name: string;
   onChange: (value: any, name: any, subName?: string) => void;
   subName?: string;
+  className?: any;
 }
 
 const AutoCompleteTextField = ({
@@ -25,6 +26,7 @@ const AutoCompleteTextField = ({
   name,
   onChange,
   subName,
+  className,
 }: AutoCompleteInterface) => {
   const [val, setVal] = useState(value);
 
@@ -42,12 +44,22 @@ const AutoCompleteTextField = ({
         onChange(val, name);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [val]);
 
   return (
     <Autocomplete
+      className={className}
       value={val}
-      onChange={(event, newValue) => {
+      selectOnFocus
+      clearOnBlur
+      handleHomeEndKeys
+      id={id}
+      options={autocompleteOptions}
+      renderOption={(option) => option.title}
+      style={{ width: 300 }}
+      freeSolo
+      onChange={(_event, newValue) => {
         if (typeof newValue === 'string') {
           setVal(newValue);
         } else if (newValue && newValue.inputValue) {
@@ -70,11 +82,6 @@ const AutoCompleteTextField = ({
 
         return filtered;
       }}
-      selectOnFocus
-      clearOnBlur
-      handleHomeEndKeys
-      id={id}
-      options={autocompleteOptions}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -88,9 +95,6 @@ const AutoCompleteTextField = ({
 
         return option.title;
       }}
-      renderOption={(option) => option.title}
-      style={{ width: 300 }}
-      freeSolo
       renderInput={(params) => (
         <TextField {...params} label={label} variant='outlined' />
       )}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import { DropzoneDialogBase } from 'material-ui-dropzone';
 import IconButton from '@material-ui/core/IconButton';
@@ -7,6 +7,10 @@ import CloseIcon from '@material-ui/icons/Close';
 const ImageDialog = () => {
   const [open, setOpen] = useState(false);
   const [fileObjects, setFileObjects] = useState([]);
+
+  useEffect(() => {
+    console.log(fileObjects);
+  }, [fileObjects]);
 
   const dialogTitle = () => (
     <>
@@ -31,7 +35,7 @@ const ImageDialog = () => {
         fileObjects={fileObjects}
         cancelButtonText={'cancel'}
         submitButtonText={'submit'}
-        maxFileSize={5000000}
+        maxFileSize={5000000} //Aprox. 5Mb
         open={open}
         onAdd={(newFileObjs) => {
           console.log('onAdd', newFileObjs);

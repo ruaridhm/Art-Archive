@@ -7,11 +7,6 @@ import mainLogo from '../../images/Logo.png';
 
 import { SideBarLogo } from './Style';
 
-type SidebarProps = {
-  pageWrapId: string;
-  outerContainerId: string;
-};
-
 const SideBar = () => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);

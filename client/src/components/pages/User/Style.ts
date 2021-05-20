@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Img from '../../../images//4263202864_237c768087_o.jpg';
 
 export const UserStatsContainer = styled.div`
   padding-left: 4.5rem;
@@ -10,7 +9,6 @@ export const UserStatsContainer = styled.div`
   &:before {
     content: ' ';
     display: block;
-    background-image: url(${Img});
     background-position: center;
     background-size: cover;
     position: absolute;

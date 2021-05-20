@@ -1,14 +1,9 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+//Context
 import RecordContext from '../../../context/record/RecordContext';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
-import RecordItemDialog from './RecordItemDialog';
-import ModalPortal from '../../modal/ModalPortal';
-
-//icons
-import EditIcon from '@material-ui/icons/Edit';
-
+//Material UI
 import {
+  Button,
   Card,
   CardActionArea,
   CardActions,
@@ -18,7 +13,14 @@ import {
   List,
   ListItem,
   ListItemText,
+  Portal,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+//Components
+import RecordItemDialog from './RecordItemDialog';
+
+//icons
+import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles({
   root: {
@@ -77,12 +79,10 @@ interface RecordItemProps {
 }
 
 const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
-  const classes = useStyles();
-
   const [showInfoDialog, setShowInfoDialog] = useState<boolean>(false);
   const recordContext = useContext(RecordContext);
   const { setCurrent } = recordContext;
-
+  const classes = useStyles();
   const { title, reference, collectionName, image, medium, price } = record;
 
   const scrollToTop = () => {
@@ -158,13 +158,13 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
       </Card>
 
       {showInfoDialog && (
-        <ModalPortal>
+        <Portal>
           <RecordItemDialog
             record={record}
             open={showInfoDialog}
             setOpen={setShowInfoDialog}
           />
-        </ModalPortal>
+        </Portal>
       )}
     </>
   );

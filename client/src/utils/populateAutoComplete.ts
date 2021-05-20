@@ -73,7 +73,7 @@ const PopulateAutoComplete = (): ValueInterface => {
         }
       } else {
         //Handle Error
-        console.log(item, 'hits else');
+        console.error(item, 'Populate AutoComplete hits else');
       }
     });
   };

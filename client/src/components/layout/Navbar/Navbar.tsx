@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+//Context
 import AuthContext from '../../../context/auth/AuthContext';
 
 //Material-UI
@@ -29,8 +31,12 @@ const useStyles = makeStyles({
   menuRight: {
     flexGrow: 1,
   },
-  switch: {
+  switchBase: {
     marginRight: '1.25em',
+    color: '#000',
+    '&$checked': {
+      color: 'red',
+    },
   },
 });
 
@@ -51,10 +57,11 @@ const StyledLink = ({ to, children, onClick }: StyledLinkInterface) => {
 
 interface NavbarProps {
   title: string;
-  toggleTheme: () => void;
+  setTheme: any;
+  theme: boolean;
 }
 
-const Navbar = ({ title, toggleTheme }: NavbarProps) => {
+const Navbar = ({ title, setTheme, theme }: NavbarProps) => {
   const authContext = useContext(AuthContext);
   const { isAuthenticated } = authContext;
   const classes = useStyles();
@@ -65,12 +72,14 @@ const Navbar = ({ title, toggleTheme }: NavbarProps) => {
       <StyledLink to='/user'>Collection Stats</StyledLink>
       <StyledLink to='/gallery'>Gallery</StyledLink>
       <Switch
-        className={classes.switch}
-        // color='#f90'
+        className={classes.switchBase}
+        size='medium'
         icon={<WbSunnyIcon />}
         checkedIcon={<NightsStayIcon />}
-        checked={true}
-        onChange={() => {}}
+        checked={theme}
+        onChange={() => {
+          setTheme(!theme);
+        }}
         name='themeToggle'
         inputProps={{ 'aria-label': 'Theme Toggle' }}
       />
@@ -97,16 +106,19 @@ const Navbar = ({ title, toggleTheme }: NavbarProps) => {
   );
   const guestLinks = (
     <>
-      <Switch
-        // color='#f90'
+      {/* <Switch
+        size='small'
+        color='secondary'
         icon={<WbSunnyIcon />}
         checkedIcon={<NightsStayIcon />}
-        checked={true}
-        onChange={() => {}}
+        checked={theme}
+        onChange={() => {
+          setTheme(!theme);
+        }}
         name='themeToggle'
         inputProps={{ 'aria-label': 'Theme Toggle' }}
       />
-      <StyledLink to='/login'>Login</StyledLink>
+      <StyledLink to='/login'>Login</StyledLink> */}
     </>
   );
 

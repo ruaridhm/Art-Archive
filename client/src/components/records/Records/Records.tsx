@@ -1,20 +1,20 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useContext } from 'react';
+//Context
 import RecordContext from '../../../context/record/RecordContext';
-import RecordItem from '../RecordItem/RecordItem';
+//Components
+import RecordItem, { RecordInterface } from '../RecordItem/RecordItem';
 import Spinner from '../../layout/Spinner/Spinner';
 //Material-UI
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import { Container, Grid } from '@material-ui/core';
 
 interface RecordsProps {
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
+  sortedRecords: any;
 }
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      paddingLeft: '1em',
-      paddingRight: '1em',
-    },
+    record: {},
     item: {
       flexWrap: 'wrap',
       maxWidth: '16%',
@@ -23,24 +23,20 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Records2 = ({ setDisplayAddRecord }: RecordsProps) => {
+const Records = ({ setDisplayAddRecord, sortedRecords }: RecordsProps) => {
   const recordContext = useContext(RecordContext);
-  const { records, filtered, getRecords, loading } = recordContext;
+  const { records, filtered, loading } = recordContext;
   const classes = useStyles();
 
-  useEffect(() => {
-    getRecords();
-    // eslint-disable-next-line
-  }, []);
-  return records !== null && records.length === 0 && !loading ? (
+  return sortedRecords !== null && records.length === 0 && !loading ? (
     <h4>Please add a record</h4>
   ) : (
-    <div className={classes.root}>
-      {records !== null && !loading ? (
+    <>
+      {sortedRecords !== null && !loading ? (
         <Grid
           spacing={3}
           container
-          alignContent='space-around'
+          alignContent='space-between'
           alignItems='center'
           justify='center'
         >
@@ -59,7 +55,7 @@ const Records2 = ({ setDisplayAddRecord }: RecordsProps) => {
                   />
                 </Grid>
               ))
-            : records.map((record) => (
+            : sortedRecords.map((record: RecordInterface) => (
                 <Grid
                   item
                   xs={6}
@@ -77,8 +73,8 @@ const Records2 = ({ setDisplayAddRecord }: RecordsProps) => {
       ) : (
         <Spinner description='Loading Items' />
       )}
-    </div>
+    </>
   );
 };
 
-export default Records2;
+export default Records;

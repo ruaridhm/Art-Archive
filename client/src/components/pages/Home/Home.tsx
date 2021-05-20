@@ -1,31 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 //Context
 import AuthContext from '../../../context/auth/AuthContext';
+import RecordContext from '../../../context/record/RecordContext';
 //Material-UI
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Select from '@material-ui/core/Select';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Fab from '@material-ui/core/Fab';
-import Button from '@material-ui/core/Button';
+import {
+  Container,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Button,
+} from '@material-ui/core';
 //Material-UI Icons
 import AddIcon from '@material-ui/icons/Add';
-
+//Custom Components
 import RecordFormDialog from '../../records/RecordForm/RecordFormDialog';
 import Records from '../../records/Records/Records';
 import RecordFilter from '../../records/RecordFilter/RecordFilter';
-
-import {
-  HomeContainer,
-  HomeFilterContainer,
-  MobileFilterContainer,
-  AddRecordButtonWrapper,
-  MobileControlsContainer,
-  MobileRecordFilterContainer,
-  SortRecords,
-  Controls,
-} from './Style';
+//Interfaces
+import { RecordInterface } from '../../records/RecordItem/RecordItem';
 
 const sortOptions = [
   {
@@ -38,11 +32,11 @@ const sortOptions = [
   },
   {
     title: 'Ref',
-    value: 'ref',
+    value: 'reference',
   },
   {
     title: 'Collection',
-    value: 'collection',
+    value: 'collectionName',
   },
   {
     title: 'Date',
@@ -66,31 +60,31 @@ const sortOptions = [
   },
   {
     title: 'Sold To',
-    value: 'soldTo',
+    value: 'sales.soldTo',
   },
   {
     title: 'Sold By',
-    value: 'soldBy',
+    value: 'sales.soldBy',
   },
   {
     title: 'Date Sold',
-    value: 'dateSold',
-  },
-  {
-    title: 'First Exhibition Date',
-    value: 'firstExhibitionDate',
+    value: 'sales.soldDate',
   },
   {
     title: 'First Exhibition Title',
-    value: 'firstExhibitionTitle',
+    value: 'exhibited[0].title',
   },
   {
-    title: 'Submission Date',
-    value: 'submissionDate',
+    title: 'First Exhibition Date',
+    value: 'exhibited[0].date',
   },
   {
     title: 'Submission Title',
-    value: 'submissionTitle',
+    value: 'submission[0].title',
+  },
+  {
+    title: 'Submission Date',
+    value: 'submission[0].date',
   },
 ];
 
@@ -109,6 +103,45 @@ const orderOptions = [
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    homeContainer: {
+      paddingLeft: '0px',
+      paddingRight: '0px',
+      marginLeft: '24px',
+      marginRight: '24px',
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    controls: {
+      display: 'grid',
+      gridTemplateColumns: ' 1fr 1fr 1fr',
+      placeItems: 'center',
+      placeContent: 'center',
+      paddingLeft: '0px',
+      paddingRight: '0px',
+    },
+    sortControls: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '0.5em 0 0.5em 0',
+      margin: '0.5em 0 0.5em 0',
+    },
+    filterContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      // width: '22rem',
+      // padding: '0.5em',
+      // margin: '0.5em',
+    },
+    buttonContainer: {
+      width: '22rem',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '0.5em',
+      margin: '0.5em',
+    },
     formControl: {
       margin: theme.spacing(1),
       minWidth: 200,
@@ -121,16 +154,56 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Home = () => {
   const authContext = useContext(AuthContext);
+  const recordContext = useContext(RecordContext);
+  const { records, getRecords } = recordContext;
   const [displayAddRecord, setDisplayAddRecord] = useState<boolean>(false);
   const [sort, setSort] = useState<string>('');
   const [order, setOrder] = useState<string>('');
+  const [sortedRecords, setSortedRecords] =
+    useState<RecordInterface[]>(records);
 
   const classes = useStyles();
 
   useEffect(() => {
+    getRecords();
     authContext.loadUser();
     // eslint-disable-next-line
   }, []);
+
+  //Sorts records depending on user input from sortOptions and orderOptions
+  useEffect(() => {
+    if (sort === '') {
+      setSortedRecords(records);
+    } else {
+      const compareValues = (key: string, order = 'ascending') => {
+        return function innerSort(a, b) {
+          if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+            // property doesn't exist on either object
+            return 0;
+          }
+
+          const varA =
+            typeof a[key] === 'string' ? a[key].toUpperCase() : a[key];
+          const varB =
+            typeof b[key] === 'string' ? b[key].toUpperCase() : b[key];
+
+          let comparison = 0;
+          if (varA > varB) {
+            comparison = 1;
+          } else if (varA < varB) {
+            comparison = -1;
+          }
+          return order === 'descending' ? comparison * -1 : comparison;
+        };
+      };
+
+      let sorted = [...sortedRecords];
+      sorted.sort(compareValues(sort, order));
+
+      setSortedRecords(sorted);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sort, order, records]);
 
   const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSort(event.target.value as string);
@@ -141,41 +214,20 @@ const Home = () => {
   };
 
   return (
-    <HomeContainer>
+    <Container className={classes.homeContainer}>
       {displayAddRecord ? (
         <RecordFormDialog
           displayAddRecord={displayAddRecord}
           setDisplayAddRecord={setDisplayAddRecord}
         />
       ) : null}
-
-      {true && (
-        <MobileControlsContainer className='MobileControlsContainer'>
-          <MobileFilterContainer>
-            <MobileRecordFilterContainer>
-              <RecordFilter />
-            </MobileRecordFilterContainer>
-          </MobileFilterContainer>
-
-          <Fab
-            color='primary'
-            aria-label='add Item'
-            onClick={() => setDisplayAddRecord(!displayAddRecord)}
-          >
-            <AddIcon />
-          </Fab>
-        </MobileControlsContainer>
-      )}
-
-      <Controls>
-        <SortRecords>
+      <Container className={classes.controls}>
+        <Container className={classes.sortControls}>
           <FormControl variant='outlined' className={classes.formControl}>
-            <InputLabel id='demo-simple-select-outlined-label'>
-              Sort By:
-            </InputLabel>
+            <InputLabel id='sort-by-label'>Sort By:</InputLabel>
             <Select
-              labelId='demo-simple-select-outlined-label'
-              id='demo-simple-select-outlined'
+              labelId='sort-by-label'
+              id='sort-by-select'
               value={sort}
               onChange={handleSortChange}
               label='Sort By'
@@ -191,31 +243,26 @@ const Home = () => {
             </Select>
           </FormControl>
           <FormControl variant='outlined' className={classes.formControl}>
-            <InputLabel id='demo-simple-select-outlined-label'>
-              Order By:
-            </InputLabel>
+            <InputLabel id='order-by-label'>Order By:</InputLabel>
             <Select
-              labelId='demo-simple-select-outlined-label'
-              id='demo-simple-select-outlined'
+              labelId='order-by-label'
+              id='order-by-select'
               value={order}
               onChange={handleOrderChange}
               label='Order By'
             >
-              <MenuItem value=''>
-                <em>None</em>
-              </MenuItem>
               {orderOptions.map((e) => (
                 <MenuItem value={e.value} key={e.value}>
-                  {e.title}{' '}
+                  {e.title}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-        </SortRecords>
-        <HomeFilterContainer>
+        </Container>
+        <Container className={classes.filterContainer}>
           <RecordFilter />
-        </HomeFilterContainer>
-        <AddRecordButtonWrapper>
+        </Container>
+        <Container className={classes.buttonContainer}>
           <Button
             variant='contained'
             color='primary'
@@ -225,11 +272,14 @@ const Home = () => {
           >
             Add Record
           </Button>
-        </AddRecordButtonWrapper>
-      </Controls>
+        </Container>
+      </Container>
 
-      <Records setDisplayAddRecord={setDisplayAddRecord} />
-    </HomeContainer>
+      <Records
+        setDisplayAddRecord={setDisplayAddRecord}
+        sortedRecords={sortedRecords}
+      />
+    </Container>
   );
 };
 

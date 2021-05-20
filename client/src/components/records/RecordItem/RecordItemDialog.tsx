@@ -1,24 +1,35 @@
 import React, { useContext, useState } from 'react';
+//Material UI
 import {
   createStyles,
+  makeStyles,
   Theme,
   withStyles,
   WithStyles,
 } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
+import {
+  Button,
+  Dialog,
+  IconButton,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  CardMedia,
+  Paper,
+  Portal,
+  Link,
+} from '@material-ui/core';
+import clsx from 'clsx';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
-import Image from 'material-ui-image';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+//Custom Components
 
-import RecordContext from '../../../context/record/RecordContext';
-import ModalPortal from '../../modal/ModalPortal';
 import AddRecordDetailsDialog from './AddRecordDetailsDialog';
+//Context
+import RecordContext from '../../../context/record/RecordContext';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -77,13 +88,43 @@ const DialogActions = withStyles((theme: Theme) => ({
   },
 }))(MuiDialogActions);
 
+const useStyles = makeStyles(() => ({
+  listBold: {
+    fontWeight: 600,
+    paddingRight: '.25em',
+  },
+  paper: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr 1fr',
+    gridTemplateRows: '1fr',
+    justifyItems: 'start',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    padding: '.5em',
+  },
+  flexInline: {
+    display: 'flex',
+  },
+  leftCol: {
+    gridColumn: '1/2',
+  },
+  midCol: {
+    gridColumn: '2/3',
+  },
+  rightCol: {
+    gridColumn: '3/4',
+  },
+  midAndRightCol: {
+    gridColumn: '2/4',
+  },
+}));
+
 const RecordItemDialog = ({ record, open, setOpen }) => {
-  const [showExhibitionDialog, setShowExhibitionDialog] = useState<boolean>(
-    false
-  );
-  const [showSubmissionDialog, setShowSubmissionDialog] = useState<boolean>(
-    false
-  );
+  const [showExhibitionDialog, setShowExhibitionDialog] =
+    useState<boolean>(false);
+  const [showSubmissionDialog, setShowSubmissionDialog] =
+    useState<boolean>(false);
+  const classes = useStyles();
   const recordContext = useContext(RecordContext);
   const { deleteRecord, clearCurrent } = recordContext;
 
@@ -98,16 +139,13 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
     medium,
     price,
     currentLocation,
+    editions,
     mediaLinks,
     notes,
-    firstExhibitedDate,
-    firstExhibitedTitle,
-    firstExhibitedAddress,
     exhibited,
     submission,
-    salesHistorySoldTo,
-    salesHistorySoldBy,
-    salesHistoryDateSold,
+    sales,
+    lastEdited,
   } = record;
 
   const handleDelete = () => {
@@ -121,7 +159,6 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
 
   const handleShowExhibition = () => {
     setShowExhibitionDialog(true);
-    console.log(showExhibitionDialog);
   };
 
   const handleShowSubmission = () => {
@@ -139,108 +176,394 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
 
   return (
     <>
-      <Dialog onClose={handleClose} aria-labelledby='dialog-title' open={open}>
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby='dialog-title'
+        open={open}
+        fullWidth={true}
+        maxWidth='xl'
+      >
         <DialogTitle id='dialog-title' onClose={handleClose}>
           {title}
         </DialogTitle>
         <DialogContent dividers>
-          <List>
+          <List style={{ width: '50%' }}>
             {reference && (
               <ListItem>
-                <ListItemText primary={`Reference: ${reference}`} />
+                <ListItemText
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Reference:
+                      </Typography>{' '}
+                      {reference}
+                    </div>
+                  }
+                />
               </ListItem>
             )}
             {collectionName && (
               <ListItem>
-                <ListItemText primary={`Collection: ${collectionName}`} />
+                <ListItemText
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Collection:
+                      </Typography>{' '}
+                      {collectionName}
+                    </div>
+                  }
+                />
               </ListItem>
             )}
 
             {date && (
               <ListItem>
-                <ListItemText primary={`Date: ${getFormattedDate(date)}`} />
+                <ListItemText
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Date:
+                      </Typography>{' '}
+                      {getFormattedDate(date)}
+                    </div>
+                  }
+                />
               </ListItem>
             )}
             {size && (
               <ListItem>
-                <ListItemText primary={`Size: ${size}`} />
+                <ListItemText
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Size:
+                      </Typography>{' '}
+                      {size}
+                    </div>
+                  }
+                />
               </ListItem>
             )}
             {medium && (
               <ListItem>
-                <ListItemText primary={`Medium: ${medium}`} />
+                <ListItemText
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Medium:
+                      </Typography>{' '}
+                      {medium}
+                    </div>
+                  }
+                />
               </ListItem>
             )}
             {price && (
               <ListItem>
-                <ListItemText primary={`Price: ${price}`} />
+                <ListItemText
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Price:
+                      </Typography>{' '}
+                      {price}
+                    </div>
+                  }
+                />
               </ListItem>
             )}
             {currentLocation && (
               <ListItem>
                 <ListItemText
-                  primary={`Current Location: ${currentLocation}`}
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Current Location:
+                      </Typography>{' '}
+                      {currentLocation}
+                    </div>
+                  }
                 />
               </ListItem>
             )}
-            {mediaLinks && (
+            {editions && (
               <ListItem>
-                <ListItemText primary={`Media Links: ${mediaLinks}`} />
+                <ListItemText
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Editions:
+                      </Typography>{' '}
+                      {editions}
+                    </div>
+                  }
+                />
               </ListItem>
             )}
+
+            {mediaLinks && (
+              <>
+                <Typography className={classes.listBold}>
+                  Media Links:
+                </Typography>
+                {mediaLinks.map((element) => {
+                  return (
+                    <ListItem key={element._id}>
+                      <ListItemText
+                        primary={
+                          <Paper elevation={3} className={classes.paper}>
+                            <div
+                              className={clsx(
+                                classes.flexInline,
+                                classes.leftCol
+                              )}
+                            >
+                              <Typography className={classes.listBold}>
+                                Title:
+                              </Typography>
+                              {element.title}
+                            </div>
+                            <div
+                              className={clsx(
+                                classes.flexInline,
+                                classes.midAndRightCol
+                              )}
+                            >
+                              <Typography className={classes.listBold}>
+                                Link:
+                              </Typography>
+                              <Link
+                                href={element.address}
+                                target='_blank'
+                                rel='noreferrer'
+                              >
+                                {element.address}
+                              </Link>
+                            </div>
+                          </Paper>
+                        }
+                      />
+                    </ListItem>
+                  );
+                })}
+              </>
+            )}
+            {exhibited && (
+              <>
+                <Typography className={classes.listBold}>Exhibited:</Typography>
+                {exhibited.map((element) => {
+                  return (
+                    <ListItem key={element._id}>
+                      <ListItemText
+                        primary={
+                          <Paper elevation={3} className={classes.paper}>
+                            {element.title && (
+                              <div
+                                className={clsx(
+                                  classes.flexInline,
+                                  classes.leftCol
+                                )}
+                              >
+                                <Typography className={classes.listBold}>
+                                  Title:
+                                </Typography>
+                                {element.title}
+                              </div>
+                            )}
+                            {element.address && (
+                              <div
+                                className={clsx(
+                                  classes.flexInline,
+                                  classes.midCol
+                                )}
+                              >
+                                <Typography className={classes.listBold}>
+                                  Address:
+                                </Typography>
+                                {element.address}
+                              </div>
+                            )}
+                            {element.date && (
+                              <div
+                                className={clsx(
+                                  classes.flexInline,
+                                  classes.rightCol
+                                )}
+                              >
+                                <Typography className={classes.listBold}>
+                                  Date:
+                                </Typography>
+                                {getFormattedDate(element.date)}
+                              </div>
+                            )}
+                          </Paper>
+                        }
+                      />
+                    </ListItem>
+                  );
+                })}
+              </>
+            )}
+            {submission && (
+              <>
+                <Typography className={classes.listBold}>
+                  Submissions:
+                </Typography>
+                {submission.map((element) => {
+                  return (
+                    <ListItem key={element._id}>
+                      <ListItemText
+                        primary={
+                          <Paper elevation={3} className={classes.paper}>
+                            {element.title && (
+                              <div
+                                className={clsx(
+                                  classes.flexInline,
+                                  classes.leftCol
+                                )}
+                              >
+                                <Typography className={classes.listBold}>
+                                  Title:
+                                </Typography>
+                                {element.title}
+                              </div>
+                            )}
+                            {element.address && (
+                              <div
+                                className={clsx(
+                                  classes.flexInline,
+                                  classes.midCol
+                                )}
+                              >
+                                <Typography className={classes.listBold}>
+                                  Address:
+                                </Typography>
+                                {element.address}
+                              </div>
+                            )}
+                            {element.date && (
+                              <div
+                                className={clsx(
+                                  classes.flexInline,
+                                  classes.rightCol
+                                )}
+                              >
+                                <Typography className={classes.listBold}>
+                                  Date:
+                                </Typography>
+                                {getFormattedDate(element.date)}
+                              </div>
+                            )}
+                          </Paper>
+                        }
+                      />
+                    </ListItem>
+                  );
+                })}
+              </>
+            )}
+
+            {sales && (
+              <>
+                <Typography className={classes.listBold}>Sales:</Typography>
+                <ListItem>
+                  <ListItemText
+                    primary={
+                      <Paper elevation={3} className={classes.paper}>
+                        {sales.soldTo && (
+                          <div
+                            className={clsx(
+                              classes.flexInline,
+                              classes.leftCol
+                            )}
+                          >
+                            <Typography className={classes.listBold}>
+                              Sold To:
+                            </Typography>
+                            {sales.soldTo}
+                          </div>
+                        )}
+                        {sales.soldBy && (
+                          <div
+                            className={clsx(classes.flexInline, classes.midCol)}
+                          >
+                            <Typography className={classes.listBold}>
+                              Sold By:
+                            </Typography>
+                            {sales.soldBy}
+                          </div>
+                        )}
+                        {sales.soldDate && (
+                          <div
+                            className={clsx(
+                              classes.flexInline,
+                              classes.rightCol
+                            )}
+                          >
+                            <Typography className={classes.listBold}>
+                              Date:
+                            </Typography>
+                            {getFormattedDate(sales.soldDate)}
+                          </div>
+                        )}
+                      </Paper>
+                    }
+                  />
+                </ListItem>
+              </>
+            )}
+
             {notes && (
               <ListItem>
-                <ListItemText primary={`Notes: ${notes}`} />
-              </ListItem>
-            )}
-            {salesHistorySoldTo && (
-              <ListItem>
-                <ListItemText primary={`Sold To: ${salesHistorySoldTo}`} />
-              </ListItem>
-            )}
-            {salesHistorySoldBy && (
-              <ListItem>
-                <ListItemText primary={`Sold By: ${salesHistorySoldBy}`} />
-              </ListItem>
-            )}
-            {salesHistoryDateSold && (
-              <ListItem>
-                <ListItemText primary={`Date Sold: ${salesHistoryDateSold}`} />
-              </ListItem>
-            )}
-            {firstExhibitedDate && (
-              <ListItem>
                 <ListItemText
-                  primary={`First Exhibited Date: ${firstExhibitedDate}`}
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Notes:
+                      </Typography>{' '}
+                      {notes}
+                    </div>
+                  }
                 />
               </ListItem>
             )}
-            {firstExhibitedTitle && (
+
+            {lastEdited && (
               <ListItem>
                 <ListItemText
-                  primary={`First Exhibited Title: ${firstExhibitedTitle}`}
-                />
-              </ListItem>
-            )}
-            {firstExhibitedAddress && (
-              <ListItem>
-                <ListItemText
-                  primary={`First Exhibited Address: ${firstExhibitedAddress}`}
+                  primary={
+                    <div style={{ display: 'flex' }}>
+                      <Typography className={classes.listBold}>
+                        Last Edited:
+                      </Typography>{' '}
+                      {getFormattedDate(lastEdited)}
+                    </div>
+                  }
                 />
               </ListItem>
             )}
           </List>
-          <Image src={image} />
+          {image && (
+            <div style={{ width: '50%' }}>
+              <CardMedia
+                component='img'
+                alt={title}
+                image={image[0].url}
+                title={title}
+              />
+            </div>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDelete} color='secondary'>
             Delete
           </Button>
           <Button onClick={handleShowExhibition} color='primary'>
-            Add Exhibition
+            Edit Exhibitions
           </Button>
           <Button onClick={handleShowSubmission} color='primary'>
-            Add Submission
+            Edit Submissions
           </Button>
           <Button autoFocus onClick={handleClose} color='primary'>
             Close
@@ -249,24 +572,24 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
       </Dialog>
 
       {showExhibitionDialog && (
-        <ModalPortal>
+        <Portal>
           <AddRecordDetailsDialog
             detail='Exhibition'
             record={record}
             open={showExhibitionDialog}
             setOpen={setShowExhibitionDialog}
           />
-        </ModalPortal>
+        </Portal>
       )}
       {showSubmissionDialog && (
-        <ModalPortal>
+        <Portal>
           <AddRecordDetailsDialog
             detail='Submission'
             record={record}
             open={showSubmissionDialog}
             setOpen={setShowSubmissionDialog}
           />
-        </ModalPortal>
+        </Portal>
       )}
     </>
   );

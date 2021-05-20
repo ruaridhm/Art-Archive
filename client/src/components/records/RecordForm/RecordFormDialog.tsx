@@ -8,29 +8,58 @@ import React, {
 //Context
 import RecordContext from '../../../context/record/RecordContext';
 //Material-UI Components
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  FormGroup,
+} from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
-import ImageDialog from './ImageDialog';
-import Container from '@material-ui/core/Container/Container';
-
-import PopulateAutoComplete from '../../../utils/populateAutoComplete';
-
 //Material-UI Icons
 import CloseIcon from '@material-ui/icons/Close';
+//Components
+import ImageDialog from './ImageDialog';
+//Util functions
+import PopulateAutoComplete from '../../../utils/populateAutoComplete';
 //Types
 import { RecordInterface } from '../RecordItem/RecordItem';
 import AutoCompleteTextField from './AutoCompleteTextField';
-
+import makeStyles from '@material-ui/core/styles/makeStyles';
 interface RecordFormProps {
   displayAddRecord: boolean;
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
 }
+
+const useStyles = makeStyles((theme) => ({
+  formGroup: {
+    alignItems: 'center',
+    marginBottom: '8px',
+  },
+  marginTopLeft: {
+    marginTop: '0px',
+    marginLeft: '8px',
+    marginBottom: '0px',
+  },
+  marginLeft: {
+    marginLeft: '8px',
+  },
+  minWidth: {
+    width: '300px',
+  },
+  widthAndVerticalMargins: {
+    width: '300px',
+    marginTop: '0px',
+    marginBottom: '0px',
+  },
+  verticalMargins: {
+    marginTop: '0px',
+    marginBottom: '0px',
+  },
+}));
 
 const emptyItemObject: RecordInterface = {
   title: '',
@@ -68,6 +97,8 @@ const RecordFormDialog = ({
   const [submissionDate, setSubmissionDate] = useState(item.submission[0].date);
   const [soldDate, setSoldDate] = useState(item.sales.soldDate);
   const autoCompleteOptions = PopulateAutoComplete();
+
+  const classes = useStyles();
 
   //Destructuring of Item object
   const {
@@ -139,6 +170,7 @@ const RecordFormDialog = ({
 
     if (current === null) {
       addRecord(item);
+      setDisplayAddRecord(false);
     } else {
       updateRecord(item);
       clearCurrent();
@@ -233,87 +265,104 @@ const RecordFormDialog = ({
         onSubmit={onSubmit}
       >
         <DialogContent>
-          <AutoCompleteTextField
-            id='title-text-field'
-            label='Title'
-            autocompleteOptions={autoCompleteOptions.title}
-            value={title}
-            onChange={handleAutocompleteChange}
-            name='title'
-          />
-          <TextField
-            label='Reference'
-            variant='outlined'
-            margin='normal'
-            type='text'
-            name='reference'
-            value={reference}
-            onChange={onChange}
-          />
-          <AutoCompleteTextField
-            id='collection-text-field'
-            label='Collection'
-            autocompleteOptions={autoCompleteOptions.collectionName}
-            value={collectionName}
-            onChange={handleAutocompleteChange}
-            name='collectionName'
-          />
-          <KeyboardDatePicker
-            label='Date'
-            margin='normal'
-            format='dd/MM/yyyy'
-            value={date}
-            inputVariant='outlined'
-            onChange={(date) => setItem({ ...item, date: date })}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          />
+          <FormGroup row={true} className={classes.formGroup}>
+            <AutoCompleteTextField
+              id='title-text-field'
+              label='Title'
+              autocompleteOptions={autoCompleteOptions.title}
+              value={title}
+              onChange={handleAutocompleteChange}
+              name='title'
+            />
+            <TextField
+              className={classes.marginTopLeft}
+              style={{ width: 300 }}
+              label='Reference'
+              variant='outlined'
+              margin='normal'
+              type='text'
+              name='reference'
+              value={reference}
+              onChange={onChange}
+            />
+          </FormGroup>
+          <FormGroup row={true} className={classes.formGroup}>
+            <AutoCompleteTextField
+              id='collection-text-field'
+              label='Collection'
+              autocompleteOptions={autoCompleteOptions.collectionName}
+              value={collectionName}
+              onChange={handleAutocompleteChange}
+              name='collectionName'
+            />
+            <AutoCompleteTextField
+              className={classes.marginLeft}
+              id='current-location-text-field'
+              label='Current Location'
+              autocompleteOptions={autoCompleteOptions.currentLocation}
+              value={currentLocation}
+              onChange={handleAutocompleteChange}
+              name='currentLocation'
+            />
+          </FormGroup>
+          <FormGroup row={true} className={classes.formGroup}>
+            <AutoCompleteTextField
+              id='size-text-field'
+              label='Size'
+              autocompleteOptions={autoCompleteOptions.size}
+              value={size}
+              onChange={handleAutocompleteChange}
+              name='size'
+            />
+            <AutoCompleteTextField
+              className={classes.marginLeft}
+              id='medium-text-field'
+              label='Medium'
+              autocompleteOptions={autoCompleteOptions.medium}
+              value={medium}
+              onChange={handleAutocompleteChange}
+              name='medium'
+            />
+          </FormGroup>
+          <FormGroup row={true} className={classes.formGroup}>
+            <KeyboardDatePicker
+              className={classes.widthAndVerticalMargins}
+              label='Date'
+              margin='normal'
+              format='dd/MM/yyyy'
+              value={date}
+              inputVariant='outlined'
+              onChange={(date) => setItem({ ...item, date: date })}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+          </FormGroup>
+          <FormGroup row={true} className={classes.formGroup}>
+            <TextField
+              className={classes.widthAndVerticalMargins}
+              label='Price'
+              variant='outlined'
+              margin='normal'
+              type='number'
+              name='price'
+              value={price}
+              onChange={onChange}
+            />
 
-          <AutoCompleteTextField
-            id='size-text-field'
-            label='Size'
-            autocompleteOptions={autoCompleteOptions.size}
-            value={size}
-            onChange={handleAutocompleteChange}
-            name='size'
-          />
-          <AutoCompleteTextField
-            id='medium-text-field'
-            label='Medium'
-            autocompleteOptions={autoCompleteOptions.medium}
-            value={medium}
-            onChange={handleAutocompleteChange}
-            name='medium'
-          />
-          <AutoCompleteTextField
-            id='current-location-text-field'
-            label='Current Location'
-            autocompleteOptions={autoCompleteOptions.currentLocation}
-            value={currentLocation}
-            onChange={handleAutocompleteChange}
-            name='currentLocation'
-          />
-          <TextField
-            label='Price'
-            variant='outlined'
-            margin='normal'
-            type='number'
-            name='price'
-            value={price}
-            onChange={onChange}
-          />
-
-          <TextField
-            label='Editions'
-            variant='outlined'
-            margin='normal'
-            type='number'
-            name='editions'
-            value={editions}
-            onChange={onChange}
-          />
-          <Container>
+            <TextField
+              style={{ width: 300 }}
+              className={`${classes.marginLeft} ${classes.widthAndVerticalMargins}`}
+              label='Editions'
+              variant='outlined'
+              margin='normal'
+              type='number'
+              name='editions'
+              value={editions}
+              onChange={onChange}
+            />
+          </FormGroup>
+          <FormGroup row={true} className={classes.formGroup}>
             <AutoCompleteTextField
               id='exhibited-title-text-field'
               label='Exhibited Title'
@@ -324,6 +373,7 @@ const RecordFormDialog = ({
               subName='title'
             />
             <AutoCompleteTextField
+              className={classes.marginLeft}
               id='exhibited-address-text-field'
               label='Exhibited Address'
               autocompleteOptions={autoCompleteOptions.exhibited.address}
@@ -333,6 +383,7 @@ const RecordFormDialog = ({
               subName='address'
             />
             <KeyboardDatePicker
+              className={classes.marginTopLeft}
               label='Exhibited Date'
               margin='normal'
               format='dd/MM/yyyy'
@@ -343,8 +394,8 @@ const RecordFormDialog = ({
                 'aria-label': 'change exhibited date',
               }}
             />
-          </Container>
-          <Container>
+          </FormGroup>
+          <FormGroup row={true} className={classes.formGroup}>
             <AutoCompleteTextField
               id='submission-title-text-field'
               label='Submission Title'
@@ -355,6 +406,7 @@ const RecordFormDialog = ({
               subName='title'
             />
             <AutoCompleteTextField
+              className={classes.marginLeft}
               id='submission-address-text-field'
               label='Submission Address'
               autocompleteOptions={autoCompleteOptions.submission.address}
@@ -364,6 +416,7 @@ const RecordFormDialog = ({
               subName='address'
             />
             <KeyboardDatePicker
+              className={classes.marginTopLeft}
               label='Submission Date'
               margin='normal'
               format='dd/MM/yyyy'
@@ -374,8 +427,8 @@ const RecordFormDialog = ({
                 'aria-label': 'change exhibited date',
               }}
             />
-          </Container>
-          <Container>
+          </FormGroup>
+          <FormGroup row={true} className={classes.formGroup}>
             <AutoCompleteTextField
               id='sold-to-text-field'
               label='Sold To'
@@ -386,6 +439,7 @@ const RecordFormDialog = ({
               subName='soldTo'
             />
             <AutoCompleteTextField
+              className={classes.marginLeft}
               id='sold-by-text-field'
               label='Sold By'
               autocompleteOptions={autoCompleteOptions.sales.soldBy}
@@ -395,6 +449,7 @@ const RecordFormDialog = ({
               subName='soldBy'
             />
             <KeyboardDatePicker
+              className={classes.marginTopLeft}
               label='Date Sold'
               margin='normal'
               format='dd/MM/yyyy'
@@ -405,8 +460,8 @@ const RecordFormDialog = ({
                 'aria-label': 'change date sold',
               }}
             />
-          </Container>
-          <Container>
+          </FormGroup>
+          <FormGroup row={true} className={classes.formGroup}>
             <AutoCompleteTextField
               id='media-link-text-field'
               label='Media Link Title'
@@ -418,6 +473,7 @@ const RecordFormDialog = ({
             />
 
             <AutoCompleteTextField
+              className={classes.marginLeft}
               id='media-link-address-field'
               label='Media Link Address'
               autocompleteOptions={autoCompleteOptions.mediaLinks.address}
@@ -426,22 +482,23 @@ const RecordFormDialog = ({
               name='mediaLinks'
               subName='address'
             />
-          </Container>
-          <TextField
-            label='Notes'
-            variant='outlined'
-            margin='normal'
-            type='text'
-            name='notes'
-            value={notes}
-            onChange={onChange}
-            multiline
-          />
-          <Container>
-            <ImageDialog />
-          </Container>
+          </FormGroup>
+          <FormGroup row={true} className={classes.formGroup}>
+            <TextField
+              className={classes.verticalMargins}
+              fullWidth={true}
+              label='Notes'
+              variant='outlined'
+              margin='normal'
+              type='text'
+              name='notes'
+              value={notes}
+              onChange={onChange}
+            />
+          </FormGroup>
         </DialogContent>
         <DialogActions>
+          <ImageDialog />
           <Button type='submit' variant='contained' color='primary'>
             {current ? 'Update Item' : 'Add Item'}
           </Button>

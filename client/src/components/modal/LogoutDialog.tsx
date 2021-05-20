@@ -13,10 +13,6 @@ const LogoutDialog = (toggleModal: any) => {
   const { logout } = authContext;
   const { clearRecords } = recordContext;
 
-  const handleClose = () => {
-    // toggleModal
-  };
-
   const onLogout = () => {
     logout();
     clearRecords();
@@ -30,15 +26,15 @@ const LogoutDialog = (toggleModal: any) => {
       aria-describedby='alert-dialog-description'
     >
       <DialogTitle id='alert-dialog-title'>
-        {'Are you sure you want to logout?'}
+        'Are you sure you want to logout?'
       </DialogTitle>
       <DialogActions>
-        <Button onClick={handleClose} color='primary'>
+        <Button onClick={toggleModal} color='primary'>
           Cancel
         </Button>
         <Button
           onClick={() => {
-            handleClose();
+            toggleModal();
             onLogout();
           }}
           color='primary'

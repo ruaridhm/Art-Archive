@@ -1,3 +1,5 @@
+import React, { useContext } from 'react';
+//Material Ui
 import {
   Button,
   createStyles,
@@ -5,71 +7,143 @@ import {
   DialogActions,
   DialogContent,
   FormControl,
+  IconButton,
   makeStyles,
   TextField,
   Theme,
+  Paper,
 } from '@material-ui/core';
-import { DialogTitle } from './RecordItemDialog';
-import React from 'react';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import DeleteIcon from '@material-ui/icons/Delete';
+//Components
+import { DialogTitle } from './RecordItemDialog';
+//Context
+import RecordContext from '../../../context/record/RecordContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: 'flex',
       flexWrap: 'wrap',
+      justifyContent: 'center',
+      marginTop: '1em',
     },
     formControl: {
       margin: theme.spacing(1),
       minWidth: 120,
     },
+    paper: {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'nowrap',
+      justifyContent: 'space-between',
+      paddingLeft: '.5em',
+    },
   })
 );
 
 interface inputState {
-  name: string;
-  date: Date | null;
+  title: string;
+  date: Date | string | null;
   address: string;
 }
 
 const emptyInput = {
-  name: '',
+  title: '',
   date: null,
   address: '',
 };
 
 const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
-  const classes = useStyles();
+  const recordContext = useContext(RecordContext);
+  const { updateRecord } = recordContext;
   const [state, setState] = React.useState<inputState | null>(emptyInput);
+  //Creating a string to use to reference values using bracket notation below and also use detail prop for strings
+  let reference: string;
+  detail === 'Exhibition'
+    ? (reference = 'exhibited')
+    : (reference = 'submission');
+
+  const classes = useStyles();
 
   const handleChange = (e: {
-    target: { type: any; name: string; value: any };
+    target: { type: any; name: string; value: string };
   }) => {
     setState({ ...state, [e.target.name]: e.target.value });
-
-    // }
   };
-  const handleDateChange = (date: Date | null) => {
-    setState({ ...state, date: date });
+  const handleDateChange = (date: Date | null | string) => {
+    setState({ ...state, date: date.toString() });
+  };
+
+  const handleDeleteItem = (id: string) => {
+    let modifiedRecord = { ...record };
+    let modifiedArr = [...record[reference]];
+    modifiedArr = modifiedArr.filter(function (obj) {
+      return obj._id !== id;
+    });
+
+    modifiedRecord[reference] = modifiedArr;
+
+    updateRecord(modifiedRecord);
+  };
+
+  const handleAddItem = () => {
+    let modifiedRecord = { ...record };
+    modifiedRecord[reference].push(state);
+
+    updateRecord(modifiedRecord);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
       <DialogTitle id={`${detail}-title`} onClose={handleClose}>
-        Add {detail}
+        {detail}s
       </DialogTitle>
       <DialogContent>
+        {(record[reference].length >= 1 && record[reference][0].title) ||
+        (record[reference].length >= 1 && record[reference][0].address) ||
+        (record[reference].length >= 1 && record[reference][0].date) ? (
+          <Paper>
+            {record[reference].map((element) => (
+              <Paper
+                variant='outlined'
+                className={classes.paper}
+                key={element._id}
+              >
+                <p>{element.title}</p>
+                <p>{element.address}</p>
+                {element.date && (
+                  <p>
+                    {element.date.slice(8, 10)} / {element.date.slice(5, 7)} /
+                    {element.date.slice(0, 4)}
+                  </p>
+                )}
+                <IconButton
+                  aria-label='delete'
+                  size='small'
+                  color='secondary'
+                  onClick={() => {
+                    handleDeleteItem(element._id);
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Paper>
+            ))}
+          </Paper>
+        ) : (
+          <p>No {detail}s saved</p>
+        )}
         <form className={classes.container}>
           <FormControl className={classes.formControl}>
             <TextField
               label={`${detail} Title`}
               variant='outlined'
               onChange={handleChange}
-              name='name'
+              name='title'
             />
             <KeyboardDatePicker
               margin='normal'
@@ -94,9 +168,9 @@ const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color='primary'>
-          Cancel
+          Close
         </Button>
-        <Button onClick={handleClose} color='primary'>
+        <Button onClick={handleAddItem} color='primary'>
           Add
         </Button>
       </DialogActions>

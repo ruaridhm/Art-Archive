@@ -19,39 +19,22 @@ const User = () => {
 
   if (!loading) {
     return (
-      <UserStatsContainer>
-        <UserTitle>User Stats</UserTitle>
-        <UserStats>
-          <UserStat>
-            <strong>User name: </strong>
-            {user && user.name}
-          </UserStat>
-          <UserStat>
-            <strong>Total records: </strong>
-            {records && records.length}
-          </UserStat>
-          <UserStat>
-            <strong>Highest Price: </strong>
-            {records && records.length}
-          </UserStat>
-          <UserStat>
-            <strong>Average Price: </strong>
-            {records && records.length}
-          </UserStat>
-          <UserStat>
-            <strong>Most Common Medium: </strong>
-            {records && records.length}
-          </UserStat>
-          <UserStat>
-            <strong>Most Exhibited: </strong>
-            {records && records.length}
-          </UserStat>
-          <UserStat>
-            <strong>Most Submissions: </strong>
-            {records && records.length}
-          </UserStat>
-        </UserStats>
-      </UserStatsContainer>
+      <ul>
+        <li>Total Items</li>
+        <li>Total Items incl Editions</li>
+        <li>Number of Collections</li>
+        <li>earliest item</li>
+        <li>newest item</li>
+        <li>avg. price</li>
+        <li>Most expensive</li>
+        <li>Lowest price</li>
+        <li>total exhibitions</li>
+        <li>total submissions</li>
+        <li>latest sold</li>
+        <li>Most popular medium</li>
+        <li>Most popular size</li>
+        <li>most editions</li>
+      </ul>
     );
   } else {
     return <Spinner description='Loading User' />;

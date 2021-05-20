@@ -15,14 +15,12 @@ const RecordFilter = () => {
   };
 
   return (
-    <form>
-      <TextField
-        variant='outlined'
-        label='Filter Records'
-        onChange={handleOnChange}
-        size='medium'
-      />
-    </form>
+    <TextField
+      variant='outlined'
+      label='Filter Records'
+      onChange={handleOnChange}
+      size='medium'
+    />
   );
 };
 

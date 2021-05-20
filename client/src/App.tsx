@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+//Components
 import PrivateRoute from './components/routing/PrivateRoute.js';
 import Navbar from './components/layout/Navbar/Navbar';
 import Home from './components/pages/Home/Home';
@@ -11,7 +12,6 @@ import AlertState from './context/alert/AlertState';
 import RecordState from './context/record/RecordState';
 import AuthState from './context/auth/AuthState';
 import setAuthToken from './utils/setAuthToken';
-
 import SideBar from './components/hamburger/SideBar';
 
 import { ThemeProvider } from 'styled-components';
@@ -26,15 +26,11 @@ import './App.scss';
 localStorage.token && setAuthToken(localStorage.token);
 
 const App = () => {
-  const [theme, setTheme] = useState('light');
-
-  const toggleTheme = () => {
-    theme === 'light' ? setTheme('dark') : setTheme('light');
-  };
+  const [theme, setTheme] = useState(false);
 
   return (
     <ThemeProvider
-      theme={theme === 'light' ? ColorVariables : DarkModeColorVariables}
+      theme={theme === true ? ColorVariables : DarkModeColorVariables}
     >
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <AuthState>
@@ -45,7 +41,8 @@ const App = () => {
                   <SideBar pageWrapId='page-wrap' outerContainerId='App' />
                   <Navbar
                     title='Ed Miliano Archive'
-                    toggleTheme={toggleTheme}
+                    setTheme={setTheme}
+                    theme={theme}
                   />
                   <Alerts />
                   <Switch>
