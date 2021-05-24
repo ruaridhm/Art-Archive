@@ -1,52 +1,55 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import React, { Dispatch, SetStateAction, useContext } from 'react';
+//Context
 import RecordContext from '../../../context/record/RecordContext';
-import RecordItem from '../RecordItem/RecordItem';
+//Components
+import RecordItem, { RecordInterface } from '../RecordItem/RecordItem';
 import Spinner from '../../layout/Spinner/Spinner';
-import { StyledTransitionGroup } from './Style';
+//Material-UI
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 interface RecordsProps {
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
+  sortedRecords: any;
 }
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    recordContainer: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+    },
+  })
+);
 
-const Records = ({ setDisplayAddRecord }: RecordsProps) => {
+const Records = ({ setDisplayAddRecord, sortedRecords }: RecordsProps) => {
   const recordContext = useContext(RecordContext);
+  const { records, filtered, loading } = recordContext;
+  const classes = useStyles();
 
-  const { records, filtered, getRecords, loading } = recordContext;
-
-  useEffect(() => {
-    getRecords();
-    // eslint-disable-next-line
-  }, []);
-
-  if (records !== null && records.length === 0 && !loading) {
-    return <h4>Please add a record</h4>;
-  }
-
-  return (
+  return sortedRecords !== null && records.length === 0 && !loading ? (
+    <h4>Please add a record</h4>
+  ) : (
     <>
-      {records !== null && !loading ? (
-        <StyledTransitionGroup>
+      {sortedRecords !== null && !loading ? (
+        <div className={classes.recordContainer}>
           {filtered !== null
             ? filtered.map((record) => (
-                <CSSTransition key={record._id} timeout={500} classNames='item'>
-                  <RecordItem
-                    record={record}
-                    setDisplayAddRecord={setDisplayAddRecord}
-                  />
-                </CSSTransition>
+                <RecordItem
+                  key={record._id}
+                  record={record}
+                  setDisplayAddRecord={setDisplayAddRecord}
+                />
               ))
-            : records.map((record) => (
-                <CSSTransition key={record._id} timeout={500} classNames='item'>
-                  <RecordItem
-                    record={record}
-                    setDisplayAddRecord={setDisplayAddRecord}
-                  />
-                </CSSTransition>
+            : sortedRecords.map((record: RecordInterface) => (
+                <RecordItem
+                  key={record._id}
+                  record={record}
+                  setDisplayAddRecord={setDisplayAddRecord}
+                />
               ))}
-        </StyledTransitionGroup>
+        </div>
       ) : (
-        <Spinner />
+        <Spinner description='Loading Items' />
       )}
     </>
   );

@@ -1,23 +1,74 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+//Context
 import RecordContext from '../../../context/record/RecordContext';
-import Button from '../../button/Button';
-import Modal from '../../modal/Modal';
-import ImageSlider from '../../imageSlider/ImageSlider';
-import ViewInfo from '../../viewInfo/ViewInfo';
-import ModalPortal from '../../modal/ModalPortal';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faInfo } from '@fortawesome/free-solid-svg-icons';
-
+//Material UI
 import {
+  Button,
   Card,
-  CardTitle,
-  CardArtist,
-  RecordDetailsListContainer,
-  RecordDetailsList,
-  RecordImage,
-  ButtonContainer,
-} from './Style';
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Portal,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+//Components
+import RecordItemDialog from './RecordItemDialog';
+
+//icons
+import EditIcon from '@material-ui/icons/Edit';
+
+const useStyles = makeStyles({
+  card: {
+    minWidth: 275,
+    maxWidth: 275,
+    height: 410,
+    margin: 8,
+  },
+  media: {
+    height: 140,
+  },
+  cardContent: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    height: 217,
+  },
+  cardTitle: {
+    marginBottom: 0,
+  },
+  cardList: {
+    paddingTop: 0,
+  },
+  cardListItem: {
+    paddingTop: 2,
+    paddingBottom: 2,
+  },
+  cardActions: {
+    height: 53,
+    paddingBottom: 5,
+  },
+});
+
+export interface MediaLinksInterface {
+  title?: string;
+  address?: string;
+}
+
+export interface DisplayedInterface {
+  title?: string;
+  date: Date | null;
+  address?: string;
+}
+export interface SalesInterface {
+  soldTo?: string;
+  soldBy?: string;
+  soldDate?: Date | null;
+  sold?: Boolean;
+}
 
 export interface RecordInterface {
   _id?: string;
@@ -25,22 +76,19 @@ export interface RecordInterface {
   artist?: string;
   reference?: string;
   collectionName?: string;
-  image?: string;
-  date?: Date | string;
+  image?: { url: string }[] | [];
+  date?: Date | null;
   size?: string;
   medium?: string;
-  price?: Number;
+  price?: number;
   currentLocation?: string;
-  mediaLinks?: string;
+  editions?: number;
+  mediaLinks?: MediaLinksInterface[] | [];
   notes?: string;
-  firstExhibitedDate?: any;
-  firstExhibitedTitle?: string;
-  firstExhibitedAddress?: string;
-  exhibited?: Array<Object>;
-  submission?: Array<Object>;
-  salesHistorySoldTo?: string;
-  salesHistorySoldBy?: string;
-  salesHistoryDateSold?: any;
+  exhibited: DisplayedInterface[];
+  submission?: DisplayedInterface[] | [];
+  sales?: SalesInterface;
+  lastEdited?: Date | null;
 }
 
 interface RecordItemProps {
@@ -49,45 +97,15 @@ interface RecordItemProps {
 }
 
 const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
-  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [showInfoDialog, setShowInfoDialog] = useState<boolean>(false);
   const recordContext = useContext(RecordContext);
-  const { deleteRecord, setCurrent, clearCurrent } = recordContext;
-
-  const closeDeleteModalHandler = () => setShowDeleteModal(false);
-  const closeInfoModalHandler = () => setShowInfoModal(false);
-
-  const {
-    _id,
-    title,
-    artist,
-    reference,
-    collectionName,
-    image,
-    date,
-    size,
-    medium,
-    price,
-    currentLocation,
-    mediaLinks,
-    notes,
-    firstExhibitedDate,
-    firstExhibitedTitle,
-    firstExhibitedAddress,
-    exhibited,
-    submission,
-    salesHistorySoldTo,
-    salesHistorySoldBy,
-    salesHistoryDateSold,
-  } = record;
+  const { setCurrent } = recordContext;
+  const classes = useStyles();
+  const { title, reference, collectionName, image, medium, price, size } =
+    record;
 
   const scrollToTop = () => {
     document.documentElement.scrollTop = 110;
-  };
-
-  const onDelete = () => {
-    deleteRecord(_id);
-    clearCurrent();
   };
 
   const editRecord = () => {
@@ -96,163 +114,82 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
     scrollToTop();
   };
 
-  const showInfoModalHandler = () => {
-    setShowInfoModal(true);
-  };
-
-  const showDeleteModalHandler = () => {
-    setShowDeleteModal(true);
-  };
-
-  const renderImageSlider = () => {
-    return <ImageSlider coverFront={image} />;
-  };
-
-  const getFormattedDate = (date) => {
-    const dateStr = date.toString();
-
-    return `${dateStr.substring(8, 10)}-${dateStr.substring(
-      5,
-      7
-    )}-${dateStr.substring(0, 4)} `;
+  const showRecordInfoDialogHandler = () => {
+    setShowInfoDialog(true);
   };
 
   return (
     <>
-      <Card className='card'>
-        <CardTitle>{title}</CardTitle>
-        <CardArtist>{artist}</CardArtist>
-        <RecordDetailsListContainer>
-          <RecordDetailsList>
-            {reference && (
-              <li>
-                <strong>Ref:</strong> {reference}
-              </li>
-            )}
-            {collectionName && (
-              <li>
-                <strong>Collection:</strong> {collectionName}
-              </li>
-            )}
-            {date && (
-              <li>
-                <strong>Date:</strong> {getFormattedDate(date)}
-              </li>
-            )}
-            {size && (
-              <li>
-                <strong>Size:</strong> {size}
-              </li>
-            )}
-            {medium && (
-              <li>
-                <strong>Medium:</strong> {medium}
-              </li>
-            )}
-            {price && (
-              <li>
-                <strong>Price:</strong> {price}
-              </li>
-            )}
-            {currentLocation && (
-              <li>
-                <strong>Current Location:</strong> {currentLocation}
-              </li>
-            )}
-            {mediaLinks && (
-              <li>
-                <strong>Media Links:</strong> {mediaLinks}
-              </li>
-            )}
-            {notes && (
-              <li>
-                <strong>Notes:</strong> {notes}
-              </li>
-            )}
-          </RecordDetailsList>
-        </RecordDetailsListContainer>
-
-        <RecordImage>{renderImageSlider()}</RecordImage>
-
-        <ButtonContainer>
+      <Card className={classes.card}>
+        <CardActionArea onClick={showRecordInfoDialogHandler}>
+          {image !== null && (
+            <CardMedia
+              className={classes.media}
+              component='img'
+              alt={title}
+              image={image[0].url}
+              title={title}
+            />
+          )}
+          <CardContent className={classes.cardContent}>
+            <Typography
+              gutterBottom
+              variant='h5'
+              component='h2'
+              className={classes.cardTitle}
+            >
+              {title}
+            </Typography>
+            <List className={classes.cardList}>
+              {reference && (
+                <ListItem className={classes.cardListItem}>
+                  <ListItemText primary={`Reference: ${reference}`} />
+                </ListItem>
+              )}
+              {collectionName && (
+                <ListItem className={classes.cardListItem}>
+                  <ListItemText primary={`Collection: ${collectionName}`} />
+                </ListItem>
+              )}
+              {medium && (
+                <ListItem className={classes.cardListItem}>
+                  <ListItemText primary={`Medium: ${medium}`} />
+                </ListItem>
+              )}
+              {size && (
+                <ListItem className={classes.cardListItem}>
+                  <ListItemText primary={`Size: ${size}`} />
+                </ListItem>
+              )}
+              {price && (
+                <ListItem className={classes.cardListItem}>
+                  <ListItemText primary={`Price: €${price}`} />
+                </ListItem>
+              )}
+            </List>
+          </CardContent>
+        </CardActionArea>
+        <CardActions className={classes.cardActions}>
           <Button
-            solidPlain
-            mediumSmall
-            type='button'
             onClick={editRecord}
-            label='Edit'
-            children={<FontAwesomeIcon icon={faEdit} />}
-          />
-          <Button
-            solidPlain
-            mediumSmall
-            type='button'
-            label='Show Info'
-            onClick={showInfoModalHandler}
-            children={<FontAwesomeIcon icon={faInfo} />}
-          />
-        </ButtonContainer>
+            color='primary'
+            variant='contained'
+            startIcon={<EditIcon />}
+            size='medium'
+          >
+            Edit
+          </Button>
+        </CardActions>
       </Card>
 
-      {showDeleteModal && (
-        <ModalPortal>
-          <Modal
-            close={closeDeleteModalHandler}
-            confirm={onDelete}
-            headerText='Confirm Delete'
-            bodyText='Are you sure you want to delete this item?'
-            confirmText='Delete'
-            confirmStyle={{ solidDanger: true }}
-            cancelStyle={{ solidPrimary: true }}
-            confirmIcon={<FontAwesomeIcon icon={faTrashAlt} />}
+      {showInfoDialog && (
+        <Portal>
+          <RecordItemDialog
+            record={record}
+            open={showInfoDialog}
+            setOpen={setShowInfoDialog}
           />
-        </ModalPortal>
-      )}
-
-      {showInfoModal && (
-        <ModalPortal>
-          <Modal
-            close={closeInfoModalHandler}
-            confirm={() => {}}
-            headerText='Record Info'
-            bodyText={
-              <>
-                <ViewInfo
-                  title={title}
-                  artist={artist}
-                  reference={reference}
-                  collectionName={collectionName}
-                  image={image}
-                  date={getFormattedDate(date)}
-                  size={size}
-                  medium={medium}
-                  price={price}
-                  currentLocation={currentLocation}
-                  mediaLinks={mediaLinks}
-                  notes={notes}
-                  firstExhibitedDate={firstExhibitedDate}
-                  firstExhibitedTitle={firstExhibitedTitle}
-                  firstExhibitedAddress={firstExhibitedAddress}
-                  exhibited={exhibited}
-                  submission={submission}
-                  salesHistorySoldTo={salesHistorySoldTo}
-                  salesHistorySoldBy={salesHistorySoldBy}
-                  salesHistoryDateSold={salesHistoryDateSold}
-                />
-                <Button
-                  solidPlain
-                  mediumSmall
-                  onClick={showDeleteModalHandler}
-                  label='Delete'
-                  type='button'
-                  children={<FontAwesomeIcon icon={faTrashAlt} />}
-                />
-              </>
-            }
-            showCancel={false}
-            showConfirm={false}
-          />
-        </ModalPortal>
+        </Portal>
       )}
     </>
   );

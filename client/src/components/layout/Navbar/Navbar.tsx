@@ -1,159 +1,146 @@
-import React, { Fragment, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+//Context
 import AuthContext from '../../../context/auth/AuthContext';
-import RecordContext from '../../../context/record/RecordContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
-import Modal from '../../modal/Modal';
-import ToggleSwitch from '../../toggleSwitch/ToggleSwitch';
-import ModalPortal from '../../modal/ModalPortal';
 
-import {
-  NavbarContainer,
-  NavLinkList,
-  NavLinkListRight,
-  NavListItem,
-  NavTitle,
-  ThemeToggleContainer,
-} from './Style';
+//Material-UI
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Switch from '@material-ui/core/Switch';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import IconButton from '@material-ui/core/IconButton';
 
+//Components
+import LogoutDialog from './LogoutDialog';
+import Sidebar from '../../sidebar/Sidebar';
+
+//Material-UI Icons
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import NightsStayIcon from '@material-ui/icons/NightsStay';
+import Portal from '@material-ui/core/Portal/Portal';
+import MenuIcon from '@material-ui/icons/Menu';
+
+//Fumctions
+
+const useStyles = makeStyles({
+  link: {
+    textDecoration: 'none',
+    color: '#fff',
+    marginRight: '2em',
+    '&:hover': {
+      textDecoration: 'underline',
+      opacity: '0.9',
+    },
+  },
+  menuRight: {
+    flexGrow: 1,
+  },
+  switchBase: {
+    marginRight: '1.25em',
+    color: '#000',
+    '&$checked': {
+      color: 'red',
+    },
+  },
+  hamburger: {},
+});
 interface NavbarProps {
   title: string;
-  toggleTheme: () => void;
+  setTheme: any;
+  theme: boolean;
 }
 
-const Navbar = ({ title, toggleTheme }: NavbarProps) => {
+const Navbar = ({ title, theme, setTheme }: NavbarProps) => {
   const authContext = useContext(AuthContext);
-  const recordContext = useContext(RecordContext);
-  const [showLogoutConfirmModal, setShowLogoutConfirmModal] = useState<boolean>(
-    false
-  );
-  const { isAuthenticated, logout } = authContext;
-  const { clearRecords } = recordContext;
+  const { isAuthenticated } = authContext;
+  const classes = useStyles();
+  const [showLogoutDialog, setShowLogoutDialog] = useState<Boolean>(false);
+  const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  const show = useMediaQuery('(max-width:800px)');
 
-  const [mode, setMode] = useState(false);
-
-  const onLogout = () => {
-    logout();
-    clearRecords();
-  };
-
-  const toggleModal = () => {
-    setShowLogoutConfirmModal(!showLogoutConfirmModal);
-  };
+  const toggleDrawer =
+    (showSidebar: boolean) =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
+      setShowSidebar(!showSidebar);
+    };
 
   const authLinks = (
-    <Fragment>
-      <NavListItem>
-        <Link to='/register'>Register New User</Link>
-      </NavListItem>
-      <NavListItem>
-        <Link to='/user'>Collection Stats.</Link>
-      </NavListItem>
-      <NavListItem>
-        <Link to='/gallery'>Gallery</Link>
-      </NavListItem>
-      <NavListItem>
-        <ToggleSwitch
-          name='newsletter'
-          onValue={
-            <FontAwesomeIcon icon={faMoon} style={{ color: '#121212' }} />
-          }
-          offValue={<FontAwesomeIcon icon={faSun} style={{ color: '#f90' }} />}
-          checked={mode}
-          onChange={() => {
-            setMode(!mode);
-            toggleTheme();
-          }}
-          icon
-        />
-      </NavListItem>
-      <NavListItem>
-        <Link
-          onClick={() => {
-            toggleModal();
-          }}
-          to='#!'
-        >
-          <FontAwesomeIcon icon={faSignOutAlt} />
-          <span className=''>Logout</span>
-        </Link>
-      </NavListItem>
-    </Fragment>
-  );
-
-  const guestLinks = (
-    <Fragment>
-      <NavListItem>
-        <Link to='/login'>Login</Link>
-      </NavListItem>
-      <NavListItem>
-        <ToggleSwitch
-          name='newsletter'
-          onValue={
-            <FontAwesomeIcon icon={faMoon} style={{ color: '#121212' }} />
-          }
-          offValue={<FontAwesomeIcon icon={faSun} style={{ color: '#f90' }} />}
-          checked={mode}
-          onChange={() => {
-            setMode(!mode);
-            toggleTheme();
-          }}
-          icon
-        />
-      </NavListItem>
-    </Fragment>
+    <>
+      <Link to='/user' className={classes.link}>
+        Collection Stats
+      </Link>
+      <Link to='/gallery' className={classes.link}>
+        Gallery
+      </Link>
+      <Switch
+        className={classes.switchBase}
+        size='medium'
+        icon={<WbSunnyIcon />}
+        checkedIcon={<NightsStayIcon />}
+        checked={theme}
+        onChange={() => {
+          setTheme(!theme);
+        }}
+        name='themeToggle'
+        inputProps={{ 'aria-label': 'Theme Toggle' }}
+      />
+      <Link
+        to='#!'
+        className={classes.link}
+        onClick={() => {
+          setShowLogoutDialog(true);
+        }}
+      >
+        Logout
+      </Link>
+    </>
   );
 
   return (
     <>
-      <NavbarContainer>
-        <NavLinkList>
-          <NavListItem>
-            <Link to='/'>
-              <NavTitle>{title}</NavTitle>
+      <AppBar position='static'>
+        <Toolbar>
+          <Typography variant='h4' className={classes.menuRight}>
+            <Link to='/' className={classes.link}>
+              {title}
             </Link>
-          </NavListItem>
-        </NavLinkList>
-        <NavLinkListRight>
-          {isAuthenticated ? authLinks : guestLinks}
-        </NavLinkListRight>
-
-        <ThemeToggleContainer>
-          <ToggleSwitch
-            name='newsletter'
-            onValue={
-              <FontAwesomeIcon icon={faMoon} style={{ color: '#121212' }} />
-            }
-            offValue={
-              <FontAwesomeIcon icon={faSun} style={{ color: '#f90' }} />
-            }
-            checked={mode}
-            onChange={() => {
-              setMode(!mode);
-              toggleTheme();
-            }}
-            icon
-          />
-        </ThemeToggleContainer>
-      </NavbarContainer>
-
-      {showLogoutConfirmModal && (
-        <ModalPortal>
-          <Modal
-            bodyText='Are you sure you want to logout?'
-            confirm={() => {
-              onLogout();
-              toggleModal();
-            }}
-            confirmIcon={<FontAwesomeIcon icon={faSignOutAlt} />}
-            confirmText='Logout'
-            headerText='Confirm Logout'
-            close={() => {
-              toggleModal();
+          </Typography>
+          {isAuthenticated && !show ? (
+            authLinks
+          ) : (
+            <IconButton aria-label='Menu' onClick={toggleDrawer(true)}>
+              <MenuIcon />
+            </IconButton>
+          )}
+        </Toolbar>
+      </AppBar>
+      {showLogoutDialog && (
+        <Portal>
+          <LogoutDialog
+            open={showLogoutDialog}
+            handleClose={() => {
+              setShowLogoutDialog(false);
             }}
           />
-        </ModalPortal>
+          ;
+        </Portal>
+      )}
+      {showSidebar && (
+        <Sidebar
+          showSidebar={showSidebar}
+          toggleDrawer={toggleDrawer}
+          setShowLogoutDialog={setShowLogoutDialog}
+        />
       )}
     </>
   );

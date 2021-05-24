@@ -3,9 +3,6 @@ import { slide as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../context/auth/AuthContext';
 import RecordContext from '../../context/record/RecordContext';
-import mainLogo from '../../images/Logo.png';
-
-import { SideBarLogo } from './Style';
 
 interface SidebarInterface {
   pageWrapId: string;
@@ -30,13 +27,8 @@ const SideBar = ({
     return (
       <Menu right>
         <Link to='/'>Home</Link>
-
-        <Link to='/register'>Register New User</Link>
-
         <Link to='/user'>Collection Stats.</Link>
-
         <Link to='/gallery'>Gallery</Link>
-
         <a onClick={onLogout} href='#!'>
           <i className='fas fa-sign-out-alt'></i> <span>Logout</span>
         </a>
@@ -45,10 +37,6 @@ const SideBar = ({
   } else {
     return (
       <Menu right>
-        <Link to='/'>
-          <SideBarLogo src={mainLogo} alt='Ed Miliano Archive' />
-        </Link>
-
         <Link to='/login'>Login</Link>
       </Menu>
     );

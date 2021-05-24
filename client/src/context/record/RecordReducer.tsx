@@ -134,14 +134,20 @@ const RecordReducer = (state: State, action: Actions) => {
             record.collectionName.match(regex) ||
             record.size.match(regex) ||
             record.medium.match(regex) ||
-            // record.price.match(regex) ||
             record.currentLocation.match(regex) ||
-            record.firstExhibitedTitle.match(regex) ||
-            record.salesHistorySoldTo.match(regex) ||
-            record.salesHistorySoldBy.match(regex)
-
-            //TODO complete parameters to search by
+            record.notes.match(regex) ||
+            // record.exhibited.title.match(regex) ||
+            // record.exhibited.address.match(regex) ||
+            // record.submission.title.match(regex) ||
+            // record.submission.address.match(regex) ||
+            record.sales.soldTo.match(regex) ||
+            record.sales.soldBy.match(regex)
+            // record.price.match(regex) ||
+            // record.mediaLinks.title.match(regex) ||
+            // record.mediaLinks.address.match(regex)
           );
+
+          //TODO complete parameters to search by
         }),
       };
     case CLEAR_FILTER:

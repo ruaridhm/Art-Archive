@@ -1,13 +1,12 @@
 import React from 'react';
-import spinner from './Spinner.gif';
-import { SpinnerContainer, StyledSpinner } from './Style';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const Spinner = () => {
-  return (
-    <SpinnerContainer>
-      <StyledSpinner src={spinner} alt='Loading...' />
-    </SpinnerContainer>
-  );
+interface SpinnerProps {
+  description: string;
+}
+
+const Spinner = ({ description }: SpinnerProps) => {
+  return <CircularProgress aria-describedby={description} />;
 };
 
 export default Spinner;

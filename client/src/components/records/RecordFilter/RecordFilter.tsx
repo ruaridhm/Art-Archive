@@ -1,14 +1,22 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
 import RecordContext from '../../../context/record/RecordContext';
-import Textfield from '../../text field/TextField';
-import { FilterFormContainer } from './Style';
+import TextField from '@material-ui/core/TextField';
+import { createStyles, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    filter: {
+      minWidth: '210px',
+    },
+  })
+);
 
 const RecordFilter = () => {
   const recordContext = useContext(RecordContext);
-  const text = useRef<HTMLInputElement>(null);
   const { filterRecords, clearFilter } = recordContext;
+  const classes = useStyles();
 
-  const onChange = (e: { target: { value: string } }) => {
+  const handleOnChange = (e: { target: { value: string } }) => {
     if (e.target.value !== '') {
       filterRecords(e.target.value);
     } else {
@@ -17,19 +25,13 @@ const RecordFilter = () => {
   };
 
   return (
-    <FilterFormContainer>
-      <form>
-        <Textfield
-          name='Filter Records'
-          ref={text}
-          type='text'
-          title='Filter Records'
-          onChange={onChange}
-          medium
-          standard
-        />
-      </form>
-    </FilterFormContainer>
+    <TextField
+      className={classes.filter}
+      variant='outlined'
+      label='Filter Records'
+      onChange={handleOnChange}
+      size='medium'
+    />
   );
 };
 

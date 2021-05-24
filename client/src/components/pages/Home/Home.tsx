@@ -1,105 +1,90 @@
 import React, { useContext, useEffect, useState } from 'react';
+//Context
+import AuthContext from '../../../context/auth/AuthContext';
+import RecordContext from '../../../context/record/RecordContext';
+//Material-UI
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {
+  Container,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Button,
+} from '@material-ui/core';
+//Material-UI Icons
+import AddIcon from '@material-ui/icons/Add';
+//Custom Components
+import RecordFormDialog from '../../records/RecordForm/RecordFormDialog';
 import Records from '../../records/Records/Records';
 import RecordFilter from '../../records/RecordFilter/RecordFilter';
-import AuthContext from '../../../context/auth/AuthContext';
-import Button from '../../button/Button';
-import Dropdown from '../../dropdown/Dropdown';
-import RecordForm from '../../records/RecordForm/RecordForm';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import {
-  HomeContainer,
-  HomeFilterContainer,
-  MobileFilterContainer,
-  AddRecordButtonWrapper,
-  MobileControlsContainer,
-  MobileRecordFilterContainer,
-  AddRecordButtonContainer,
-  AddRecordButtonDescription,
-  SortRecords,
-  Controls,
-} from './Style';
+//Interfaces
+import { RecordInterface } from '../../records/RecordItem/RecordItem';
 
 const sortOptions = [
   {
-    id: 1,
     title: 'Title',
     value: 'title',
   },
   {
-    id: 2,
     title: 'Artist',
     value: 'artist',
   },
   {
-    id: 3,
     title: 'Ref',
-    value: 'ref',
+    value: 'reference',
   },
   {
-    id: 4,
     title: 'Collection',
-    value: 'collection',
+    value: 'collectionName',
   },
   {
-    id: 5,
     title: 'Date',
     value: 'date',
   },
   {
-    id: 6,
     title: 'Size',
     value: 'size',
   },
   {
-    id: 7,
     title: 'Medium',
     value: 'medium',
   },
   {
-    id: 8,
     title: 'Price',
     value: 'price',
   },
   {
-    id: 9,
     title: 'Current Location',
     value: 'currentLocation',
   },
   {
-    id: 10,
     title: 'Sold To',
-    value: 'soldTo',
+    value: 'sales.soldTo',
   },
   {
-    id: 11,
     title: 'Sold By',
-    value: 'soldBy',
+    value: 'sales.soldBy',
   },
   {
-    id: 12,
     title: 'Date Sold',
-    value: 'dateSold',
+    value: 'sales.soldDate',
   },
   {
-    id: 13,
-    title: 'First Exhibition Date',
-    value: 'firstExhibitionDate',
-  },
-  {
-    id: 14,
     title: 'First Exhibition Title',
-    value: 'firstExhibitionTitle',
+    value: 'exhibited[0].title',
   },
   {
-    id: 15,
-    title: 'Submission Date',
-    value: 'submissionDate',
+    title: 'First Exhibition Date',
+    value: 'exhibited[0].date',
   },
   {
-    id: 16,
     title: 'Submission Title',
-    value: 'submissionTitle',
+    value: 'submission[0].title',
+  },
+  {
+    title: 'Submission Date',
+    value: 'submission[0].date',
   },
 ];
 
@@ -115,82 +100,176 @@ const orderOptions = [
     value: 'descending',
   },
 ];
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    homeContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    controls: {
+      display: 'grid',
+      gridTemplateColumns: ' 1fr 1fr 1fr',
+      placeItems: 'center',
+      placeContent: 'center',
+    },
+    sortControls: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '0.5em 0 0.5em 0',
+      margin: '0.5em 0 0.5em 0',
+    },
+    filterContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    buttonContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '0.5em',
+      margin: '0.5em',
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 200,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+  })
+);
+
 const Home = () => {
   const authContext = useContext(AuthContext);
+  const recordContext = useContext(RecordContext);
+  const { records, getRecords } = recordContext;
   const [displayAddRecord, setDisplayAddRecord] = useState<boolean>(false);
-  const [sort, setSort] = useState([]);
-  const [order, setOrder] = useState([]);
-  const [open, setOpen] = useState<string>('');
+  const [sort, setSort] = useState<string>('');
+  const [order, setOrder] = useState<string>('');
+  const [sortedRecords, setSortedRecords] =
+    useState<RecordInterface[]>(records);
+
+  const classes = useStyles();
 
   useEffect(() => {
+    getRecords();
     authContext.loadUser();
     // eslint-disable-next-line
   }, []);
 
+  //Sorts records depending on user input from sortOptions and orderOptions
+  useEffect(() => {
+    if (sort === '') {
+      setSortedRecords(records);
+    } else {
+      const compareValues = (key: string, order = 'ascending') => {
+        return function innerSort(a, b) {
+          if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+            // property doesn't exist on either object
+            return 0;
+          }
+
+          const varA =
+            typeof a[key] === 'string' ? a[key].toUpperCase() : a[key];
+          const varB =
+            typeof b[key] === 'string' ? b[key].toUpperCase() : b[key];
+
+          let comparison = 0;
+          if (varA > varB) {
+            comparison = 1;
+          } else if (varA < varB) {
+            comparison = -1;
+          }
+          return order === 'descending' ? comparison * -1 : comparison;
+        };
+      };
+
+      let sorted = [...sortedRecords];
+      sorted.sort(compareValues(sort, order));
+
+      setSortedRecords(sorted);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sort, order, records]);
+
+  const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSort(event.target.value as string);
+  };
+
+  const handleOrderChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setOrder(event.target.value as string);
+  };
+
   return (
-    <HomeContainer>
+    <div className={classes.homeContainer}>
       {displayAddRecord ? (
-        <RecordForm
+        <RecordFormDialog
           displayAddRecord={displayAddRecord}
           setDisplayAddRecord={setDisplayAddRecord}
         />
       ) : null}
-
-      {true && (
-        <MobileControlsContainer className='MobileControlsContainer'>
-          <MobileFilterContainer>
-            <MobileRecordFilterContainer>
-              <RecordFilter />
-            </MobileRecordFilterContainer>
-          </MobileFilterContainer>
-          <Button
-            medium
-            circleSuccess
-            onClick={() => setDisplayAddRecord(!displayAddRecord)}
-            label={<FontAwesomeIcon icon={faPlus} />}
-            type='button'
-          />
-        </MobileControlsContainer>
-      )}
-
-      <Controls>
-        <SortRecords>
-          <Dropdown
-            title='Sort by:'
-            items={sortOptions}
-            selection={sort}
-            setSelection={setSort}
-            open={open}
-            setOpen={setOpen}
-          />
-          <Dropdown
-            title='Order by:'
-            items={orderOptions}
-            selection={order}
-            setSelection={setOrder}
-            open={open}
-            setOpen={setOpen}
-          />
-        </SortRecords>
-        <HomeFilterContainer>
+      <div className={classes.controls}>
+        <Container className={classes.sortControls}>
+          <FormControl variant='outlined' className={classes.formControl}>
+            <InputLabel id='sort-by-label'>Sort By:</InputLabel>
+            <Select
+              labelId='sort-by-label'
+              id='sort-by-select'
+              value={sort}
+              onChange={handleSortChange}
+              label='Sort By'
+            >
+              <MenuItem value=''>
+                <em>None</em>
+              </MenuItem>
+              {sortOptions.map((e) => (
+                <MenuItem value={e.value} key={e.value}>
+                  {e.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl variant='outlined' className={classes.formControl}>
+            <InputLabel id='order-by-label'>Order By:</InputLabel>
+            <Select
+              labelId='order-by-label'
+              id='order-by-select'
+              value={order}
+              onChange={handleOrderChange}
+              label='Order By'
+            >
+              {orderOptions.map((e) => (
+                <MenuItem value={e.value} key={e.value}>
+                  {e.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Container>
+        <Container className={classes.filterContainer}>
           <RecordFilter />
-        </HomeFilterContainer>
-        <AddRecordButtonWrapper>
-          <AddRecordButtonContainer>
-            <Button
-              medium
-              circleSuccess
-              onClick={() => setDisplayAddRecord(!displayAddRecord)}
-              label={<FontAwesomeIcon icon={faPlus} />}
-              type='button'
-            />
-            <AddRecordButtonDescription>Add Record</AddRecordButtonDescription>
-          </AddRecordButtonContainer>
-        </AddRecordButtonWrapper>
-      </Controls>
+        </Container>
+        <Container className={classes.buttonContainer}>
+          <Button
+            variant='contained'
+            color='primary'
+            size='large'
+            startIcon={<AddIcon />}
+            onClick={() => setDisplayAddRecord(!displayAddRecord)}
+          >
+            Add Record
+          </Button>
+        </Container>
+      </div>
 
-      <Records setDisplayAddRecord={setDisplayAddRecord} />
-    </HomeContainer>
+      <Records
+        setDisplayAddRecord={setDisplayAddRecord}
+        sortedRecords={sortedRecords}
+      />
+    </div>
   );
 };
 
