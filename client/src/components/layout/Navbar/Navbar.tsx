@@ -53,7 +53,7 @@ interface NavbarProps {
   theme: boolean;
 }
 
-const Navbar = ({ title, setTheme, theme }: NavbarProps) => {
+const Navbar = ({ title, theme, setTheme }: NavbarProps) => {
   const authContext = useContext(AuthContext);
   const { isAuthenticated } = authContext;
   const classes = useStyles();

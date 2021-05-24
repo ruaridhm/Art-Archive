@@ -13,8 +13,9 @@ import RecordState from './context/record/RecordState';
 import AuthState from './context/auth/AuthState';
 import setAuthToken from './utils/setAuthToken';
 
-import { ThemeProvider } from 'styled-components';
-import { ColorVariables, DarkModeColorVariables } from './variables';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import 'date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -25,12 +26,22 @@ import './App.scss';
 localStorage.token && setAuthToken(localStorage.token);
 
 const App = () => {
-  const [theme, setTheme] = useState(false);
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [palette, setPalette] = useState(prefersDarkMode);
+
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: palette ? 'dark' : 'light',
+        },
+      }),
+    [palette]
+  );
 
   return (
-    <ThemeProvider
-      theme={theme === true ? ColorVariables : DarkModeColorVariables}
-    >
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <AuthState>
           <RecordState>
@@ -38,8 +49,8 @@ const App = () => {
               <Router>
                 <Navbar
                   title='Ed Miliano Archive'
-                  setTheme={setTheme}
-                  theme={theme}
+                  setTheme={setPalette}
+                  theme={palette}
                 />
                 <Alerts />
                 <Switch>
