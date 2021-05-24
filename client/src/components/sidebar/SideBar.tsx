@@ -1,48 +1,106 @@
 import React, { useContext } from 'react';
-import { slide as Menu } from 'react-burger-menu';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
+
+//Icons
+import HomeIcon from '@material-ui/icons/Home';
+import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
+import BubbleChartIcon from '@material-ui/icons/BubbleChart';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
+//Context
 import AuthContext from '../../context/auth/AuthContext';
-import RecordContext from '../../context/record/RecordContext';
-import mainLogo from '../../images/Logo.png';
 
-import { SideBarLogo } from './Style';
+const useStyles = makeStyles({
+  list: {
+    width: 250,
+    maxWidth: '33vw',
+  },
+  fullList: {
+    width: 'auto',
+  },
+});
 
-const SideBar = () => {
-  const authContext = useContext(AuthContext);
-  const recordContext = useContext(RecordContext);
-  const { isAuthenticated, logout, user } = authContext;
-  const { clearRecords } = recordContext;
-
-  const onLogout = () => {
-    logout();
-    clearRecords();
-  };
-
-  if (isAuthenticated) {
-    return (
-      <Menu right>
-        <Link to='/'>
-          <SideBarLogo src={mainLogo} alt='Ed Miliano Archive' />
-        </Link>
-        <Link to='/user'>Collection Stats. {user && user.name}</Link>
-
-        <Link to='/gallery'>Gallery</Link>
-
-        <Link onClick={onLogout} to='#!'>
-          <i className='fas fa-sign-out-alt'></i> <span>Logout</span>
-        </Link>
-      </Menu>
-    );
-  } else {
-    return (
-      <Menu right>
-        <Link to='/'>
-          <SideBarLogo src={mainLogo} alt='Ed Miliano Archive' />
-        </Link>
-
-        <Link to='/login'>Login</Link>
-      </Menu>
-    );
-  }
+const ListItemLink = (props) => {
+  return <ListItem button component={Link} to={props.to} {...props} />;
 };
-export default SideBar;
+
+interface SidebarInterface {
+  showSidebar: boolean;
+  toggleDrawer: (
+    showSidebar: boolean
+  ) => (event: React.KeyboardEvent | React.MouseEvent) => void;
+
+  setShowLogoutDialog: React.Dispatch<React.SetStateAction<Boolean>>;
+}
+
+const Sidebar = ({
+  showSidebar,
+  toggleDrawer,
+  setShowLogoutDialog,
+}: SidebarInterface) => {
+  const authContext = useContext(AuthContext);
+  const { isAuthenticated } = authContext;
+
+  const classes = useStyles();
+
+  return (
+    <Drawer anchor='right' open={showSidebar} onClose={toggleDrawer(false)}>
+      <div
+        role='presentation'
+        onClick={toggleDrawer(false)}
+        onKeyDown={toggleDrawer(false)}
+      >
+        {isAuthenticated && (
+          <>
+            <List className={classes.list}>
+              <ListItemLink button to='/'>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary='Home' />
+              </ListItemLink>
+
+              <ListItemLink button to='/user'>
+                <ListItemIcon>
+                  <BubbleChartIcon />
+                </ListItemIcon>
+                <ListItemText primary='Collection Stats' />
+              </ListItemLink>
+              <ListItemLink button to='/gallery'>
+                <ListItemIcon>
+                  <PhotoLibraryIcon />
+                </ListItemIcon>
+                <ListItemText primary='Gallery' />
+              </ListItemLink>
+            </List>
+            <Divider />
+            <List>
+              <ListItem
+                button
+                onClick={() => {
+                  setShowLogoutDialog(true);
+                }}
+              >
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>
+                <ListItemText primary='Logout' />
+              </ListItem>
+            </List>
+          </>
+        )}
+      </div>
+    </Drawer>
+  );
+};
+
+export default Sidebar;

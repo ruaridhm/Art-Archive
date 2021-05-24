@@ -6,7 +6,6 @@ import RecordItem, { RecordInterface } from '../RecordItem/RecordItem';
 import Spinner from '../../layout/Spinner/Spinner';
 //Material-UI
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Container, Grid } from '@material-ui/core';
 
 interface RecordsProps {
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
@@ -14,11 +13,10 @@ interface RecordsProps {
 }
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    record: {},
-    item: {
+    recordContainer: {
+      display: 'flex',
       flexWrap: 'wrap',
-      maxWidth: '16%',
-      minWidth: '16%',
+      justifyContent: 'center',
     },
   })
 );
@@ -33,43 +31,23 @@ const Records = ({ setDisplayAddRecord, sortedRecords }: RecordsProps) => {
   ) : (
     <>
       {sortedRecords !== null && !loading ? (
-        <Grid
-          spacing={3}
-          container
-          alignContent='space-between'
-          alignItems='center'
-          justify='center'
-        >
+        <div className={classes.recordContainer}>
           {filtered !== null
             ? filtered.map((record) => (
-                <Grid
-                  item
-                  xs={6}
-                  sm={3}
-                  className={classes.item}
+                <RecordItem
                   key={record._id}
-                >
-                  <RecordItem
-                    record={record}
-                    setDisplayAddRecord={setDisplayAddRecord}
-                  />
-                </Grid>
+                  record={record}
+                  setDisplayAddRecord={setDisplayAddRecord}
+                />
               ))
             : sortedRecords.map((record: RecordInterface) => (
-                <Grid
-                  item
-                  xs={6}
-                  sm={3}
-                  className={classes.item}
+                <RecordItem
                   key={record._id}
-                >
-                  <RecordItem
-                    record={record}
-                    setDisplayAddRecord={setDisplayAddRecord}
-                  />
-                </Grid>
+                  record={record}
+                  setDisplayAddRecord={setDisplayAddRecord}
+                />
               ))}
-        </Grid>
+        </div>
       ) : (
         <Spinner description='Loading Items' />
       )}

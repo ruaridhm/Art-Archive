@@ -17,6 +17,7 @@ import {
   DialogTitle,
   IconButton,
   FormGroup,
+  Typography,
 } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 //Material-UI Icons
@@ -362,6 +363,7 @@ const RecordFormDialog = ({
               onChange={onChange}
             />
           </FormGroup>
+          <Typography variant='subtitle1'>Exhibitions</Typography>
           <FormGroup row={true} className={classes.formGroup}>
             <AutoCompleteTextField
               id='exhibited-title-text-field'
@@ -395,6 +397,7 @@ const RecordFormDialog = ({
               }}
             />
           </FormGroup>
+          <Typography variant='subtitle1'>Submissions</Typography>
           <FormGroup row={true} className={classes.formGroup}>
             <AutoCompleteTextField
               id='submission-title-text-field'
@@ -428,6 +431,7 @@ const RecordFormDialog = ({
               }}
             />
           </FormGroup>
+          <Typography variant='subtitle1'>Sales</Typography>
           <FormGroup row={true} className={classes.formGroup}>
             <AutoCompleteTextField
               id='sold-to-text-field'
@@ -461,6 +465,7 @@ const RecordFormDialog = ({
               }}
             />
           </FormGroup>
+          <Typography variant='subtitle1'>Media Links</Typography>
           <FormGroup row={true} className={classes.formGroup}>
             <AutoCompleteTextField
               id='media-link-text-field'

@@ -124,6 +124,8 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
     useState<boolean>(false);
   const [showSubmissionDialog, setShowSubmissionDialog] =
     useState<boolean>(false);
+  const [showMediaQueryDialog, setShowMediaQueryDialog] =
+    useState<boolean>(false);
   const classes = useStyles();
   const recordContext = useContext(RecordContext);
   const { deleteRecord, clearCurrent } = recordContext;
@@ -157,6 +159,10 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
     setOpen(false);
   };
 
+  const handleShowMediaQuery = () => {
+    setShowMediaQueryDialog(true);
+  };
+
   const handleShowExhibition = () => {
     setShowExhibitionDialog(true);
   };
@@ -180,14 +186,14 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
         onClose={handleClose}
         aria-labelledby='dialog-title'
         open={open}
-        fullWidth={true}
+        fullWidth={image[0].url === '' ? false : true}
         maxWidth='xl'
       >
         <DialogTitle id='dialog-title' onClose={handleClose}>
           {title}
         </DialogTitle>
         <DialogContent dividers>
-          <List style={{ width: '50%' }}>
+          <List style={{ width: image[0].url === '' ? '100%' : '50%' }}>
             {reference && (
               <ListItem>
                 <ListItemText
@@ -265,8 +271,8 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
                   primary={
                     <div style={{ display: 'flex' }}>
                       <Typography className={classes.listBold}>
-                        Price:
-                      </Typography>{' '}
+                        Price: €
+                      </Typography>
                       {price}
                     </div>
                   }
@@ -302,7 +308,7 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
               </ListItem>
             )}
 
-            {mediaLinks && (
+            {mediaLinks[0].title !== '' && mediaLinks[0].address !== '' && (
               <>
                 <Typography className={classes.listBold}>
                   Media Links:
@@ -349,170 +355,181 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
                 })}
               </>
             )}
-            {exhibited && (
-              <>
-                <Typography className={classes.listBold}>Exhibited:</Typography>
-                {exhibited.map((element) => {
-                  return (
-                    <ListItem key={element._id}>
-                      <ListItemText
-                        primary={
-                          <Paper elevation={3} className={classes.paper}>
-                            {element.title && (
-                              <div
-                                className={clsx(
-                                  classes.flexInline,
-                                  classes.leftCol
-                                )}
-                              >
-                                <Typography className={classes.listBold}>
-                                  Title:
-                                </Typography>
-                                {element.title}
-                              </div>
-                            )}
-                            {element.address && (
-                              <div
-                                className={clsx(
-                                  classes.flexInline,
-                                  classes.midCol
-                                )}
-                              >
-                                <Typography className={classes.listBold}>
-                                  Address:
-                                </Typography>
-                                {element.address}
-                              </div>
-                            )}
-                            {element.date && (
-                              <div
-                                className={clsx(
-                                  classes.flexInline,
-                                  classes.rightCol
-                                )}
-                              >
-                                <Typography className={classes.listBold}>
-                                  Date:
-                                </Typography>
-                                {getFormattedDate(element.date)}
-                              </div>
-                            )}
-                          </Paper>
-                        }
-                      />
-                    </ListItem>
-                  );
-                })}
-              </>
-            )}
-            {submission && (
-              <>
-                <Typography className={classes.listBold}>
-                  Submissions:
-                </Typography>
-                {submission.map((element) => {
-                  return (
-                    <ListItem key={element._id}>
-                      <ListItemText
-                        primary={
-                          <Paper elevation={3} className={classes.paper}>
-                            {element.title && (
-                              <div
-                                className={clsx(
-                                  classes.flexInline,
-                                  classes.leftCol
-                                )}
-                              >
-                                <Typography className={classes.listBold}>
-                                  Title:
-                                </Typography>
-                                {element.title}
-                              </div>
-                            )}
-                            {element.address && (
-                              <div
-                                className={clsx(
-                                  classes.flexInline,
-                                  classes.midCol
-                                )}
-                              >
-                                <Typography className={classes.listBold}>
-                                  Address:
-                                </Typography>
-                                {element.address}
-                              </div>
-                            )}
-                            {element.date && (
-                              <div
-                                className={clsx(
-                                  classes.flexInline,
-                                  classes.rightCol
-                                )}
-                              >
-                                <Typography className={classes.listBold}>
-                                  Date:
-                                </Typography>
-                                {getFormattedDate(element.date)}
-                              </div>
-                            )}
-                          </Paper>
-                        }
-                      />
-                    </ListItem>
-                  );
-                })}
-              </>
-            )}
+            {exhibited[0].title !== '' &&
+              exhibited[0].address !== '' &&
+              exhibited[0].date !== null && (
+                <>
+                  <Typography className={classes.listBold}>
+                    Exhibited:
+                  </Typography>
+                  {exhibited.map((element) => {
+                    return (
+                      <ListItem key={element._id}>
+                        <ListItemText
+                          primary={
+                            <Paper elevation={3} className={classes.paper}>
+                              {element.title && (
+                                <div
+                                  className={clsx(
+                                    classes.flexInline,
+                                    classes.leftCol
+                                  )}
+                                >
+                                  <Typography className={classes.listBold}>
+                                    Title:
+                                  </Typography>
+                                  {element.title}
+                                </div>
+                              )}
+                              {element.address && (
+                                <div
+                                  className={clsx(
+                                    classes.flexInline,
+                                    classes.midCol
+                                  )}
+                                >
+                                  <Typography className={classes.listBold}>
+                                    Address:
+                                  </Typography>
+                                  {element.address}
+                                </div>
+                              )}
+                              {element.date && (
+                                <div
+                                  className={clsx(
+                                    classes.flexInline,
+                                    classes.rightCol
+                                  )}
+                                >
+                                  <Typography className={classes.listBold}>
+                                    Date:
+                                  </Typography>
+                                  {getFormattedDate(element.date)}
+                                </div>
+                              )}
+                            </Paper>
+                          }
+                        />
+                      </ListItem>
+                    );
+                  })}
+                </>
+              )}
+            {submission[0].title !== '' &&
+              submission[0].address !== '' &&
+              submission[0].date !== null && (
+                <>
+                  <Typography className={classes.listBold}>
+                    Submissions:
+                  </Typography>
+                  {submission.map((element) => {
+                    return (
+                      <ListItem key={element._id}>
+                        <ListItemText
+                          primary={
+                            <Paper elevation={3} className={classes.paper}>
+                              {element.title && (
+                                <div
+                                  className={clsx(
+                                    classes.flexInline,
+                                    classes.leftCol
+                                  )}
+                                >
+                                  <Typography className={classes.listBold}>
+                                    Title:
+                                  </Typography>
+                                  {element.title}
+                                </div>
+                              )}
+                              {element.address && (
+                                <div
+                                  className={clsx(
+                                    classes.flexInline,
+                                    classes.midCol
+                                  )}
+                                >
+                                  <Typography className={classes.listBold}>
+                                    Address:
+                                  </Typography>
+                                  {element.address}
+                                </div>
+                              )}
+                              {element.date && (
+                                <div
+                                  className={clsx(
+                                    classes.flexInline,
+                                    classes.rightCol
+                                  )}
+                                >
+                                  <Typography className={classes.listBold}>
+                                    Date:
+                                  </Typography>
+                                  {getFormattedDate(element.date)}
+                                </div>
+                              )}
+                            </Paper>
+                          }
+                        />
+                      </ListItem>
+                    );
+                  })}
+                </>
+              )}
 
-            {sales && (
-              <>
-                <Typography className={classes.listBold}>Sales:</Typography>
-                <ListItem>
-                  <ListItemText
-                    primary={
-                      <Paper elevation={3} className={classes.paper}>
-                        {sales.soldTo && (
-                          <div
-                            className={clsx(
-                              classes.flexInline,
-                              classes.leftCol
-                            )}
-                          >
-                            <Typography className={classes.listBold}>
-                              Sold To:
-                            </Typography>
-                            {sales.soldTo}
-                          </div>
-                        )}
-                        {sales.soldBy && (
-                          <div
-                            className={clsx(classes.flexInline, classes.midCol)}
-                          >
-                            <Typography className={classes.listBold}>
-                              Sold By:
-                            </Typography>
-                            {sales.soldBy}
-                          </div>
-                        )}
-                        {sales.soldDate && (
-                          <div
-                            className={clsx(
-                              classes.flexInline,
-                              classes.rightCol
-                            )}
-                          >
-                            <Typography className={classes.listBold}>
-                              Date:
-                            </Typography>
-                            {getFormattedDate(sales.soldDate)}
-                          </div>
-                        )}
-                      </Paper>
-                    }
-                  />
-                </ListItem>
-              </>
-            )}
+            {sales.soldTo !== '' &&
+              sales.soldBy !== '' &&
+              sales.soldDate !== null && (
+                <>
+                  <Typography className={classes.listBold}>Sales:</Typography>
+                  <ListItem>
+                    <ListItemText
+                      primary={
+                        <Paper elevation={3} className={classes.paper}>
+                          {sales.soldTo && (
+                            <div
+                              className={clsx(
+                                classes.flexInline,
+                                classes.leftCol
+                              )}
+                            >
+                              <Typography className={classes.listBold}>
+                                Sold To:
+                              </Typography>
+                              {sales.soldTo}
+                            </div>
+                          )}
+                          {sales.soldBy && (
+                            <div
+                              className={clsx(
+                                classes.flexInline,
+                                classes.midCol
+                              )}
+                            >
+                              <Typography className={classes.listBold}>
+                                Sold By:
+                              </Typography>
+                              {sales.soldBy}
+                            </div>
+                          )}
+                          {sales.soldDate && (
+                            <div
+                              className={clsx(
+                                classes.flexInline,
+                                classes.rightCol
+                              )}
+                            >
+                              <Typography className={classes.listBold}>
+                                Date:
+                              </Typography>
+                              {getFormattedDate(sales.soldDate)}
+                            </div>
+                          )}
+                        </Paper>
+                      }
+                    />
+                  </ListItem>
+                </>
+              )}
 
             {notes && (
               <ListItem>
@@ -544,7 +561,7 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
               </ListItem>
             )}
           </List>
-          {image && (
+          {image[0].url !== '' && (
             <div style={{ width: '50%' }}>
               <CardMedia
                 component='img'
@@ -558,6 +575,9 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
         <DialogActions>
           <Button onClick={handleDelete} color='secondary'>
             Delete
+          </Button>
+          <Button onClick={handleShowMediaQuery} color='primary'>
+            Edit Media Links
           </Button>
           <Button onClick={handleShowExhibition} color='primary'>
             Edit Exhibitions
@@ -588,6 +608,16 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
             record={record}
             open={showSubmissionDialog}
             setOpen={setShowSubmissionDialog}
+          />
+        </Portal>
+      )}
+      {showMediaQueryDialog && (
+        <Portal>
+          <AddRecordDetailsDialog
+            detail='MediaLink'
+            record={record}
+            open={showMediaQueryDialog}
+            setOpen={setShowMediaQueryDialog}
           />
         </Portal>
       )}

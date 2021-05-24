@@ -104,10 +104,6 @@ const orderOptions = [
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     homeContainer: {
-      paddingLeft: '0px',
-      paddingRight: '0px',
-      marginLeft: '24px',
-      marginRight: '24px',
       display: 'flex',
       flexDirection: 'column',
     },
@@ -116,8 +112,6 @@ const useStyles = makeStyles((theme: Theme) =>
       gridTemplateColumns: ' 1fr 1fr 1fr',
       placeItems: 'center',
       placeContent: 'center',
-      paddingLeft: '0px',
-      paddingRight: '0px',
     },
     sortControls: {
       display: 'flex',
@@ -130,12 +124,8 @@ const useStyles = makeStyles((theme: Theme) =>
     filterContainer: {
       display: 'flex',
       justifyContent: 'center',
-      // width: '22rem',
-      // padding: '0.5em',
-      // margin: '0.5em',
     },
     buttonContainer: {
-      width: '22rem',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -214,14 +204,14 @@ const Home = () => {
   };
 
   return (
-    <Container className={classes.homeContainer}>
+    <div className={classes.homeContainer}>
       {displayAddRecord ? (
         <RecordFormDialog
           displayAddRecord={displayAddRecord}
           setDisplayAddRecord={setDisplayAddRecord}
         />
       ) : null}
-      <Container className={classes.controls}>
+      <div className={classes.controls}>
         <Container className={classes.sortControls}>
           <FormControl variant='outlined' className={classes.formControl}>
             <InputLabel id='sort-by-label'>Sort By:</InputLabel>
@@ -273,13 +263,13 @@ const Home = () => {
             Add Record
           </Button>
         </Container>
-      </Container>
+      </div>
 
       <Records
         setDisplayAddRecord={setDisplayAddRecord}
         sortedRecords={sortedRecords}
       />
-    </Container>
+    </div>
   );
 };
 

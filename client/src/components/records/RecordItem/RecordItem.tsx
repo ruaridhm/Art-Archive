@@ -23,15 +23,34 @@ import RecordItemDialog from './RecordItemDialog';
 import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-    height: 500,
+  card: {
+    minWidth: 275,
+    maxWidth: 275,
+    height: 410,
+    margin: 8,
+    backgroundColor: '#e0dddd',
   },
   media: {
     height: 140,
   },
-  actionArea: {
-    height: '90%',
+  cardContent: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    height: 217,
+  },
+  cardTitle: {
+    marginBottom: 0,
+  },
+  cardList: {
+    paddingTop: 0,
+  },
+  cardListItem: {
+    paddingTop: 2,
+    paddingBottom: 2,
+  },
+  cardActions: {
+    height: 53,
+    paddingBottom: 5,
   },
 });
 
@@ -62,9 +81,9 @@ export interface RecordInterface {
   date?: Date | null;
   size?: string;
   medium?: string;
-  price?: Number;
+  price?: number;
   currentLocation?: string;
-  editions?: Number;
+  editions?: number;
   mediaLinks?: MediaLinksInterface[] | [];
   notes?: string;
   exhibited: DisplayedInterface[];
@@ -83,7 +102,8 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
   const recordContext = useContext(RecordContext);
   const { setCurrent } = recordContext;
   const classes = useStyles();
-  const { title, reference, collectionName, image, medium, price } = record;
+  const { title, reference, collectionName, image, medium, price, size } =
+    record;
 
   const scrollToTop = () => {
     document.documentElement.scrollTop = 110;
@@ -101,50 +121,56 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
 
   return (
     <>
-      <Card className={classes.root}>
-        <CardActionArea
-          onClick={showRecordInfoDialogHandler}
-          className={classes.actionArea}
-        >
+      <Card className={classes.card}>
+        <CardActionArea onClick={showRecordInfoDialogHandler}>
           {image !== null && (
             <CardMedia
               className={classes.media}
               component='img'
               alt={title}
-              height='140'
               image={image[0].url}
               title={title}
             />
           )}
-          <CardContent>
-            <Typography gutterBottom variant='h5' component='h2'>
+          <CardContent className={classes.cardContent}>
+            <Typography
+              gutterBottom
+              variant='h5'
+              component='h2'
+              className={classes.cardTitle}
+            >
               {title}
             </Typography>
-            <List>
+            <List className={classes.cardList}>
               {reference && (
-                <ListItem>
+                <ListItem className={classes.cardListItem}>
                   <ListItemText primary={`Reference: ${reference}`} />
                 </ListItem>
               )}
               {collectionName && (
-                <ListItem>
+                <ListItem className={classes.cardListItem}>
                   <ListItemText primary={`Collection: ${collectionName}`} />
                 </ListItem>
               )}
               {medium && (
-                <ListItem>
+                <ListItem className={classes.cardListItem}>
                   <ListItemText primary={`Medium: ${medium}`} />
                 </ListItem>
               )}
+              {size && (
+                <ListItem className={classes.cardListItem}>
+                  <ListItemText primary={`Size: ${size}`} />
+                </ListItem>
+              )}
               {price && (
-                <ListItem>
-                  <ListItemText primary={`Price: ${price}`} />
+                <ListItem className={classes.cardListItem}>
+                  <ListItemText primary={`Price: €${price}`} />
                 </ListItem>
               )}
             </List>
           </CardContent>
         </CardActionArea>
-        <CardActions>
+        <CardActions className={classes.cardActions}>
           <Button
             onClick={editRecord}
             color='primary'
