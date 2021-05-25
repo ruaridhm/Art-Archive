@@ -60,9 +60,21 @@ const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
   const [state, setState] = React.useState<inputState | null>(emptyInput);
   //Creating a string to use to reference values using bracket notation below and also use detail prop for strings
   let reference: string;
-  detail === 'Exhibition'
-    ? (reference = 'exhibited')
-    : (reference = 'submission');
+  switch (detail) {
+    case 'Exhibition':
+      reference = 'exhibited';
+      break;
+    case 'Submission':
+      reference = 'submission';
+      break;
+    case 'MediaLink':
+      reference = 'mediaLinks';
+      break;
+    default:
+      console.log('switch hit default case');
+  }
+
+  console.log(reference);
 
   const classes = useStyles();
 
@@ -71,6 +83,7 @@ const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
   }) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
+
   const handleDateChange = (date: Date | null | string) => {
     setState({ ...state, date: date.toString() });
   };
@@ -81,16 +94,14 @@ const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
     modifiedArr = modifiedArr.filter(function (obj) {
       return obj._id !== id;
     });
-
     modifiedRecord[reference] = modifiedArr;
-
     updateRecord(modifiedRecord);
   };
 
   const handleAddItem = () => {
     let modifiedRecord = { ...record };
     modifiedRecord[reference].push(state);
-
+    console.log(modifiedRecord);
     updateRecord(modifiedRecord);
   };
 

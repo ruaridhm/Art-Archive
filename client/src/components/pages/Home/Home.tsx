@@ -145,7 +145,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const Home = () => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
-  const { records, getRecords } = recordContext;
+  const { records, getRecords, clearCurrent } = recordContext;
   const [displayAddRecord, setDisplayAddRecord] = useState<boolean>(false);
   const [sort, setSort] = useState<string>('');
   const [order, setOrder] = useState<string>('');
@@ -195,6 +195,10 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, order, records]);
 
+  const handleAddRecord = () => {
+    clearCurrent();
+    setDisplayAddRecord(!displayAddRecord);
+  };
   const handleSortChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSort(event.target.value as string);
   };
@@ -258,7 +262,7 @@ const Home = () => {
             color='primary'
             size='large'
             startIcon={<AddIcon />}
-            onClick={() => setDisplayAddRecord(!displayAddRecord)}
+            onClick={handleAddRecord}
           >
             Add Record
           </Button>

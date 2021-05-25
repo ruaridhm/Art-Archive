@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 //Components
 import LogoutDialog from './LogoutDialog';
-import Sidebar from '../../sidebar/Sidebar';
+import Sidebar from '../sidebar/SideBar';
 
 //Material-UI Icons
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
@@ -41,9 +41,6 @@ const useStyles = makeStyles({
   switchBase: {
     marginRight: '1.25em',
     color: '#000',
-    '&$checked': {
-      color: 'red',
-    },
   },
   hamburger: {},
 });

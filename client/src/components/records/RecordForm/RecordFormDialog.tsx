@@ -35,7 +35,7 @@ interface RecordFormProps {
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   formGroup: {
     alignItems: 'center',
     marginBottom: '8px',
@@ -138,8 +138,8 @@ const RecordFormDialog = ({
   };
 
   const handleAutocompleteChange = (
-    value,
-    category,
+    value: string,
+    category: string,
     subCategory = 'noName'
   ) => {
     if (subCategory !== 'noName') {
@@ -164,7 +164,7 @@ const RecordFormDialog = ({
     }
   };
 
-  const handleDropzoneChange = (files: File[]) => {};
+  // const handleDropzoneChange = (files: File[]) => {};
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -192,14 +192,16 @@ const RecordFormDialog = ({
       exhibitedDate !== null &&
       exhibitedDate.getTime() === exhibitedDate.getTime()
     ) {
-      setItem({
-        ...item,
-        exhibited: [
-          {
-            ...item.exhibited[0],
-            date: exhibitedDate,
-          },
-        ],
+      setItem((prevItem) => {
+        return {
+          ...prevItem,
+          exhibited: [
+            {
+              ...prevItem.exhibited[0],
+              date: exhibitedDate,
+            },
+          ],
+        };
       });
     }
   }, [exhibitedDate]);
@@ -208,26 +210,30 @@ const RecordFormDialog = ({
       submissionDate !== null &&
       submissionDate.getTime() === submissionDate.getTime()
     ) {
-      setItem({
-        ...item,
-        submission: [
-          {
-            ...item.submission[0],
-            date: submissionDate,
-          },
-        ],
+      setItem((prevItem) => {
+        return {
+          ...prevItem,
+          submission: [
+            {
+              ...prevItem.submission[0],
+              date: submissionDate,
+            },
+          ],
+        };
       });
     }
   }, [submissionDate]);
 
   useEffect(() => {
     if (soldDate !== null && soldDate.getTime() === soldDate.getTime()) {
-      setItem({
-        ...item,
-        sales: {
-          ...item.sales,
-          soldDate: soldDate,
-        },
+      setItem((prevItem) => {
+        return {
+          ...prevItem,
+          sales: {
+            ...prevItem.sales,
+            soldDate: soldDate,
+          },
+        };
       });
     }
   }, [soldDate]);

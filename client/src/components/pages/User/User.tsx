@@ -7,7 +7,6 @@ const User = () => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
   const { getRecords, records, loading } = recordContext;
-  const { user } = authContext;
 
   useEffect(() => {
     authContext.loadUser();
@@ -60,9 +59,8 @@ const User = () => {
     records.forEach((elem) => {
       if (elem[value] !== null) {
         let current = new Date(elem[value]).getTime();
-        console.log(current);
+
         if (latest < current) {
-          console.log(current);
           latest = current;
           title = elem.title;
         }
@@ -90,12 +88,12 @@ const User = () => {
     return total / recordsWithPrice;
   };
 
-  const calcHighPrice = () => {
+  const calcHighPrice = (value: string) => {
     let highest = 0;
     records.forEach((elem) => {
-      if (elem.price !== 0) {
-        if (elem.price > highest) {
-          highest = elem.price;
+      if (elem[value] !== 0) {
+        if (elem[value] > highest) {
+          highest = elem[value];
         }
       }
     });
@@ -112,6 +110,56 @@ const User = () => {
       }
     });
     return lowest;
+  };
+  const totalArrTitleCount = (value: string) => {
+    const total = [];
+    records.forEach((record) => {
+      record[value].forEach((elem: { title: string }) => {
+        if (
+          total.includes(elem.title) ||
+          elem.title === undefined ||
+          elem.title === ''
+        ) {
+          return;
+        } else {
+          total.push(elem.title);
+        }
+      });
+    });
+    return total.length;
+  };
+
+  const mostPopularCount = (value: string) => {
+    let total = [];
+    records.forEach((elem) => {
+      elem[value] !== '' && total.push(elem[value]);
+    });
+    const obj = total.reduce(
+      (key, val) => ({ ...key, [val]: (key[val] | 0) + 1 }),
+      {}
+    );
+
+    let keys = Object.keys(obj);
+    let largest = Math.max.apply(
+      null,
+      keys.map((x) => obj[x])
+    );
+    let result = keys.reduce((result, key) => {
+      if (obj[key] === largest) {
+        result.push(key);
+      }
+      return result;
+    }, []);
+    let ans = ' ';
+    for (let i = 0; i < result.length; i++) {
+      if (i !== result.length - 1) {
+        ans += `${result[i]}, `;
+      } else {
+        ans += `${result[i]}`;
+      }
+    }
+
+    return ans;
   };
 
   if (!loading && records) {
@@ -136,19 +184,29 @@ const User = () => {
           avg. price: €<span>{calcAvgPrice()}</span>
         </li>
         <li>
-          Highest Price: €<span>{calcHighPrice()}</span>
+          Highest Price: €<span>{calcHighPrice('price')}</span>
         </li>
         <li>
           Lowest price: €<span>{calcLowPrice()}</span>
         </li>
-        <li>total exhibitions</li>
-        <li>total submissions</li>
+        <li>
+          total exhibitions<span>{totalArrTitleCount('exhibited')}</span>
+        </li>
+        <li>
+          total submissions<span>{totalArrTitleCount('submission')}</span>
+        </li>
         <li>
           latest sold<span>{calcLatestDate('sales.soldDate')}</span>
         </li>
-        <li>Most popular medium</li>
-        <li>Most popular size</li>
-        <li>most editions</li>
+        <li>
+          Most popular medium :<span>{mostPopularCount('medium')}</span>
+        </li>
+        <li>
+          Most popular size :<span>{mostPopularCount('size')}</span>
+        </li>
+        <li>
+          most editions :<span>{calcHighPrice('editions')}</span>
+        </li>
       </ul>
     );
   } else {
