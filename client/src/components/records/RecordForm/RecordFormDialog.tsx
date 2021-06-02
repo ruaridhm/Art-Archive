@@ -94,8 +94,8 @@ const RecordFormDialog = ({
   const recordContext = useContext(RecordContext);
   const { addRecord, current, clearCurrent, updateRecord } = recordContext;
   const [item, setItem] = useState(emptyItemObject);
-  const [exhibitedDate, setExhibitedDate] = useState(item.exhibited[0].date);
-  const [submissionDate, setSubmissionDate] = useState(item.submission[0].date);
+  const [exhibitedDate, setExhibitedDate] = useState(null);
+  const [submissionDate, setSubmissionDate] = useState(null);
   const [soldDate, setSoldDate] = useState(item.sales.soldDate);
   const autoCompleteOptions = PopulateAutoComplete();
 
@@ -170,6 +170,26 @@ const RecordFormDialog = ({
     e.preventDefault();
 
     if (current === null) {
+      //check if exhibitions, submissions are empty. If so initialize as an empty array instead of [{ title: '', date: null, address: '' }]
+      // if (
+      //   (item.exhibited[0].title === '' && item.exhibited[0].address === '',
+      //   item.exhibited[0].date === null)
+      // ) {
+      //   item.exhibited = [];
+      // }
+      // if (
+      //   (item.submission[0].title === '' && item.submission[0].address === '',
+      //   item.submission[0].date === null)
+      // ) {
+      //   item.submission = [];
+      // }
+      // if (
+      //   item.mediaLinks[0].title === '' &&
+      //   item.mediaLinks[0].address === ''
+      // ) {
+      //   item.mediaLinks = [];
+      // }
+
       addRecord(item);
       setDisplayAddRecord(false);
     } else {

@@ -47,11 +47,7 @@ const App = () => {
           <RecordState>
             <AlertState>
               <Router>
-                <Navbar
-                  title='Ed Miliano Archive'
-                  setTheme={setPalette}
-                  theme={palette}
-                />
+                <Navbar title='Archive' setTheme={setPalette} theme={palette} />
                 <Alerts />
                 <Switch>
                   <PrivateRoute exact path='/' component={Home} />

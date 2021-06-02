@@ -19,6 +19,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { DialogTitle } from './RecordItemDialog';
 //Context
 import RecordContext from '../../../context/record/RecordContext';
+import { RecordInterface } from './RecordItem';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,7 +55,21 @@ const emptyInput = {
   address: '',
 };
 
-const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
+interface AddRecordDetailsDialogInterface {
+  detail: string;
+  record: RecordInterface;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  noDate?: boolean;
+}
+
+const AddRecordDetailsDialog = ({
+  detail,
+  record,
+  open,
+  setOpen,
+  noDate,
+}: AddRecordDetailsDialogInterface) => {
   const recordContext = useContext(RecordContext);
   const { updateRecord } = recordContext;
   const [state, setState] = React.useState<inputState | null>(emptyInput);
@@ -73,9 +88,6 @@ const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
     default:
       console.log('switch hit default case');
   }
-
-  console.log(reference);
-
   const classes = useStyles();
 
   const handleChange = (e: {
@@ -99,24 +111,42 @@ const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
   };
 
   const handleAddItem = () => {
-    let modifiedRecord = { ...record };
-    modifiedRecord[reference].push(state);
-    console.log(modifiedRecord);
-    updateRecord(modifiedRecord);
+    if (state.title === '' && state.address === '') {
+      //Todo add error alerting user here
+      return;
+    } else if (
+      record[reference].length === 1 &&
+      record[reference][0].title === '' &&
+      record[reference][0].address === ''
+    ) {
+      let modifiedRecord = { ...record };
+      modifiedRecord[reference].push(state);
+      modifiedRecord[reference].shift();
+      console.log(modifiedRecord);
+      updateRecord(modifiedRecord);
+      setState(emptyInput);
+    } else {
+      let modifiedRecord = { ...record };
+      modifiedRecord[reference].push(state);
+      console.log(modifiedRecord);
+      updateRecord(modifiedRecord);
+      setState(emptyInput);
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
       <DialogTitle id={`${detail}-title`} onClose={handleClose}>
         {detail}s
       </DialogTitle>
       <DialogContent>
-        {(record[reference].length >= 1 && record[reference][0].title) ||
-        (record[reference].length >= 1 && record[reference][0].address) ||
-        (record[reference].length >= 1 && record[reference][0].date) ? (
+        {record[reference].length >= 1 &&
+        record[reference][0].title !== '' &&
+        record[reference][0].address !== '' ? (
           <Paper>
             {record[reference].map((element) => (
               <Paper
@@ -155,24 +185,28 @@ const AddRecordDetailsDialog = ({ detail, record, open, setOpen }) => {
               variant='outlined'
               onChange={handleChange}
               name='title'
+              value={state.title}
             />
-            <KeyboardDatePicker
-              margin='normal'
-              id='date-picker-dialog'
-              label={`${detail} Date`}
-              format='dd/MM/yyyy'
-              value={state.date}
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-              inputVariant='outlined'
-            />
+            {!noDate && (
+              <KeyboardDatePicker
+                margin='normal'
+                id='date-picker-dialog'
+                label={`${detail} Date`}
+                format='dd/MM/yyyy'
+                value={state.date}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                inputVariant='outlined'
+              />
+            )}
             <TextField
               label={`${detail} Address`}
               variant='outlined'
               onChange={handleChange}
               name='address'
+              value={state.address}
             />
           </FormControl>
         </form>

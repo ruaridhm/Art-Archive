@@ -42,7 +42,6 @@ const useStyles = makeStyles({
     marginRight: '1.25em',
     color: '#000',
   },
-  hamburger: {},
 });
 interface NavbarProps {
   title: string;
@@ -58,27 +57,8 @@ const Navbar = ({ title, theme, setTheme }: NavbarProps) => {
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const show = useMediaQuery('(max-width:800px)');
 
-  const toggleDrawer =
-    (showSidebar: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return;
-      }
-      setShowSidebar(!showSidebar);
-    };
-
-  const authLinks = (
-    <>
-      <Link to='/user' className={classes.link}>
-        Collection Stats
-      </Link>
-      <Link to='/gallery' className={classes.link}>
-        Gallery
-      </Link>
+  const ThemeToggle = () => {
+    return (
       <Switch
         className={classes.switchBase}
         size='medium'
@@ -91,6 +71,30 @@ const Navbar = ({ title, theme, setTheme }: NavbarProps) => {
         name='themeToggle'
         inputProps={{ 'aria-label': 'Theme Toggle' }}
       />
+    );
+  };
+  const toggleDrawer =
+    (showSidebar: boolean) =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
+      setShowSidebar(showSidebar);
+    };
+
+  const authLinks = (
+    <>
+      <Link to='/user' className={classes.link}>
+        Collection Stats
+      </Link>
+      <Link to='/gallery' className={classes.link}>
+        Gallery
+      </Link>
+      <ThemeToggle />
       <Link
         to='#!'
         className={classes.link}
@@ -115,9 +119,12 @@ const Navbar = ({ title, theme, setTheme }: NavbarProps) => {
           {isAuthenticated && !show ? (
             authLinks
           ) : (
-            <IconButton aria-label='Menu' onClick={toggleDrawer(true)}>
-              <MenuIcon />
-            </IconButton>
+            <>
+              <ThemeToggle />
+              <IconButton aria-label='Menu' onClick={toggleDrawer(true)}>
+                <MenuIcon />
+              </IconButton>
+            </>
           )}
         </Toolbar>
       </AppBar>

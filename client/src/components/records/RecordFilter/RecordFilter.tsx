@@ -3,10 +3,10 @@ import RecordContext from '../../../context/record/RecordContext';
 import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     filter: {
-      minWidth: '210px',
+      width: '100%',
     },
   })
 );

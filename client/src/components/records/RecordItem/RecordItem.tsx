@@ -161,7 +161,7 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
                   <ListItemText primary={`Size: ${size}`} />
                 </ListItem>
               )}
-              {price && (
+              {price !== 0 && (
                 <ListItem className={classes.cardListItem}>
                   <ListItemText primary={`Price: €${price}`} />
                 </ListItem>
