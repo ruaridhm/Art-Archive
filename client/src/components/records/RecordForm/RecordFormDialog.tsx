@@ -74,10 +74,10 @@ const emptyItemObject: RecordInterface = {
   price: 0,
   currentLocation: '',
   editions: 1,
-  mediaLinks: [{ title: '', address: '' }],
+  mediaLinks: [],
   notes: '',
-  exhibited: [{ title: '', date: null, address: '' }],
-  submission: [{ title: '', date: null, address: '' }],
+  exhibited: [],
+  submission: [],
   sales: {
     soldTo: '',
     soldBy: '',
@@ -94,6 +94,20 @@ const RecordFormDialog = ({
   const recordContext = useContext(RecordContext);
   const { addRecord, current, clearCurrent, updateRecord } = recordContext;
   const [item, setItem] = useState(emptyItemObject);
+  const [newMediaLinks, setnewMediaLinks] = useState({
+    title: '',
+    address: '',
+  });
+  const [newExhibited, setNewExhibited] = useState({
+    title: '',
+    date: null,
+    address: '',
+  });
+  const [newSubmission, setnewSubmission] = useState({
+    title: '',
+    date: null,
+    address: '',
+  });
   const [exhibitedDate, setExhibitedDate] = useState(null);
   const [submissionDate, setSubmissionDate] = useState(null);
   const [soldDate, setSoldDate] = useState(item.sales.soldDate);
@@ -170,26 +184,6 @@ const RecordFormDialog = ({
     e.preventDefault();
 
     if (current === null) {
-      //check if exhibitions, submissions are empty. If so initialize as an empty array instead of [{ title: '', date: null, address: '' }]
-      // if (
-      //   (item.exhibited[0].title === '' && item.exhibited[0].address === '',
-      //   item.exhibited[0].date === null)
-      // ) {
-      //   item.exhibited = [];
-      // }
-      // if (
-      //   (item.submission[0].title === '' && item.submission[0].address === '',
-      //   item.submission[0].date === null)
-      // ) {
-      //   item.submission = [];
-      // }
-      // if (
-      //   item.mediaLinks[0].title === '' &&
-      //   item.mediaLinks[0].address === ''
-      // ) {
-      //   item.mediaLinks = [];
-      // }
-
       addRecord(item);
       setDisplayAddRecord(false);
     } else {
@@ -389,13 +383,13 @@ const RecordFormDialog = ({
               onChange={onChange}
             />
           </FormGroup>
-          <Typography variant='subtitle1'>Exhibitions</Typography>
+          {/* <Typography variant='subtitle1'>Exhibitions</Typography>
           <FormGroup row={true} className={classes.formGroup}>
             <AutoCompleteTextField
               id='exhibited-title-text-field'
               label='Exhibited Title'
               autocompleteOptions={autoCompleteOptions.exhibited.title}
-              value={exhibited[0].title}
+              value={newExhibited.title}
               onChange={handleAutocompleteChange}
               name='exhibited'
               subName='title'
@@ -405,7 +399,7 @@ const RecordFormDialog = ({
               id='exhibited-address-text-field'
               label='Exhibited Address'
               autocompleteOptions={autoCompleteOptions.exhibited.address}
-              value={exhibited[0].address}
+              value={newExhibited.address}
               onChange={handleAutocompleteChange}
               name='exhibited'
               subName='address'
@@ -415,7 +409,7 @@ const RecordFormDialog = ({
               label='Exhibited Date'
               margin='normal'
               format='dd/MM/yyyy'
-              value={exhibitedDate}
+              value={newExhibited.date}
               inputVariant='outlined'
               onChange={(date) => handleExhibitedDateChange(date)}
               KeyboardButtonProps={{
@@ -429,7 +423,7 @@ const RecordFormDialog = ({
               id='submission-title-text-field'
               label='Submission Title'
               autocompleteOptions={autoCompleteOptions.submission.title}
-              value={submission[0].title}
+              value={newSubmission.title}
               onChange={handleAutocompleteChange}
               name='submission'
               subName='title'
@@ -439,7 +433,7 @@ const RecordFormDialog = ({
               id='submission-address-text-field'
               label='Submission Address'
               autocompleteOptions={autoCompleteOptions.submission.address}
-              value={submission[0].address}
+              value={newSubmission.address}
               onChange={handleAutocompleteChange}
               name='submission'
               subName='address'
@@ -449,7 +443,7 @@ const RecordFormDialog = ({
               label='Submission Date'
               margin='normal'
               format='dd/MM/yyyy'
-              value={submission[0].date}
+              value={newSubmission.date}
               inputVariant='outlined'
               onChange={(date) => handleSubmissionDateChange(date)}
               KeyboardButtonProps={{
@@ -492,12 +486,12 @@ const RecordFormDialog = ({
             />
           </FormGroup>
           <Typography variant='subtitle1'>Media Links</Typography>
-          <FormGroup row={true} className={classes.formGroup}>
-            <AutoCompleteTextField
+          <FormGroup row={true} className={classes.formGroup}> */}
+          {/* <AutoCompleteTextField
               id='media-link-text-field'
               label='Media Link Title'
               autocompleteOptions={autoCompleteOptions.mediaLinks.title}
-              value={mediaLinks[0].title}
+              value={newMediaLinks.title}
               onChange={handleAutocompleteChange}
               name='mediaLinks'
               subName='title'
@@ -508,12 +502,12 @@ const RecordFormDialog = ({
               id='media-link-address-field'
               label='Media Link Address'
               autocompleteOptions={autoCompleteOptions.mediaLinks.address}
-              value={mediaLinks[0].address}
+              value={newMediaLinks.address}
               onChange={handleAutocompleteChange}
               name='mediaLinks'
               subName='address'
             />
-          </FormGroup>
+          </FormGroup> */}
           <FormGroup row={true} className={classes.formGroup}>
             <TextField
               className={classes.verticalMargins}
@@ -534,11 +528,11 @@ const RecordFormDialog = ({
             {current ? 'Update Item' : 'Add Item'}
           </Button>
 
-          {current && (
+          {/* {!current && (
             <Button variant='contained' onClick={clearAll} color='secondary'>
               Clear
             </Button>
-          )}
+          )} */}
         </DialogActions>
       </form>
     </Dialog>
