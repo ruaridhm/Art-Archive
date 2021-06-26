@@ -53,7 +53,7 @@ const Navbar = ({ title, theme, setTheme }: NavbarProps) => {
   const authContext = useContext(AuthContext);
   const { isAuthenticated } = authContext;
   const classes = useStyles();
-  const [showLogoutDialog, setShowLogoutDialog] = useState<Boolean>(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState<boolean>(false);
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
   const show = useMediaQuery('(max-width:800px)');
 

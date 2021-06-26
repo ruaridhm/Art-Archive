@@ -79,13 +79,13 @@ const RecordReducer = (state: State, action: Actions) => {
     case ADD_RECORD:
       return {
         ...state,
-        records: [action.payload, ...state.records],
+        records: [action.payload, ...state?.records],
         loading: false,
       };
     case UPDATE_RECORD:
       return {
         ...state,
-        records: state.records.map((record: RecordInterface) =>
+        records: state?.records?.map((record: RecordInterface) =>
           record._id === action.payload._id ? action.payload : record
         ),
         loading: false,
@@ -93,7 +93,7 @@ const RecordReducer = (state: State, action: Actions) => {
     case DELETE_RECORD:
       return {
         ...state,
-        records: state.records.filter(
+        records: state?.records?.filter(
           (record: RecordInterface) => record._id !== action.payload
         ),
         loading: false,
@@ -125,23 +125,23 @@ const RecordReducer = (state: State, action: Actions) => {
     case FILTER_RECORDS:
       return {
         ...state,
-        filtered: state.records.filter((record: RecordInterface) => {
+        filtered: state?.records?.filter((record: RecordInterface) => {
           const regex = new RegExp(`${action.payload}`, 'gi');
           return (
-            record.title.match(regex) ||
-            record.artist.match(regex) ||
-            record.reference.match(regex) ||
-            record.collectionName.match(regex) ||
-            record.size.match(regex) ||
-            record.medium.match(regex) ||
-            record.currentLocation.match(regex) ||
-            record.notes.match(regex) ||
+            record?.title?.match(regex) ||
+            record?.artist?.match(regex) ||
+            record?.reference?.match(regex) ||
+            record?.collectionName?.match(regex) ||
+            record?.size?.match(regex) ||
+            record?.medium?.match(regex) ||
+            record?.currentLocation?.match(regex) ||
+            record?.notes?.match(regex) ||
             // record.exhibited.title.match(regex) ||
             // record.exhibited.address.match(regex) ||
             // record.submission.title.match(regex) ||
             // record.submission.address.match(regex) ||
-            record.sales.soldTo.match(regex) ||
-            record.sales.soldBy.match(regex)
+            record?.sales?.soldTo?.match(regex) ||
+            record?.sales?.soldBy?.match(regex)
             // record.price.match(regex) ||
             // record.mediaLinks.title.match(regex) ||
             // record.mediaLinks.address.match(regex)

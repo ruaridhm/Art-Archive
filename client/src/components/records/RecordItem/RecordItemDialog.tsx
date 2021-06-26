@@ -30,6 +30,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddRecordDetailsDialog from './AddRecordDetailsDialog';
 //Context
 import RecordContext from '../../../context/record/RecordContext';
+import {
+  DisplayedInterface,
+  MediaLinksInterface,
+  RecordInterface,
+} from './RecordItem';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -119,7 +124,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const RecordItemDialog = ({ record, open, setOpen }) => {
+interface RecordItemDialogProps {
+  record: RecordInterface;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
   const [showExhibitionDialog, setShowExhibitionDialog] =
     useState<boolean>(false);
   const [showSubmissionDialog, setShowSubmissionDialog] =
@@ -171,7 +182,7 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
     setShowSubmissionDialog(!showSubmissionDialog);
   };
 
-  const getFormattedDate = (date) => {
+  const getFormattedDate = (date: Date) => {
     const dateStr = date.toString();
 
     return `${dateStr.substring(8, 10)}-${dateStr.substring(
@@ -313,7 +324,7 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
                 <Typography className={classes.listBold}>
                   Media Links:
                 </Typography>
-                {mediaLinks.map((element) => {
+                {mediaLinks?.map((element: MediaLinksInterface) => {
                   return (
                     <ListItem key={element._id}>
                       <ListItemText
@@ -416,7 +427,7 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
                 <Typography className={classes.listBold}>
                   Submissions:
                 </Typography>
-                {submission.map((element) => {
+                {submission?.map((element: DisplayedInterface) => {
                   return (
                     <ListItem key={element._id}>
                       <ListItemText
@@ -470,16 +481,16 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
               </>
             )}
 
-            {sales.soldTo !== '' &&
-              sales.soldBy !== '' &&
-              sales.soldDate !== null && (
+            {sales?.soldTo !== '' &&
+              sales?.soldBy !== '' &&
+              sales?.soldDate !== null && (
                 <>
                   <Typography className={classes.listBold}>Sales:</Typography>
                   <ListItem>
                     <ListItemText
                       primary={
                         <Paper elevation={3} className={classes.paper}>
-                          {sales.soldTo && (
+                          {sales?.soldTo && (
                             <div
                               className={clsx(
                                 classes.flexInline,
@@ -492,7 +503,7 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
                               {sales.soldTo}
                             </div>
                           )}
-                          {sales.soldBy && (
+                          {sales?.soldBy && (
                             <div
                               className={clsx(
                                 classes.flexInline,
@@ -502,7 +513,7 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
                               <Typography className={classes.listBold}>
                                 Sold By:
                               </Typography>
-                              {sales.soldBy}
+                              {sales?.soldBy}
                             </div>
                           )}
                           {sales.soldDate && (
@@ -515,7 +526,7 @@ const RecordItemDialog = ({ record, open, setOpen }) => {
                               <Typography className={classes.listBold}>
                                 Date:
                               </Typography>
-                              {getFormattedDate(sales.soldDate)}
+                              {getFormattedDate(sales?.soldDate)}
                             </div>
                           )}
                         </Paper>

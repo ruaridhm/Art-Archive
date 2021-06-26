@@ -43,7 +43,10 @@ const Home = () => {
       setSortedRecords(records);
     } else {
       const compareValues = (key: string, order = 'ascending') => {
-        return function innerSort(a, b) {
+        return function innerSort(
+          a: { [x: string]: any; hasOwnProperty: (arg0: string) => any },
+          b: { [x: string]: any; hasOwnProperty: (arg0: string) => any }
+        ) {
           if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
             // property doesn't exist on either object
             return 0;

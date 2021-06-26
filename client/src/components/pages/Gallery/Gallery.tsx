@@ -12,6 +12,7 @@ import RecordItemDialog from '../../records/RecordItem/RecordItemDialog';
 import { Button, Box, Portal } from '@material-ui/core';
 //Material-UI Icons
 import InfoIcon from '@material-ui/icons/Info';
+import { RecordInterface } from '../../records/RecordItem/RecordItem';
 //https://github.com/yifaneye/react-gallery-carousel
 
 const Gallery = () => {
@@ -31,15 +32,14 @@ const Gallery = () => {
 
   useEffect(() => {
     records &&
-      records.forEach((element) => {
-        if (element.image[0].url !== '') {
+      records.forEach((record: RecordInterface) => {
+        if (record.image[0].url !== '') {
           if (
-            carouselImages.find((item) => item._id === element._id) ===
-            undefined
+            carouselImages.find((item) => item._id === record._id) === undefined
           )
             setCarouselImages([
               ...carouselImages,
-              { src: element.image[0].url, _id: element._id },
+              { src: record.image[0].url, _id: record._id },
             ]);
         }
       });

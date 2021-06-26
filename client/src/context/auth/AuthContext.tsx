@@ -9,8 +9,7 @@ type authContextType = {
   error: any | null;
   isAuthenticated: boolean | null;
   loading: boolean;
-  // user: { name: string; id: string } | null;
-  user;
+  user: any;
   token: string;
 };
 

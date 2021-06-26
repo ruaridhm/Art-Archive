@@ -110,7 +110,7 @@ const RecordFormDialog = ({
   });
   const [exhibitedDate, setExhibitedDate] = useState(null);
   const [submissionDate, setSubmissionDate] = useState(null);
-  const [soldDate, setSoldDate] = useState(item.sales.soldDate);
+  const [soldDate, setSoldDate] = useState(item?.sales?.soldDate);
   const autoCompleteOptions = PopulateAutoComplete();
 
   const classes = useStyles();
@@ -204,7 +204,7 @@ const RecordFormDialog = ({
   useEffect(() => {
     if (
       exhibitedDate !== null &&
-      exhibitedDate.getTime() === exhibitedDate.getTime()
+      exhibitedDate?.getTime() === exhibitedDate?.getTime()
     ) {
       setItem((prevItem) => {
         return {
@@ -222,7 +222,7 @@ const RecordFormDialog = ({
   useEffect(() => {
     if (
       submissionDate !== null &&
-      submissionDate.getTime() === submissionDate.getTime()
+      submissionDate?.getTime() === submissionDate?.getTime()
     ) {
       setItem((prevItem) => {
         return {
@@ -239,7 +239,7 @@ const RecordFormDialog = ({
   }, [submissionDate]);
 
   useEffect(() => {
-    if (soldDate !== null && soldDate.getTime() === soldDate.getTime()) {
+    if (soldDate !== null && soldDate?.getTime() === soldDate?.getTime()) {
       setItem((prevItem) => {
         return {
           ...prevItem,
@@ -252,16 +252,16 @@ const RecordFormDialog = ({
     }
   }, [soldDate]);
 
-  const handleExhibitedDateChange = (date: Date | null) => {
-    setExhibitedDate(date);
-  };
-  const handleSubmissionDateChange = (date: Date | null) => {
-    setSubmissionDate(date);
-  };
+  // const handleExhibitedDateChange = (date: Date | null) => {
+  //   setExhibitedDate(date);
+  // };
+  // const handleSubmissionDateChange = (date: Date | null) => {
+  //   setSubmissionDate(date);
+  // };
 
-  const handleSoldDateChange = (date: Date | null) => {
-    setSoldDate(date);
-  };
+  // const handleSoldDateChange = (date: Date | null) => {
+  //   setSoldDate(date);
+  // };
   return (
     <Dialog
       open={displayAddRecord}

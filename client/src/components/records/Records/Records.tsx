@@ -35,7 +35,7 @@ const Records = ({ setDisplayAddRecord, sortedRecords }: RecordsProps) => {
   const { records, filtered, loading } = recordContext;
   const classes = useStyles();
 
-  return sortedRecords !== null && records.length === 0 && !loading ? (
+  return sortedRecords !== null && records?.length === 0 && !loading ? (
     <Container className={classes.noRecordContainer}>
       <Typography variant='h3'>Please add a record</Typography>
       <AddRecordButton setDisplayAddRecord={setDisplayAddRecord} />

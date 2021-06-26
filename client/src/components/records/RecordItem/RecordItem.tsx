@@ -56,12 +56,14 @@ const useStyles = makeStyles({
 export interface MediaLinksInterface {
   title?: string;
   address?: string;
+  _id: string;
 }
 
 export interface DisplayedInterface {
   title?: string;
   date: Date | null;
   address?: string;
+  _id: string;
 }
 export interface SalesInterface {
   soldTo?: string;
@@ -89,6 +91,7 @@ export interface RecordInterface {
   submission?: DisplayedInterface[] | [];
   sales?: SalesInterface;
   lastEdited?: Date | null;
+  [item: string]: any;
 }
 
 interface RecordItemProps {

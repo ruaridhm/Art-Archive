@@ -29,7 +29,13 @@ const useStyles = makeStyles({
   },
 });
 
-const ListItemLink = (props) => {
+interface ListItemLinkProps {
+  children: any;
+  button: true;
+  to: string;
+}
+
+const ListItemLink = (props: ListItemLinkProps) => {
   return <ListItem button component={Link} to={props.to} {...props} />;
 };
 
@@ -39,7 +45,7 @@ interface SidebarInterface {
     showSidebar: boolean
   ) => (event: React.KeyboardEvent | React.MouseEvent) => void;
 
-  setShowLogoutDialog: React.Dispatch<React.SetStateAction<Boolean>>;
+  setShowLogoutDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Sidebar = ({
