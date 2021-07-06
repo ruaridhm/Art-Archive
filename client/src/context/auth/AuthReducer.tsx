@@ -32,18 +32,26 @@ type Actions =
       type: 'CLEAR_ERRORS';
     };
 
-interface AuthState {
+export interface AuthStateInterface {
+  loadUser: any;
+  login: any;
+  logout: any;
+  clearErrors: any;
+
   token: string;
   isAuthenticated: boolean;
   loading: boolean;
-  user: {
-    name: string;
-    id: string;
-  };
-  error: string;
+  user:
+    | {
+        name: string;
+        id: string;
+      }
+    | string
+    | null;
+  error: string | null;
 }
 
-const AuthReducer = (state: AuthState, action: Actions) => {
+const AuthReducer = (state: any, action: Actions) => {
   switch (action.type) {
     case USER_LOADED:
       return {

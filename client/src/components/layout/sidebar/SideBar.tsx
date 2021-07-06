@@ -17,7 +17,7 @@ import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 //Context
-import AuthContext from '../../context/auth/AuthContext';
+import AuthContext from '../../../context/auth/AuthContext';
 
 const useStyles = makeStyles({
   list: {
@@ -28,18 +28,13 @@ const useStyles = makeStyles({
     width: 'auto',
   },
 });
-
-const ListItemLink = (props) => {
-  return <ListItem button component={Link} to={props.to} {...props} />;
-};
-
 interface SidebarInterface {
   showSidebar: boolean;
   toggleDrawer: (
     showSidebar: boolean
   ) => (event: React.KeyboardEvent | React.MouseEvent) => void;
 
-  setShowLogoutDialog: React.Dispatch<React.SetStateAction<Boolean>>;
+  setShowLogoutDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Sidebar = ({
@@ -62,25 +57,25 @@ const Sidebar = ({
         {isAuthenticated && (
           <>
             <List className={classes.list}>
-              <ListItemLink button to='/'>
+              <ListItem button component={Link} to='/'>
                 <ListItemIcon>
                   <HomeIcon />
                 </ListItemIcon>
                 <ListItemText primary='Home' />
-              </ListItemLink>
+              </ListItem>
 
-              <ListItemLink button to='/user'>
+              <ListItem button component={Link} to='/user'>
                 <ListItemIcon>
                   <BubbleChartIcon />
                 </ListItemIcon>
                 <ListItemText primary='Collection Stats' />
-              </ListItemLink>
-              <ListItemLink button to='/gallery'>
+              </ListItem>
+              <ListItem button component={Link} to='/gallery'>
                 <ListItemIcon>
                   <PhotoLibraryIcon />
                 </ListItemIcon>
                 <ListItemText primary='Gallery' />
-              </ListItemLink>
+              </ListItem>
             </List>
             <Divider />
             <List>

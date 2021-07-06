@@ -1,12 +1,25 @@
 import React from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Container, CircularProgress, makeStyles } from '@material-ui/core';
 
 interface SpinnerProps {
   description: string;
 }
+const useStyles = makeStyles({
+  spinnerContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '80vh',
+  },
+});
 
 const Spinner = ({ description }: SpinnerProps) => {
-  return <CircularProgress aria-describedby={description} />;
+  const classes = useStyles();
+  return (
+    <Container className={classes.spinnerContainer}>
+      <CircularProgress aria-describedby={description} />
+    </Container>
+  );
 };
 
 export default Spinner;

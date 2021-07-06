@@ -1,15 +1,19 @@
 import React, { useContext } from 'react';
-import { Component } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import {
+  Route,
+  Redirect,
+  RouteProps,
+  RouteComponentProps,
+} from 'react-router-dom';
 import AuthContext from '../../context/auth/AuthContext';
 
-interface PrivateRouteProps {
-  component: React.FC<{}>;
-  exact: boolean;
-  path: string;
+interface PrivateRouteProps extends RouteProps {
+  component:
+    | React.ComponentType<RouteComponentProps<any>>
+    | React.ComponentType<any>;
 }
 
-const PrivateRoute = ({ component, ...rest }: PrivateRouteProps) => {
+const PrivateRoute = ({ component: Component, ...rest }: PrivateRouteProps) => {
   const authContext = useContext(AuthContext);
   const { isAuthenticated, loading } = authContext;
   return (

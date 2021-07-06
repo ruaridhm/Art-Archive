@@ -1,13 +1,37 @@
 import React, { useContext, useEffect } from 'react';
+//Custom Components
 import Spinner from '../../layout/Spinner/Spinner';
+//Context
 import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
+//Material UI
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
+
+const useStyles = makeStyles({
+  container: {
+    margin: '1rem',
+    maxWidth: 'calc(100% - 2rem)',
+  },
+  boldHeader: {
+    fontSize: '1.25rem',
+  },
+  table: {},
+});
 
 const User = () => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
   const { getRecords, records, loading } = recordContext;
-  const { user } = authContext;
+  const classes = useStyles();
 
   useEffect(() => {
     authContext.loadUser();
@@ -17,139 +41,224 @@ const User = () => {
   }, []);
 
   const calcEditionsTotal = () => {
-    let total = 0;
-    records.forEach((elem) => {
-      total += elem.editions;
+    let total: number = 0;
+    records?.forEach((elem) => {
+      if (elem.editions) {
+        total += elem.editions;
+      }
     });
     return total;
   };
   const calcCollectionsTotal = () => {
-    let total = [];
-    records.forEach((elem) => {
-      if (!total.includes(elem.collectionName)) {
-        total.push(elem.collectionName);
+    let total: string[] = [];
+    records?.forEach((elem) => {
+      if (elem.collectionName !== '' && elem.collectionName !== undefined) {
+        if (!total.includes(elem.collectionName)) {
+          total.push(elem.collectionName);
+        }
       }
     });
     return total.length;
   };
 
   const calcEarliestDate = () => {
-    let earliest = Date.now();
-    let title: string;
-    records.forEach((elem) => {
+    let earliest = 0;
+    // let title: string;
+    records?.forEach((elem) => {
       if (elem.date !== null) {
-        let current = new Date(elem.date).getTime();
+        let current = new Date(elem.date!).getTime();
         if (earliest > current) {
           earliest = current;
-          title = elem.title;
+          // title = elem.title;
         }
       }
     });
-
-    const result = new Date(earliest);
-
-    return [
-      `${result.getUTCDay()}/${result.getMonth()}/${result.getFullYear()}`,
-      ' , ',
-      title,
-    ];
+    if (earliest === 0) {
+      return 'No valid dates set';
+    } else {
+      return new Date(earliest).toDateString();
+    }
   };
   const calcLatestDate = (value: string) => {
-    let latest = Date.now();
-    let title: string;
-    records.forEach((elem) => {
+    let latest = 170000000000000;
+    // let title: string;
+    records?.forEach((elem) => {
       if (elem[value] !== null) {
         let current = new Date(elem[value]).getTime();
-        console.log(current);
+
         if (latest < current) {
-          console.log(current);
           latest = current;
-          title = elem.title;
+          // title = elem.title;
         }
       }
     });
 
-    const result = new Date(latest);
-
-    return [
-      `${result.getUTCDay()}/${result.getMonth()}/${result.getFullYear()}`,
-      ' , ',
-      title,
-    ];
+    if (latest > Date.now()) {
+      return 'No valid dates set';
+    } else {
+      return new Date(latest).toDateString();
+    }
   };
 
   const calcAvgPrice = () => {
     let total = 0;
     let recordsWithPrice = 0;
-    records.forEach((elem) => {
-      if (elem.price !== 1) {
+    records?.forEach((elem) => {
+      if (elem.price !== 1 && elem.price !== undefined) {
         total += elem.price;
         recordsWithPrice++;
       }
     });
-    return total / recordsWithPrice;
+
+    if (total / recordsWithPrice === 0) {
+      return 'No prices set.';
+    } else {
+      return `€ ${total / recordsWithPrice}`;
+    }
   };
 
-  const calcHighPrice = () => {
+  const calcHighPrice = (value: string) => {
     let highest = 0;
-    records.forEach((elem) => {
-      if (elem.price !== 0) {
-        if (elem.price > highest) {
-          highest = elem.price;
+    records?.forEach((elem) => {
+      if (elem[value] !== 0) {
+        if (elem[value] > highest) {
+          highest = elem[value];
         }
       }
     });
-    return highest;
+    if (highest === 0) {
+      return 'No prices set.';
+    } else if (value === 'editions') {
+      return highest;
+    } else {
+      return `€ ${highest}`;
+    }
   };
   const calcLowPrice = () => {
-    let lowest = 9999999;
+    let lowest: number = 9999999;
 
-    records.forEach((elem) => {
-      if (elem.price !== 0) {
+    records?.forEach((elem) => {
+      if (elem.price !== 0 && elem.price !== undefined) {
         if (elem.price < lowest) {
           lowest = elem.price;
         }
       }
     });
-    return lowest;
+    if ((lowest = 9999999)) {
+      return 'No prices set.';
+    } else {
+      return `€ ${lowest}`;
+    }
   };
+  const totalArrTitleCount = (value: string) => {
+    const total: string[] = [];
+    records?.forEach((record) => {
+      record[value].forEach((elem: { title: string }) => {
+        if (
+          total.includes(elem.title) ||
+          elem.title === undefined ||
+          elem.title === ''
+        ) {
+          return;
+        } else {
+          total.push(elem.title);
+        }
+      });
+    });
+    return total.length;
+  };
+
+  interface KeyInterface {
+    [val: string]: any;
+  }
+
+  const mostPopularCount = (value: string) => {
+    let total: string[] = [];
+    records?.forEach((elem) => {
+      elem[value] !== '' && total.push(elem[value]);
+    });
+    const obj = total.reduce(
+      (key: KeyInterface, val) => ({ ...key, [val]: (key[val] | 0) + 1 }),
+      {}
+    );
+    console.log('obj', obj);
+
+    let keys = Object.keys(obj);
+    let largest = Math.max.apply(
+      null,
+      keys.map((x) => obj[x])
+    );
+    let result = keys.reduce((result, key: string) => {
+      if (obj[key] === largest) {
+        result.push();
+      }
+      return result;
+    }, []);
+    let ans = ' ';
+    for (let i = 0; i < result.length; i++) {
+      if (i !== result.length - 1) {
+        ans += `${result[i]}, `;
+      } else {
+        ans += `${result[i]}`;
+      }
+    }
+
+    return ans;
+  };
+
+  const getTotalRecords = (): number => {
+    return records!.length;
+  };
+
+  const createData = (name: string, value: string | number) => {
+    return { name, value };
+  };
+
+  const rows = [
+    createData('Total Items: ', getTotalRecords()),
+    createData('Total Items Including Editions:', calcEditionsTotal()),
+    createData('Number of Collections: ', calcCollectionsTotal()),
+    createData('Earliest Item', calcEarliestDate()),
+    createData('Latest Item', calcLatestDate('date')),
+    createData('Average Price', calcAvgPrice()),
+    createData('Highest Price', calcHighPrice('price')),
+    createData('Lowest Price', calcLowPrice()),
+    createData('Total Exhibitions', totalArrTitleCount('exhibited')),
+    createData('Total Submissions', totalArrTitleCount('submission')),
+    createData('Latest Sold', calcLatestDate('sales.soldDate')),
+    createData('Most Popular Medium', mostPopularCount('medium')),
+    createData('Most Popular Size', mostPopularCount('size')),
+    createData('Most Editions', calcHighPrice('editions')),
+  ];
 
   if (!loading && records) {
     return (
-      <ul>
-        <li>
-          Total Items: <span>{records.length}</span>
-        </li>
-        <li>
-          Total Items incl Editions: <span>{calcEditionsTotal()}</span>
-        </li>
-        <li>
-          Number of Collections: <span>{calcCollectionsTotal()}</span>
-        </li>
-        <li>
-          earliest item: <span>{calcEarliestDate()}</span>
-        </li>
-        <li>
-          newest item: <span>{calcLatestDate('date')}</span>
-        </li>
-        <li>
-          avg. price: €<span>{calcAvgPrice()}</span>
-        </li>
-        <li>
-          Highest Price: €<span>{calcHighPrice()}</span>
-        </li>
-        <li>
-          Lowest price: €<span>{calcLowPrice()}</span>
-        </li>
-        <li>total exhibitions</li>
-        <li>total submissions</li>
-        <li>
-          latest sold<span>{calcLatestDate('sales.soldDate')}</span>
-        </li>
-        <li>Most popular medium</li>
-        <li>Most popular size</li>
-        <li>most editions</li>
-      </ul>
+      <TableContainer component={Paper} className={classes.container}>
+        <Table className={classes.table} aria-label='archive statistics'>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.boldHeader}>Statistic</TableCell>
+              <TableCell className={classes.boldHeader} align='right'>
+                Value
+              </TableCell>
+              <TableCell className={classes.boldHeader} align='right'>
+                Item
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.name}>
+                <TableCell component='th' scope='row'>
+                  {row.name}
+                </TableCell>
+                <TableCell align='right'>{row.value}</TableCell>
+                {/* <TableCell align="right">{row.item}</TableCell> */}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     );
   } else {
     return <Spinner description='Loading User' />;

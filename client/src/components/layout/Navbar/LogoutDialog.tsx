@@ -10,7 +10,12 @@ import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
 import Typography from '@material-ui/core/Typography/Typography';
 
-const LogoutDialog = ({ open, handleClose }) => {
+interface LogoutDialogProps {
+  open: boolean;
+  handleClose: () => void;
+}
+
+const LogoutDialog = ({ open, handleClose }: LogoutDialogProps) => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
   const { logout } = authContext;

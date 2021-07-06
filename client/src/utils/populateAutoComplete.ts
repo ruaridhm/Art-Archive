@@ -1,16 +1,27 @@
 import { useContext } from 'react';
+import { RecordInterface } from '../components/records/RecordItem/RecordItem';
 import RecordContext from '../context/record/RecordContext';
 
+interface SalesValueInterface {
+  soldTo: string[] | [];
+  soldBy: string[] | [];
+}
+
+interface ValueArraysInterface {
+  title: string[] | [];
+  address: string[] | [];
+}
 interface ValueInterface {
   title: string[] | [];
   collectionName: string[] | [];
   size: string[] | [];
   medium: string[] | [];
   currentLocation: string[] | [];
-  exhibited: { title: string[] | []; address: string[] | [] };
-  submission: { title: string[] | []; address: string[] | [] };
-  sales: { soldTo: string[] | []; soldBy: string[] | [] };
-  mediaLinks: { title: string[] | []; address: string[] | [] };
+  exhibited: ValueArraysInterface;
+  submission: ValueArraysInterface;
+  sales: SalesValueInterface;
+  mediaLinks: ValueArraysInterface;
+  [item: string]: any;
 }
 
 const PopulateAutoComplete = (): ValueInterface => {
@@ -29,26 +40,36 @@ const PopulateAutoComplete = (): ValueInterface => {
     mediaLinks: { title: [], address: [] },
   };
 
-  const populate = (item: string, subItem: string = 'noItem'): void => {
-    records.forEach((record) => {
+  const populate = (
+    records: RecordInterface[] | null,
+    item: string,
+    subItem: string = 'noItem'
+  ): void => {
+    records?.forEach((record: RecordInterface) => {
       if (Array.isArray(record[item])) {
         //item is an Array of Objects
         //eg: Exhibited, Submission, MediaLinks
 
-        record[item].forEach((element: { title: string; address: string }) => {
-          if (element[subItem] !== undefined && element[subItem] !== '') {
-            if (
-              !values[item][subItem].some(
-                (value: { [x: string]: any }) =>
-                  value[subItem] === element[subItem]
-              )
-            ) {
-              values[item][subItem].push({ title: element[subItem] });
+        record[item].forEach(
+          (element: {
+            title: string;
+            address: string;
+            [subItem: string]: any;
+          }) => {
+            if (element[subItem] !== undefined && element[subItem] !== '') {
+              if (
+                !values[item][subItem].some(
+                  (value: { [x: string]: any }) =>
+                    value[subItem] === element[subItem]
+                )
+              ) {
+                values[item][subItem].push({ title: element[subItem] });
+              }
             }
           }
-        });
+        );
       } else if (typeof record[item] === 'object') {
-        //item is  an Objects
+        //item is an Object
         //eg: Sales
 
         if (
@@ -60,7 +81,7 @@ const PopulateAutoComplete = (): ValueInterface => {
           values[item][subItem].push({ title: record[item][subItem] });
         }
       } else if (typeof record[item] === 'string') {
-        //item is  a String
+        //item is a String
         //eg: Title, CollectionName, Size, Medium, CurrentLocation,
 
         if (
@@ -73,24 +94,24 @@ const PopulateAutoComplete = (): ValueInterface => {
         }
       } else {
         //Handle Error
-        console.error(item, 'Populate AutoComplete hits else');
+        console.error(item, 'PopulateAutoComplete hits else (line 81)');
       }
     });
   };
 
-  populate('title');
-  populate('collectionName');
-  populate('size');
-  populate('medium');
-  populate('currentLocation');
-  populate('exhibited', 'title');
-  populate('exhibited', 'address');
-  populate('submission', 'title');
-  populate('submission', 'address');
-  populate('sales', 'soldTo');
-  populate('sales', 'soldBy');
-  populate('mediaLinks', 'title');
-  populate('mediaLinks', 'address');
+  populate(records, 'title');
+  populate(records, 'collectionName');
+  populate(records, 'size');
+  populate(records, 'medium');
+  populate(records, 'currentLocation');
+  populate(records, 'exhibited', 'title');
+  populate(records, 'exhibited', 'address');
+  populate(records, 'submission', 'title');
+  populate(records, 'submission', 'address');
+  populate(records, 'sales', 'soldTo');
+  populate(records, 'sales', 'soldBy');
+  populate(records, 'mediaLinks', 'title');
+  populate(records, 'mediaLinks', 'address');
 
   return values;
 };

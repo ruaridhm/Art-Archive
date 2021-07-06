@@ -56,12 +56,14 @@ const useStyles = makeStyles({
 export interface MediaLinksInterface {
   title?: string;
   address?: string;
+  _id: string;
 }
 
 export interface DisplayedInterface {
   title?: string;
   date: Date | null;
   address?: string;
+  _id: string;
 }
 export interface SalesInterface {
   soldTo?: string;
@@ -83,12 +85,13 @@ export interface RecordInterface {
   price?: number;
   currentLocation?: string;
   editions?: number;
-  mediaLinks?: MediaLinksInterface[] | [];
+  mediaLinks?: any | [];
   notes?: string;
   exhibited: DisplayedInterface[];
-  submission?: DisplayedInterface[] | [];
+  submission?: any | [];
   sales?: SalesInterface;
   lastEdited?: Date | null;
+  [item: string]: any;
 }
 
 interface RecordItemProps {
@@ -122,12 +125,12 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
     <>
       <Card className={classes.card}>
         <CardActionArea onClick={showRecordInfoDialogHandler}>
-          {image !== null && (
+          {image![0].url !== '' && (
             <CardMedia
               className={classes.media}
               component='img'
               alt={title}
-              image={image[0].url}
+              image={image![0].url}
               title={title}
             />
           )}
@@ -161,7 +164,7 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
                   <ListItemText primary={`Size: ${size}`} />
                 </ListItem>
               )}
-              {price && (
+              {price !== 0 && (
                 <ListItem className={classes.cardListItem}>
                   <ListItemText primary={`Price: €${price}`} />
                 </ListItem>

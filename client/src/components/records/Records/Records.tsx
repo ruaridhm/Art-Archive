@@ -6,6 +6,8 @@ import RecordItem, { RecordInterface } from '../RecordItem/RecordItem';
 import Spinner from '../../layout/Spinner/Spinner';
 //Material-UI
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { Container, Typography } from '@material-ui/core';
+import AddRecordButton from '../../../components/addRecordButton/AddRecordButton';
 
 interface RecordsProps {
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
@@ -18,6 +20,13 @@ const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap',
       justifyContent: 'center',
     },
+    noRecordContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '60vh',
+    },
   })
 );
 
@@ -26,8 +35,11 @@ const Records = ({ setDisplayAddRecord, sortedRecords }: RecordsProps) => {
   const { records, filtered, loading } = recordContext;
   const classes = useStyles();
 
-  return sortedRecords !== null && records.length === 0 && !loading ? (
-    <h4>Please add a record</h4>
+  return sortedRecords !== null && records?.length === 0 && !loading ? (
+    <Container className={classes.noRecordContainer}>
+      <Typography variant='h3'>Please add a record</Typography>
+      <AddRecordButton setDisplayAddRecord={setDisplayAddRecord} />
+    </Container>
   ) : (
     <>
       {sortedRecords !== null && !loading ? (
