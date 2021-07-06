@@ -52,10 +52,10 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface inputState {
-  title: string;
-  date: Date | string | null;
-  address: string;
-  _id?: string;
+  title?: string;
+  date?: Date | string | null;
+  address?: string;
+  _id?: string | undefined;
 }
 
 const emptyInput = {
@@ -84,7 +84,7 @@ const AddRecordDetailsDialog = ({
   const [state, setState] = useState<inputState | null>(emptyInput);
   const [editMode, setEditMode] = useState(false);
   //Creating a string to use to reference values using bracket notation below and also use detail prop for strings
-  let reference: string;
+  let reference = '';
   switch (detail) {
     case 'Exhibition':
       reference = 'exhibited';
@@ -132,19 +132,19 @@ const AddRecordDetailsDialog = ({
   };
 
   const handleAddItem = () => {
-    if (state.title === '' && state.address === '') {
+    if (state?.title === '' && state?.address === '') {
       //Todo add error alerting user here
       return;
     } else if (
-      record[reference].find((x: { _id: string }) => x._id === state._id)
+      record[reference].find((x: { _id: string }) => x._id === state?._id)
     ) {
       let modifiedRecord = { ...record };
       let itemToEditIndex = modifiedRecord[reference].findIndex(
-        (x: { _id: string }) => x._id === state._id
+        (x: { _id: string }) => x._id === state?._id
       );
-      modifiedRecord[reference][itemToEditIndex].title = state.title;
-      modifiedRecord[reference][itemToEditIndex].date = state.date;
-      modifiedRecord[reference][itemToEditIndex].address = state.address;
+      modifiedRecord[reference][itemToEditIndex].title = state?.title;
+      modifiedRecord[reference][itemToEditIndex].date = state?.date;
+      modifiedRecord[reference][itemToEditIndex].address = state?.address;
       updateRecord(modifiedRecord);
       setState(emptyInput);
       setEditMode(false);
@@ -170,46 +170,61 @@ const AddRecordDetailsDialog = ({
         record[reference][0].title !== '' &&
         record[reference][0].address !== '' ? (
           <Paper>
-            {record[reference].map((element) => (
-              <Card
-                variant='outlined'
-                className={classes.paper}
-                key={element._id}
-              >
-                <CardContent>
-                  <Typography>{element.title}</Typography>
-                  <Typography>{element.address}</Typography>
-                  {element.date && (
-                    <Typography>
-                      {element.date.slice(8, 10)} / {element.date.slice(5, 7)} /
-                      {element.date.slice(0, 4)}
-                    </Typography>
-                  )}
-                </CardContent>
-                <CardActions className={classes.cardActions}>
-                  <IconButton
-                    aria-label='edit'
-                    size='small'
-                    color='primary'
-                    onClick={() => {
-                      handleEditItem(element._id);
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    aria-label='delete'
-                    size='small'
-                    color='secondary'
-                    onClick={() => {
-                      handleDeleteItem(element._id);
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </CardActions>
-              </Card>
-            ))}
+            {record[reference].map(
+              (element: {
+                _id: string;
+                title:
+                  | boolean
+                  | React.ReactChild
+                  | React.ReactFragment
+                  | React.ReactPortal;
+                address:
+                  | boolean
+                  | React.ReactChild
+                  | React.ReactFragment
+                  | React.ReactPortal;
+                date: string | any[];
+              }) => (
+                <Card
+                  variant='outlined'
+                  className={classes.paper}
+                  key={element._id}
+                >
+                  <CardContent>
+                    <Typography>{element.title}</Typography>
+                    <Typography>{element.address}</Typography>
+                    {element.date && (
+                      <Typography>
+                        {element.date.slice(8, 10)} / {element.date.slice(5, 7)}{' '}
+                        /{element.date.slice(0, 4)}
+                      </Typography>
+                    )}
+                  </CardContent>
+                  <CardActions className={classes.cardActions}>
+                    <IconButton
+                      aria-label='edit'
+                      size='small'
+                      color='primary'
+                      onClick={() => {
+                        handleEditItem(element._id);
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label='delete'
+                      size='small'
+                      color='secondary'
+                      onClick={() => {
+                        handleDeleteItem(element._id);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+              )
+            )}
           </Paper>
         ) : (
           <p>No {detail}s saved</p>
@@ -221,7 +236,7 @@ const AddRecordDetailsDialog = ({
               variant='outlined'
               onChange={handleChange}
               name='title'
-              value={state.title}
+              value={state?.title}
             />
             {!noDate && (
               <KeyboardDatePicker
@@ -229,7 +244,7 @@ const AddRecordDetailsDialog = ({
                 id='date-picker-dialog'
                 label={`${detail} Date`}
                 format='dd/MM/yyyy'
-                value={state.date}
+                value={state?.date}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
@@ -242,7 +257,7 @@ const AddRecordDetailsDialog = ({
               variant='outlined'
               onChange={handleChange}
               name='address'
-              value={state.address}
+              value={state?.address}
             />
           </FormControl>
         </form>

@@ -12,6 +12,7 @@ import clsx from 'clsx';
 //Material-UI Icons
 import RecordFilter from '../../../records/RecordFilter/RecordFilter';
 import AddRecordButton from '../../../addRecordButton/AddRecordButton';
+import FilterToolTip from '../../../records/RecordFilter/FilterToolTip';
 
 const sortOptions = [
   {
@@ -238,6 +239,7 @@ const Controls = ({
       </div>
       <div className={clsx(classes.gridContainers, classes.filterControls)}>
         <RecordFilter />
+        <FilterToolTip />
       </div>
       <div className={clsx(classes.gridContainers, classes.addButton)}>
         <AddRecordButton setDisplayAddRecord={setDisplayAddRecord} />

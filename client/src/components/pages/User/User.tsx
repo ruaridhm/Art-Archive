@@ -41,16 +41,18 @@ const User = () => {
   }, []);
 
   const calcEditionsTotal = () => {
-    let total = 0;
-    records.forEach((elem) => {
-      total += elem.editions;
+    let total: number = 0;
+    records?.forEach((elem) => {
+      if (elem.editions) {
+        total += elem.editions;
+      }
     });
     return total;
   };
   const calcCollectionsTotal = () => {
-    let total = [];
-    records.forEach((elem) => {
-      if (elem.collectionName !== '') {
+    let total: string[] = [];
+    records?.forEach((elem) => {
+      if (elem.collectionName !== '' && elem.collectionName !== undefined) {
         if (!total.includes(elem.collectionName)) {
           total.push(elem.collectionName);
         }
@@ -61,13 +63,13 @@ const User = () => {
 
   const calcEarliestDate = () => {
     let earliest = 0;
-    let title: string;
-    records.forEach((elem) => {
+    // let title: string;
+    records?.forEach((elem) => {
       if (elem.date !== null) {
-        let current = new Date(elem.date).getTime();
+        let current = new Date(elem.date!).getTime();
         if (earliest > current) {
           earliest = current;
-          title = elem.title;
+          // title = elem.title;
         }
       }
     });
@@ -79,14 +81,14 @@ const User = () => {
   };
   const calcLatestDate = (value: string) => {
     let latest = 170000000000000;
-    let title: string;
-    records.forEach((elem) => {
+    // let title: string;
+    records?.forEach((elem) => {
       if (elem[value] !== null) {
         let current = new Date(elem[value]).getTime();
 
         if (latest < current) {
           latest = current;
-          title = elem.title;
+          // title = elem.title;
         }
       }
     });
@@ -101,8 +103,8 @@ const User = () => {
   const calcAvgPrice = () => {
     let total = 0;
     let recordsWithPrice = 0;
-    records.forEach((elem) => {
-      if (elem.price !== 1) {
+    records?.forEach((elem) => {
+      if (elem.price !== 1 && elem.price !== undefined) {
         total += elem.price;
         recordsWithPrice++;
       }
@@ -117,7 +119,7 @@ const User = () => {
 
   const calcHighPrice = (value: string) => {
     let highest = 0;
-    records.forEach((elem) => {
+    records?.forEach((elem) => {
       if (elem[value] !== 0) {
         if (elem[value] > highest) {
           highest = elem[value];
@@ -133,10 +135,10 @@ const User = () => {
     }
   };
   const calcLowPrice = () => {
-    let lowest = 9999999;
+    let lowest: number = 9999999;
 
-    records.forEach((elem) => {
-      if (elem.price !== 0) {
+    records?.forEach((elem) => {
+      if (elem.price !== 0 && elem.price !== undefined) {
         if (elem.price < lowest) {
           lowest = elem.price;
         }
@@ -149,8 +151,8 @@ const User = () => {
     }
   };
   const totalArrTitleCount = (value: string) => {
-    const total = [];
-    records.forEach((record) => {
+    const total: string[] = [];
+    records?.forEach((record) => {
       record[value].forEach((elem: { title: string }) => {
         if (
           total.includes(elem.title) ||
@@ -166,24 +168,29 @@ const User = () => {
     return total.length;
   };
 
+  interface KeyInterface {
+    [val: string]: any;
+  }
+
   const mostPopularCount = (value: string) => {
-    let total = [];
-    records.forEach((elem) => {
+    let total: string[] = [];
+    records?.forEach((elem) => {
       elem[value] !== '' && total.push(elem[value]);
     });
     const obj = total.reduce(
-      (key, val) => ({ ...key, [val]: (key[val] | 0) + 1 }),
+      (key: KeyInterface, val) => ({ ...key, [val]: (key[val] | 0) + 1 }),
       {}
     );
+    console.log('obj', obj);
 
     let keys = Object.keys(obj);
     let largest = Math.max.apply(
       null,
       keys.map((x) => obj[x])
     );
-    let result = keys.reduce((result, key) => {
+    let result = keys.reduce((result, key: string) => {
       if (obj[key] === largest) {
-        result.push(key);
+        result.push();
       }
       return result;
     }, []);
@@ -199,11 +206,11 @@ const User = () => {
     return ans;
   };
 
-  const getTotalRecords = () => {
-    return records.length;
+  const getTotalRecords = (): number => {
+    return records!.length;
   };
 
-  const createData = (name: string, value) => {
+  const createData = (name: string, value: string | number) => {
     return { name, value };
   };
 

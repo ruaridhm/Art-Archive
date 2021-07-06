@@ -27,8 +27,9 @@ const Home = () => {
   const [displayAddRecord, setDisplayAddRecord] = useState<boolean>(false);
   const [sort, setSort] = useState<string>('');
   const [order, setOrder] = useState<string>('');
-  const [sortedRecords, setSortedRecords] =
-    useState<RecordInterface[]>(records);
+  const [sortedRecords, setSortedRecords] = useState<RecordInterface[] | null>(
+    records
+  );
 
   const classes = useStyles();
   useEffect(() => {
@@ -43,7 +44,10 @@ const Home = () => {
       setSortedRecords(records);
     } else {
       const compareValues = (key: string, order = 'ascending') => {
-        return function innerSort(a, b) {
+        return function innerSort(
+          a: { [x: string]: any; hasOwnProperty: (arg0: string) => any },
+          b: { [x: string]: any; hasOwnProperty: (arg0: string) => any }
+        ) {
           if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
             // property doesn't exist on either object
             return 0;
@@ -64,8 +68,8 @@ const Home = () => {
         };
       };
 
-      let sorted = [...sortedRecords];
-      sorted.sort(compareValues(sort, order));
+      let sorted = sortedRecords;
+      sorted!.sort(compareValues(sort, order));
 
       setSortedRecords(sorted);
     }

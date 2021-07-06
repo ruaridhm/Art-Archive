@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 //Components
-import PrivateRoute from './components/routing/PrivateRoute.js';
+import PrivateRoute from './components/routing/PrivateRoute';
 import Navbar from './components/layout/Navbar/Navbar';
 import Home from './components/pages/Home/Home';
 import User from './components/pages/User/User';
@@ -12,11 +12,11 @@ import AlertState from './context/alert/AlertState';
 import RecordState from './context/record/RecordState';
 import AuthState from './context/auth/AuthState';
 import setAuthToken from './utils/setAuthToken';
-
+//Material UI
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
+//Date functionality
 import 'date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
