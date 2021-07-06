@@ -26,7 +26,6 @@ import { DialogTitle } from './RecordItemDialog';
 //Context
 import RecordContext from '../../../context/record/RecordContext';
 import { RecordInterface } from './RecordItem';
-import { Number } from 'mongoose';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,10 +52,10 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface inputState {
-  title: string;
-  date: Date | string | null;
-  address: string;
-  _id?: string;
+  title?: string;
+  date?: Date | string | null;
+  address?: string;
+  _id?: string | undefined;
 }
 
 const emptyInput = {
@@ -85,7 +84,7 @@ const AddRecordDetailsDialog = ({
   const [state, setState] = useState<inputState | null>(emptyInput);
   const [editMode, setEditMode] = useState(false);
   //Creating a string to use to reference values using bracket notation below and also use detail prop for strings
-  let reference: string;
+  let reference = '';
   switch (detail) {
     case 'Exhibition':
       reference = 'exhibited';

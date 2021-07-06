@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
-import { DropzoneDialogBase } from 'material-ui-dropzone';
+import { DropzoneDialogBase, FileObject } from 'material-ui-dropzone';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 const ImageDialog = () => {
   const [open, setOpen] = useState(false);
-  const [fileObjects, setFileObjects] = useState([]);
+  const [fileObjects, setFileObjects] = useState<FileObject[]>([]);
 
   useEffect(() => {
     console.log(fileObjects);
@@ -39,7 +39,7 @@ const ImageDialog = () => {
         open={open}
         onAdd={(newFileObjs) => {
           console.log('onAdd', newFileObjs);
-          setFileObjects([].concat(fileObjects, newFileObjs));
+          setFileObjects([...fileObjects, ...newFileObjs]);
         }}
         onDelete={(deleteFileObj) => {
           console.log('onDelete', deleteFileObj);

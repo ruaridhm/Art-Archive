@@ -104,9 +104,10 @@ const useStyles = makeStyles(() => ({
     gridTemplateRows: '1fr',
     justifyItems: 'start',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     padding: '.5em',
   },
+  mediaLink: {},
   flexInline: {
     display: 'flex',
   },
@@ -162,8 +163,10 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
   } = record;
 
   const handleDelete = () => {
-    deleteRecord(_id);
-    clearCurrent();
+    if (_id !== undefined) {
+      deleteRecord(_id);
+      clearCurrent();
+    }
   };
 
   const handleClose = () => {
@@ -197,14 +200,14 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
         onClose={handleClose}
         aria-labelledby='dialog-title'
         open={open}
-        fullWidth={image[0].url === '' ? false : true}
+        fullWidth={image![0].url === '' ? false : true}
         maxWidth='xl'
       >
         <DialogTitle id='dialog-title' onClose={handleClose}>
           {title}
         </DialogTitle>
         <DialogContent dividers>
-          <List style={{ width: image[0].url === '' ? '100%' : '50%' }}>
+          <List style={{ width: image![0].url === '' ? '100%' : '50%' }}>
             {reference && (
               <ListItem>
                 <ListItemText
@@ -351,6 +354,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                                 Link:
                               </Typography>
                               <Link
+                                className={classes.mediaLink}
                                 href={element.address}
                                 target='_blank'
                                 rel='noreferrer'
@@ -516,7 +520,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                               {sales?.soldBy}
                             </div>
                           )}
-                          {sales.soldDate && (
+                          {sales?.soldDate && (
                             <div
                               className={clsx(
                                 classes.flexInline,
@@ -566,12 +570,12 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               </ListItem>
             )}
           </List>
-          {image[0].url !== '' && (
+          {image![0].url !== '' && (
             <div style={{ width: '50%' }}>
               <CardMedia
                 component='img'
                 alt={title}
-                image={image[0].url}
+                image={image![0].url}
                 title={title}
               />
             </div>

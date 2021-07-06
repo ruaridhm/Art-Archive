@@ -17,7 +17,6 @@ import {
   DialogTitle,
   IconButton,
   FormGroup,
-  Typography,
 } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 //Material-UI Icons
@@ -94,23 +93,23 @@ const RecordFormDialog = ({
   const recordContext = useContext(RecordContext);
   const { addRecord, current, clearCurrent, updateRecord } = recordContext;
   const [item, setItem] = useState(emptyItemObject);
-  const [newMediaLinks, setnewMediaLinks] = useState({
-    title: '',
-    address: '',
-  });
-  const [newExhibited, setNewExhibited] = useState({
-    title: '',
-    date: null,
-    address: '',
-  });
-  const [newSubmission, setnewSubmission] = useState({
-    title: '',
-    date: null,
-    address: '',
-  });
-  const [exhibitedDate, setExhibitedDate] = useState(null);
-  const [submissionDate, setSubmissionDate] = useState(null);
-  const [soldDate, setSoldDate] = useState(item?.sales?.soldDate);
+  // const [newMediaLinks, setnewMediaLinks] = useState({
+  //   title: '',
+  //   address: '',
+  // });
+  // const [newExhibited, setNewExhibited] = useState({
+  //   title: '',
+  //   date: null,
+  //   address: '',
+  // });
+  // const [newSubmission, setnewSubmission] = useState({
+  //   title: '',
+  //   date: null,
+  //   address: '',
+  // });
+  // const [exhibitedDate, setExhibitedDate] = useState<Date | null>(null);
+  // const [submissionDate, setSubmissionDate] = useState<Date | null>(null);
+  // const [soldDate, setSoldDate] = useState<Date | null>(item!.sales!.soldDate!);
   const autoCompleteOptions = PopulateAutoComplete();
 
   const classes = useStyles();
@@ -120,18 +119,18 @@ const RecordFormDialog = ({
     title,
     reference,
     collectionName,
-    image,
+    // image,
     date,
     size,
     medium,
     price,
     currentLocation,
     editions,
-    mediaLinks,
+    // mediaLinks,
     notes,
-    exhibited,
-    submission,
-    sales,
+    // exhibited,
+    // submission,
+    // sales,
   } = item;
 
   //if a record is in current assign current to item else initialize item as an empty object
@@ -201,56 +200,56 @@ const RecordFormDialog = ({
     setDisplayAddRecord(!displayAddRecord);
   };
 
-  useEffect(() => {
-    if (
-      exhibitedDate !== null &&
-      exhibitedDate?.getTime() === exhibitedDate?.getTime()
-    ) {
-      setItem((prevItem) => {
-        return {
-          ...prevItem,
-          exhibited: [
-            {
-              ...prevItem.exhibited[0],
-              date: exhibitedDate,
-            },
-          ],
-        };
-      });
-    }
-  }, [exhibitedDate]);
-  useEffect(() => {
-    if (
-      submissionDate !== null &&
-      submissionDate?.getTime() === submissionDate?.getTime()
-    ) {
-      setItem((prevItem) => {
-        return {
-          ...prevItem,
-          submission: [
-            {
-              ...prevItem.submission[0],
-              date: submissionDate,
-            },
-          ],
-        };
-      });
-    }
-  }, [submissionDate]);
+  // useEffect(() => {
+  //   if (
+  //     exhibitedDate !== null &&
+  //     exhibitedDate!.getTime() === exhibitedDate!.getTime()
+  //   ) {
+  //     setItem((prevItem) => {
+  //       return {
+  //         ...prevItem,
+  //         exhibited: [
+  //           {
+  //             ...prevItem.exhibited[0],
+  //             date: exhibitedDate,
+  //           },
+  //         ],
+  //       };
+  //     });
+  //   }
+  // }, [exhibitedDate]);
+  // useEffect(() => {
+  //   if (
+  //     submissionDate !== null &&
+  //     submissionDate?.getTime() === submissionDate?.getTime()
+  //   ) {
+  //     setItem((prevItem) => {
+  //       return {
+  //         ...prevItem,
+  //         submission: [
+  //           {
+  //             ...prevItem.submission[0],
+  //             date: submissionDate,
+  //           },
+  //         ],
+  //       };
+  //     });
+  //   }
+  // }, [submissionDate]);
 
-  useEffect(() => {
-    if (soldDate !== null && soldDate?.getTime() === soldDate?.getTime()) {
-      setItem((prevItem) => {
-        return {
-          ...prevItem,
-          sales: {
-            ...prevItem.sales,
-            soldDate: soldDate,
-          },
-        };
-      });
-    }
-  }, [soldDate]);
+  // useEffect(() => {
+  //   if (soldDate !== null && soldDate?.getTime() === soldDate?.getTime()) {
+  //     setItem((prevItem) => {
+  //       return {
+  //         ...prevItem,
+  //         sales: {
+  //           ...prevItem.sales,
+  //           soldDate: soldDate,
+  //         },
+  //       };
+  //     });
+  //   }
+  // }, [soldDate]);
 
   // const handleExhibitedDateChange = (date: Date | null) => {
   //   setExhibitedDate(date);

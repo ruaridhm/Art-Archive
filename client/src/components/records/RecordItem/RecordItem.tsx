@@ -85,10 +85,10 @@ export interface RecordInterface {
   price?: number;
   currentLocation?: string;
   editions?: number;
-  mediaLinks?: MediaLinksInterface[] | [];
+  mediaLinks?: any | [];
   notes?: string;
   exhibited: DisplayedInterface[];
-  submission?: DisplayedInterface[] | [];
+  submission?: any | [];
   sales?: SalesInterface;
   lastEdited?: Date | null;
   [item: string]: any;
@@ -125,12 +125,12 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
     <>
       <Card className={classes.card}>
         <CardActionArea onClick={showRecordInfoDialogHandler}>
-          {image[0].url !== '' && (
+          {image![0].url !== '' && (
             <CardMedia
               className={classes.media}
               component='img'
               alt={title}
-              image={image[0].url}
+              image={image![0].url}
               title={title}
             />
           )}

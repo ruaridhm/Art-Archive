@@ -27,8 +27,9 @@ const Home = () => {
   const [displayAddRecord, setDisplayAddRecord] = useState<boolean>(false);
   const [sort, setSort] = useState<string>('');
   const [order, setOrder] = useState<string>('');
-  const [sortedRecords, setSortedRecords] =
-    useState<RecordInterface[]>(records);
+  const [sortedRecords, setSortedRecords] = useState<RecordInterface[] | null>(
+    records
+  );
 
   const classes = useStyles();
   useEffect(() => {
@@ -67,8 +68,8 @@ const Home = () => {
         };
       };
 
-      let sorted = [...sortedRecords];
-      sorted.sort(compareValues(sort, order));
+      let sorted = sortedRecords;
+      sorted!.sort(compareValues(sort, order));
 
       setSortedRecords(sorted);
     }

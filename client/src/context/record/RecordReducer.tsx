@@ -57,18 +57,18 @@ type Actions =
       payload: RecordInterface;
     };
 
-interface Record {
-  records: Array<RecordInterface> | null;
-  current: RecordInterface | null;
-  moveRecord: RecordInterface | null;
-  filtered: Array<RecordInterface> | null;
-  error: string | null;
-  loading: boolean;
-}
+// interface Record {
+//   records: Array<RecordInterface> | null;
+//   current: RecordInterface | null;
+//   moveRecord: RecordInterface | null;
+//   filtered: Array<RecordInterface> | null;
+//   error: string | null;
+//   loading: boolean;
+// }
 
-type State = Record;
+// type State = Record;
 
-const RecordReducer = (state: State, action: Actions) => {
+const RecordReducer = (state: any, action: Actions) => {
   switch (action.type) {
     case GET_RECORDS:
       return {

@@ -1,4 +1,4 @@
-import React, { ReactText, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 //Custom Components
 import Spinner from '../../layout/Spinner/Spinner';
 //Context
@@ -63,10 +63,10 @@ const User = () => {
 
   const calcEarliestDate = () => {
     let earliest = 0;
-    let title: string;
+    // let title: string;
     records?.forEach((elem) => {
       if (elem.date !== null) {
-        let current = new Date(elem.date).getTime();
+        let current = new Date(elem.date!).getTime();
         if (earliest > current) {
           earliest = current;
           // title = elem.title;
@@ -168,15 +168,20 @@ const User = () => {
     return total.length;
   };
 
+  interface KeyInterface {
+    [val: string]: any;
+  }
+
   const mostPopularCount = (value: string) => {
     let total: string[] = [];
     records?.forEach((elem) => {
       elem[value] !== '' && total.push(elem[value]);
     });
     const obj = total.reduce(
-      (key, val) => ({ ...key, [val]: (key[val] | 0) + 1 }),
+      (key: KeyInterface, val) => ({ ...key, [val]: (key[val] | 0) + 1 }),
       {}
     );
+    console.log('obj', obj);
 
     let keys = Object.keys(obj);
     let largest = Math.max.apply(
@@ -201,8 +206,8 @@ const User = () => {
     return ans;
   };
 
-  const getTotalRecords = () => {
-    return records?.length;
+  const getTotalRecords = (): number => {
+    return records!.length;
   };
 
   const createData = (name: string, value: string | number) => {

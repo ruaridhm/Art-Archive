@@ -28,17 +28,6 @@ const useStyles = makeStyles({
     width: 'auto',
   },
 });
-
-interface ListItemLinkProps {
-  children: any;
-  button: true;
-  to: string;
-}
-
-const ListItemLink = (props: ListItemLinkProps) => {
-  return <ListItem button component={Link} to={props.to} {...props} />;
-};
-
 interface SidebarInterface {
   showSidebar: boolean;
   toggleDrawer: (
@@ -68,25 +57,25 @@ const Sidebar = ({
         {isAuthenticated && (
           <>
             <List className={classes.list}>
-              <ListItemLink button to='/'>
+              <ListItem button component={Link} to='/'>
                 <ListItemIcon>
                   <HomeIcon />
                 </ListItemIcon>
                 <ListItemText primary='Home' />
-              </ListItemLink>
+              </ListItem>
 
-              <ListItemLink button to='/user'>
+              <ListItem button component={Link} to='/user'>
                 <ListItemIcon>
                   <BubbleChartIcon />
                 </ListItemIcon>
                 <ListItemText primary='Collection Stats' />
-              </ListItemLink>
-              <ListItemLink button to='/gallery'>
+              </ListItem>
+              <ListItem button component={Link} to='/gallery'>
                 <ListItemIcon>
                   <PhotoLibraryIcon />
                 </ListItemIcon>
                 <ListItemText primary='Gallery' />
-              </ListItemLink>
+              </ListItem>
             </List>
             <Divider />
             <List>

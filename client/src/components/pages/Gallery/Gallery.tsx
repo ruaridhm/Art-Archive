@@ -3,6 +3,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
 //Carousel
+// @ts-ignore
 import Carousel from 'react-gallery-carousel';
 import 'react-gallery-carousel/dist/index.css';
 //Custom Components
@@ -15,13 +16,20 @@ import InfoIcon from '@material-ui/icons/Info';
 import { RecordInterface } from '../../records/RecordItem/RecordItem';
 //https://github.com/yifaneye/react-gallery-carousel
 
+interface carouselImagesStateInterface {
+  src: string;
+  _id: string;
+}
+
 const Gallery = () => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
   const { getRecords, records } = recordContext;
-  const [carouselImages, setCarouselImages] = useState([]);
+  const [carouselImages, setCarouselImages] = useState<
+    carouselImagesStateInterface[] | []
+  >([]);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
-  const [foundRecord, setFoundRecord] = useState(null);
+  const [foundRecord, setFoundRecord] = useState<RecordInterface>();
 
   useEffect(() => {
     authContext.loadUser();
@@ -33,19 +41,24 @@ const Gallery = () => {
   useEffect(() => {
     records &&
       records.forEach((record: RecordInterface) => {
-        if (record.image[0].url !== '') {
+        //TS non-null assertion operator (!) used in next line
+        if (record.image![0].url !== '') {
           if (
-            carouselImages.find((item) => item._id === record._id) === undefined
-          )
+            carouselImages.find(
+              (item: carouselImagesStateInterface) => item._id === record._id
+            ) === undefined
+          ) {
             setCarouselImages([
               ...carouselImages,
-              { src: record.image[0].url, _id: record._id },
+              //TS non-null assertion operator (!) used in next line
+              { src: record.image![0].url, _id: record._id! },
             ]);
+          }
         }
       });
     carouselImages.length >= 1 &&
       setFoundRecord(
-        records.find((element) => element._id === carouselImages[0]._id)
+        records?.find((element) => element._id === carouselImages[0]._id)
       );
   }, [carouselImages, records]);
 
@@ -56,7 +69,7 @@ const Gallery = () => {
 
   const handleCurrentIndex = (e: { curIndex: any }) => {
     setFoundRecord(
-      records.find((element) => element._id === carouselImages[e.curIndex]._id)
+      records?.find((element) => element._id === carouselImages[e.curIndex]._id)
     );
   };
 
@@ -96,7 +109,7 @@ const Gallery = () => {
       {showInfoDialog && foundRecord !== null ? (
         <Portal>
           <RecordItemDialog
-            record={foundRecord}
+            record={foundRecord!}
             open={showInfoDialog}
             setOpen={setShowInfoDialog}
           />
