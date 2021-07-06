@@ -1,6 +1,24 @@
 {
-  "short_name": "Ed Miliano Archive",
+  "short_name": "Archive",
   "name": "Ed Miliano Archive",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64X64 32X32 24X24 16X16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "maskable.png",
+      "sizes": "196X196",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    { "src": "logo192.png", "sizes": "192X192", "type": "image/png" },
+    { "src": "logo256.png", "sizes": "256X256", "type": "image/png" },
+    { "src": "logo384.png", "sizes": "384X384", "type": "image/png" },
+    { "src": "logo512.png", "sizes": "512X512", "type": "image/png" }
+  ],
+  "scope": "/",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

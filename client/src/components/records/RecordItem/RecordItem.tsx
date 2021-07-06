@@ -122,7 +122,7 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
     <>
       <Card className={classes.card}>
         <CardActionArea onClick={showRecordInfoDialogHandler}>
-          {image !== null && (
+          {image[0].url !== '' && (
             <CardMedia
               className={classes.media}
               component='img'
@@ -161,7 +161,7 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
                   <ListItemText primary={`Size: ${size}`} />
                 </ListItem>
               )}
-              {price && (
+              {price !== 0 && (
                 <ListItem className={classes.cardListItem}>
                   <ListItemText primary={`Price: €${price}`} />
                 </ListItem>

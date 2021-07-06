@@ -17,7 +17,7 @@ import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 //Context
-import AuthContext from '../../context/auth/AuthContext';
+import AuthContext from '../../../context/auth/AuthContext';
 
 const useStyles = makeStyles({
   list: {
