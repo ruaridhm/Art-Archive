@@ -36,7 +36,7 @@ const FilterToolTip = () => {
         </Fragment>
       }
     >
-      <Button>
+      <Button aria-label='Filter options hint'>
         <HelpIcon color='primary' />
       </Button>
     </StyledTooltip>

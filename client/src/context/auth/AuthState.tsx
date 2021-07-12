@@ -49,7 +49,7 @@ const AuthState: React.FC = ({ children }) => {
     };
     try {
       const res = await axios.post('/api/auth', formData, config);
-
+      console.log(res);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
@@ -57,6 +57,7 @@ const AuthState: React.FC = ({ children }) => {
 
       loadUser();
     } catch (err) {
+      console.log(err);
       dispatch({
         type: LOGIN_FAIL,
         payload: err.response.data.msg,

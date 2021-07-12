@@ -5,7 +5,7 @@ import Autocomplete, {
   createFilterOptions,
 } from '@material-ui/lab/Autocomplete';
 
-const filter = createFilterOptions<FilmOptionType>();
+const filter = createFilterOptions<FilterOptionType>();
 
 interface AutoCompleteInterface {
   id: string;
@@ -102,7 +102,7 @@ const AutoCompleteTextField = ({
   );
 };
 
-interface FilmOptionType {
+interface FilterOptionType {
   inputValue?: string;
   title: string;
 }
