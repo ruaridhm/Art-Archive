@@ -12,6 +12,7 @@ interface PrivateRouteProps extends RouteProps {
     | React.ComponentType<RouteComponentProps<any>>
     | React.ComponentType<any>;
   exact: boolean;
+  path: string;
 }
 
 const PrivateRoute = ({ component: Component, ...rest }: PrivateRouteProps) => {
