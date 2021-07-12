@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
 //Material-UI
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 //Custom Components
 import RecordFormDialog from '../../records/RecordForm/RecordFormDialog';
 import Records from '../../records/Records/Records';
@@ -11,7 +11,7 @@ import Controls from './Controls/Controls';
 //Interfaces
 import { RecordInterface } from '../../records/RecordItem/RecordItem';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     homeContainer: {
       display: 'flex',

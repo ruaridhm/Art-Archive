@@ -20,8 +20,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import 'date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-
-import './App.scss';
+import '@fontsource/roboto';
 
 localStorage.token && setAuthToken(localStorage.token);
 
@@ -32,6 +31,9 @@ const App = () => {
   const theme = React.useMemo(
     () =>
       createMuiTheme({
+        typography: {
+          fontFamily: 'roboto',
+        },
         palette: {
           type: palette ? 'dark' : 'light',
         },
