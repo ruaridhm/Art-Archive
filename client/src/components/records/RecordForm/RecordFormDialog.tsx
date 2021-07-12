@@ -192,9 +192,9 @@ const RecordFormDialog = ({
     }
   };
 
-  const clearAll = () => {
-    clearCurrent();
-  };
+  // const clearAll = () => {
+  //   clearCurrent();
+  // };
 
   const close = () => {
     setDisplayAddRecord(!displayAddRecord);
