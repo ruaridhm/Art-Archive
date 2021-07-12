@@ -50,6 +50,7 @@
   "proxy": "http://localhost:5000",
   "devDependencies": {
     "@types/react-burger-menu": "^2.6.2",
+    "@types/styled-components": "^5.1.11",
     "eslint-plugin-react-hooks": "^4.2.0"
   }
 }

@@ -4,7 +4,7 @@ import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 
-declare const self: ServiceWorkerGlobalScope;
+declare const self: any;
 
 clientsClaim();
 
@@ -35,7 +35,7 @@ registerRoute(
   })
 );
 
-self.addEventListener('message', (event) => {
+self.addEventListener('message', (event: any) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
