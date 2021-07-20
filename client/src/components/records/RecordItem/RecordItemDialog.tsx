@@ -35,6 +35,7 @@ import {
   MediaLinksInterface,
   RecordInterface,
 } from './RecordItem';
+import EditionSalesDialog from './EditionSalesDialog';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -132,6 +133,7 @@ interface RecordItemDialogProps {
 }
 
 const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
+  const [showEditionSales, setShowEditionSales] = useState<boolean>(false);
   const [showExhibitionDialog, setShowExhibitionDialog] =
     useState<boolean>(false);
   const [showSubmissionDialog, setShowSubmissionDialog] =
@@ -171,6 +173,10 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleShowEditionSales = () => {
+    setShowEditionSales(!showEditionSales);
   };
 
   const handleShowMediaQuery = () => {
@@ -485,7 +491,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               </>
             )}
 
-            {sales?.soldTo !== '' &&
+            {/* {sales?.soldTo !== '' &&
               sales?.soldBy !== '' &&
               sales?.soldDate !== null && (
                 <>
@@ -538,7 +544,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                     />
                   </ListItem>
                 </>
-              )}
+              )} */}
 
             {notes && (
               <ListItem>
@@ -593,6 +599,13 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
             Edit Media Links
           </Button>
           <Button
+            onClick={handleShowEditionSales}
+            color='primary'
+            variant='contained'
+          >
+            Edit Edition Sales
+          </Button>
+          <Button
             onClick={handleShowExhibition}
             color='primary'
             variant='contained'
@@ -616,6 +629,16 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {showEditionSales && (
+        <Portal>
+          <EditionSalesDialog
+            editions={editions}
+            open={showEditionSales}
+            setOpen={setShowEditionSales}
+          />
+        </Portal>
+      )}
 
       {showExhibitionDialog && (
         <Portal>

@@ -26,9 +26,10 @@ import ImageDialog from './ImageDialog';
 //Util functions
 import PopulateAutoComplete from '../../../utils/populateAutoComplete';
 //Types
-import { RecordInterface } from '../RecordItem/RecordItem';
+import { RecordInterface, SalesInterface } from '../RecordItem/RecordItem';
 import AutoCompleteTextField from './AutoCompleteTextField';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+
 interface RecordFormProps {
   displayAddRecord: boolean;
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
@@ -77,12 +78,7 @@ const emptyItemObject: RecordInterface = {
   notes: '',
   exhibited: [],
   submission: [],
-  sales: {
-    soldTo: '',
-    soldBy: '',
-    soldDate: null,
-    sold: false,
-  },
+  sales: [],
   lastEdited: null,
 };
 
@@ -145,10 +141,91 @@ const RecordFormDialog = ({
   //Functions
 
   const onChange = (e: { target: { type: any; name: string; value: any } }) => {
+    console.log(e.target);
     // if (e.target.type !== undefined && e.target.type === 'text') {
     setItem({ ...item, [e.target.name]: e.target.value });
     // }
   };
+
+  const onChangeEditions = (e: {
+    target: { type: any; name: string; value: any };
+  }) => {
+    //set number of editions
+    let tempVar = e.target.value;
+    if (tempVar >= 1000) {
+      tempVar = 1000;
+    } else if (tempVar < 1) {
+      tempVar = 1;
+    }
+    setItem({
+      ...item,
+      editions: tempVar,
+    });
+  };
+
+  const newCalcSalesArrFcn = (editions: number) => {
+    const tempArr = [];
+    for (let i = 0; i < editions; i++) {
+      tempArr.push({
+        edition: i + 1,
+        soldTo: '',
+        soldBy: '',
+        soldDate: null,
+        sold: false,
+      });
+    }
+    return tempArr;
+  };
+
+  // const calcSalesArrFcn = (editions: number) => {
+  //   console.log('calcSalesArrFcn run');
+  //   let tempArr: SalesInterface[] = [];
+  //   //check if sales arr is empty
+  //   if (item.sales!.length === 0) {
+  //     console.log('if (1) hit');
+  //     // console.log('sales arr empty if hit');
+  //     //set number of sales editions in sales Array
+
+  //     for (let i = 1; i <= editions!; i++) {
+  //       tempArr.push({
+  //         edition: i,
+  //         soldTo: '',
+  //         soldBy: '',
+  //         soldDate: null,
+  //         sold: false,
+  //       });
+  //     }
+  //   } else if (item.sales.length >= 1) {
+  //     console.log('else if (2) sales array already exists');
+  //     if (editions < item.sales.length) {
+  //       console.log('reducing the editions could remove sales details');
+
+  //       for (let i = 1; i <= editions; i++) {
+  //         tempArr.push({
+  //           edition: i,
+  //           soldTo: '',
+  //           soldBy: '',
+  //           soldDate: null,
+  //           sold: false,
+  //         });
+  //       }
+  //     } else if (editions > item.sales.length) {
+  //       console.log('3 else if hit');
+  //       const sizeDifference = item.sales.length - editions;
+  //       tempArr = [...item.sales];
+  //       for (let i = item.sales.length + 1; i <= sizeDifference; i++) {
+  //         tempArr.push({
+  //           edition: i,
+  //           soldTo: '',
+  //           soldBy: '',
+  //           soldDate: null,
+  //           sold: false,
+  //         });
+  //       }
+  //     }
+  //   }
+  //   return tempArr;
+  // };
 
   const handleAutocompleteChange = (
     value: string,
@@ -181,12 +258,18 @@ const RecordFormDialog = ({
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    console.log('onsubmit called');
+
+    let newItem = { ...item, sales: newCalcSalesArrFcn(editions) };
+    setItem({
+      ...newItem,
+    });
 
     if (current === null) {
-      addRecord(item);
+      addRecord(newItem);
       setDisplayAddRecord(false);
     } else {
-      updateRecord(item);
+      updateRecord(newItem);
       clearCurrent();
       setDisplayAddRecord(false);
     }
@@ -379,7 +462,7 @@ const RecordFormDialog = ({
               type='number'
               name='editions'
               value={editions}
-              onChange={onChange}
+              onChange={onChangeEditions}
             />
           </FormGroup>
           {/* <Typography variant='subtitle1'>Exhibitions</Typography>

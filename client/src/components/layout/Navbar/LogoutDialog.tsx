@@ -28,7 +28,7 @@ const LogoutDialog = ({ open, handleClose }: LogoutDialogProps) => {
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby='Confirm Logout'>
       <DialogTitle id='logout-confirm-title'>
-        <Typography variant='h6'>Are you sure you want to logout?</Typography>
+        <Typography>Are you sure you want to logout?</Typography>
       </DialogTitle>
       <DialogActions>
         <Button autoFocus onClick={handleClose} color='primary'>

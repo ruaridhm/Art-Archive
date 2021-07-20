@@ -49,7 +49,6 @@ const AuthState: React.FC = ({ children }) => {
     };
     try {
       const res = await axios.post('/api/auth', formData, config);
-      console.log(res);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,

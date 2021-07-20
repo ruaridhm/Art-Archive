@@ -66,10 +66,11 @@ export interface DisplayedInterface {
   _id: string;
 }
 export interface SalesInterface {
+  edition: number;
   soldTo?: string;
   soldBy?: string;
   soldDate?: Date | null;
-  sold?: Boolean;
+  sold?: boolean;
 }
 
 export interface RecordInterface {
@@ -88,8 +89,8 @@ export interface RecordInterface {
   mediaLinks?: any | [];
   notes?: string;
   exhibited: DisplayedInterface[];
-  submission?: any | [];
-  sales?: SalesInterface;
+  submission?: DisplayedInterface[];
+  sales?: SalesInterface[];
   lastEdited?: Date | null;
   [item: string]: any;
 }

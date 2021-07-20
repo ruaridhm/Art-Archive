@@ -86,20 +86,26 @@ const ItemSchema = mongoose.Schema({
   ],
 
   //Sales History
-  sales: {
-    soldTo: {
-      type: String,
+  sales: [
+    {
+      edition: {
+        type: Number,
+      },
+      soldTo: {
+        type: String,
+      },
+      soldBy: {
+        type: String,
+      },
+      soldDate: {
+        type: Date,
+      },
+      sold: {
+        type: Boolean,
+      },
     },
-    soldBy: {
-      type: String,
-    },
-    soldDate: {
-      type: Date,
-    },
-    sold: {
-      type: Boolean,
-    },
-  },
+  ],
+
   lastEdited: {
     type: Date,
   },

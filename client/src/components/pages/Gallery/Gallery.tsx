@@ -76,7 +76,7 @@ const Gallery = () => {
   return (
     <>
       {carouselImages.length !== 0 ? (
-        <Box height='89.99vh'>
+        <Box height='90%'>
           <Carousel
             images={carouselImages}
             hasThumbnails={false}

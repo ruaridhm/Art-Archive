@@ -2,10 +2,10 @@ import { useContext } from 'react';
 import { RecordInterface } from '../components/records/RecordItem/RecordItem';
 import RecordContext from '../context/record/RecordContext';
 
-interface SalesValueInterface {
-  soldTo: string[] | [];
-  soldBy: string[] | [];
-}
+// interface SalesValueInterface {
+//   soldTo: string[] | [];
+//   soldBy: string[] | [];
+// }
 
 interface ValueArraysInterface {
   title: string[] | [];
@@ -19,7 +19,7 @@ interface ValueInterface {
   currentLocation: string[] | [];
   exhibited: ValueArraysInterface;
   submission: ValueArraysInterface;
-  sales: SalesValueInterface;
+  // sales: SalesValueInterface;
   mediaLinks: ValueArraysInterface;
   [item: string]: any;
 }
@@ -108,8 +108,8 @@ const PopulateAutoComplete = (): ValueInterface => {
   populate(records, 'exhibited', 'address');
   populate(records, 'submission', 'title');
   populate(records, 'submission', 'address');
-  populate(records, 'sales', 'soldTo');
-  populate(records, 'sales', 'soldBy');
+  // populate(records, 'sales', 'soldTo');
+  // populate(records, 'sales', 'soldBy');
   populate(records, 'mediaLinks', 'title');
   populate(records, 'mediaLinks', 'address');
 
