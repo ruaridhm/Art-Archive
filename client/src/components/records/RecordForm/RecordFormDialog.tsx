@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 //Context
 import RecordContext from '../../../context/record/RecordContext';
+import AlertContext from '../../../context/alert/AlertContext';
 //Material-UI Components
 import {
   Button,
@@ -76,8 +77,8 @@ const emptyItemObject: RecordInterface = {
   editions: 1,
   mediaLinks: [],
   notes: '',
-  exhibited: [],
-  submission: [],
+  exhibitions: [],
+  submissions: [],
   sales: [],
   lastEdited: null,
 };
@@ -86,7 +87,9 @@ const RecordFormDialog = ({
   displayAddRecord,
   setDisplayAddRecord,
 }: RecordFormProps) => {
+  const alertContext = useContext(AlertContext);
   const recordContext = useContext(RecordContext);
+  const { setAlert } = alertContext;
   const { addRecord, current, clearCurrent, updateRecord } = recordContext;
   const [item, setItem] = useState(emptyItemObject);
   // const [newMediaLinks, setnewMediaLinks] = useState({
@@ -164,17 +167,49 @@ const RecordFormDialog = ({
   };
 
   const newCalcSalesArrFcn = (editions: number) => {
-    const tempArr = [];
-    for (let i = 0; i < editions; i++) {
-      tempArr.push({
-        edition: i + 1,
-        soldTo: '',
-        soldBy: '',
-        soldDate: null,
-        sold: false,
-      });
+    let tempArr: SalesInterface[] = [];
+    if (item.sales!.length !== 0) {
+      tempArr = [...item.sales];
     }
-    return tempArr;
+    console.log('newCalcSalesArrFcn called');
+
+    if (item.sales!.length === 0) {
+      console.log('if');
+      for (let i = 0; i < editions; i++) {
+        tempArr.push({
+          edition: i + 1,
+          soldTo: '',
+          soldBy: '',
+          soldDate: null,
+          sold: false,
+        });
+      }
+      return tempArr;
+    } else if (editions >= item.sales!.length) {
+      console.log('else if 2');
+      let numberOfExistingSalesObjects = item.sales!.length;
+      console.log('numberOfExistingSalesObjects', numberOfExistingSalesObjects);
+      console.log('editions', editions);
+      for (let i = numberOfExistingSalesObjects; i < editions!; i++) {
+        console.log('i', i);
+        tempArr.push({
+          edition: i,
+          soldTo: '',
+          soldBy: '',
+          soldDate: null,
+          sold: false,
+        });
+      }
+      return tempArr;
+    } else if (editions < item.sales!.length) {
+      console.log('else if 3');
+      setAlert(
+        'Reducing the number of editions may cause sales data to be lost',
+        'danger'
+      );
+
+      return tempArr.slice(0, editions);
+    }
   };
 
   // const calcSalesArrFcn = (editions: number) => {
@@ -195,10 +230,12 @@ const RecordFormDialog = ({
   //         sold: false,
   //       });
   //     }
-  //   } else if (item.sales.length >= 1) {
+  //   }
+
+  //else if (item.sales.length >= 1) {
   //     console.log('else if (2) sales array already exists');
   //     if (editions < item.sales.length) {
-  //       console.log('reducing the editions could remove sales details');
+  //       console.log('reducing the number of editions will remove sales details');
 
   //       for (let i = 1; i <= editions; i++) {
   //         tempArr.push({
@@ -209,7 +246,9 @@ const RecordFormDialog = ({
   //           sold: false,
   //         });
   //       }
-  //     } else if (editions > item.sales.length) {
+  //     }
+
+  //else if (editions > item.sales.length) {
   //       console.log('3 else if hit');
   //       const sizeDifference = item.sales.length - editions;
   //       tempArr = [...item.sales];
@@ -258,9 +297,8 @@ const RecordFormDialog = ({
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log('onsubmit called');
 
-    let newItem = { ...item, sales: newCalcSalesArrFcn(editions) };
+    const newItem = { ...item, sales: newCalcSalesArrFcn(editions) };
     setItem({
       ...newItem,
     });

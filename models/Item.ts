@@ -56,7 +56,7 @@ const ItemSchema = mongoose.Schema({
     type: String,
   },
 
-  exhibited: [
+  exhibitions: [
     {
       date: {
         type: Date,
@@ -70,8 +70,8 @@ const ItemSchema = mongoose.Schema({
     },
   ],
 
-  //Submission History
-  submission: [
+  //Submissions History
+  submissions: [
     {
       date: {
         type: Date,

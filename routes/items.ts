@@ -46,8 +46,8 @@ router.post('/', [auth], async (req, res) => {
     editions,
     mediaLinks,
     notes,
-    exhibited,
-    submission,
+    exhibitions,
+    submissions,
     sales,
     lastEdited,
   } = req.body;
@@ -67,8 +67,8 @@ router.post('/', [auth], async (req, res) => {
       editions,
       mediaLinks,
       notes,
-      exhibited,
-      submission,
+      exhibitions,
+      submissions,
       sales,
       lastEdited,
       user: req.user.id,
@@ -101,8 +101,8 @@ router.put('/:id', auth, async (req, res) => {
     editions,
     mediaLinks,
     notes,
-    exhibited,
-    submission,
+    exhibitions,
+    submissions,
     sales,
     lastEdited,
   } = req.body;
@@ -123,8 +123,8 @@ router.put('/:id', auth, async (req, res) => {
   if (editions) itemFields.editions = editions;
   if (mediaLinks) itemFields.mediaLinks = mediaLinks;
   if (notes) itemFields.notes = notes;
-  if (exhibited) itemFields.exhibited = exhibited;
-  if (submission) itemFields.submission = submission;
+  if (exhibitions) itemFields.exhibitions = exhibitions;
+  if (submissions) itemFields.submissions = submissions;
   if (sales) itemFields.sales = sales;
   if (lastEdited) itemFields.lastEdited = lastEdited;
 

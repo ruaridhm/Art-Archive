@@ -88,8 +88,8 @@ export interface RecordInterface {
   editions?: number;
   mediaLinks?: any | [];
   notes?: string;
-  exhibited: DisplayedInterface[];
-  submission?: DisplayedInterface[];
+  exhibitions: DisplayedInterface[];
+  submissions?: DisplayedInterface[];
   sales?: SalesInterface[];
   lastEdited?: Date | null;
   [item: string]: any;
