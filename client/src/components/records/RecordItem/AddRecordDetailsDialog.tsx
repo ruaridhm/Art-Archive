@@ -266,6 +266,7 @@ const AddRecordDetailsDialog = ({
               onChange={handleChange}
               name={`${inputValues[0]}`}
               value={state?.[inputValues[0]]}
+              margin='normal'
             />
             <TextField
               label={`${detail} ${inputValues[1]}`}
@@ -273,6 +274,7 @@ const AddRecordDetailsDialog = ({
               onChange={handleChange}
               name={`${inputValues[1]}`}
               value={state?.[inputValues[1]]}
+              margin='normal'
             />
             {!noDate && (
               <KeyboardDatePicker
