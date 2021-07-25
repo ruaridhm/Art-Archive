@@ -32,6 +32,9 @@ const useStyles = makeStyles({
   media: {
     height: 140,
   },
+  actionArea: {
+    minHeight: 357,
+  },
   cardContent: {
     paddingTop: 8,
     paddingBottom: 8,
@@ -125,7 +128,10 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
   return (
     <>
       <Card className={classes.card}>
-        <CardActionArea onClick={showRecordInfoDialogHandler}>
+        <CardActionArea
+          onClick={showRecordInfoDialogHandler}
+          className={classes.actionArea}
+        >
           {image![0].url !== '' && (
             <CardMedia
               className={classes.media}
