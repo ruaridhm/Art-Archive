@@ -121,9 +121,11 @@ const Navbar = ({ title, theme, setTheme }: NavbarProps) => {
           ) : (
             <>
               <ThemeToggle />
-              <IconButton aria-label='Menu' onClick={toggleDrawer(true)}>
-                <MenuIcon />
-              </IconButton>
+              {isAuthenticated && (
+                <IconButton aria-label='Menu' onClick={toggleDrawer(true)}>
+                  <MenuIcon />
+                </IconButton>
+              )}
             </>
           )}
         </Toolbar>
