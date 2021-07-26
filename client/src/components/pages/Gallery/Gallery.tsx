@@ -65,7 +65,7 @@ const Gallery = () => {
 
   return (
     <>
-      {renderReady && !loading ? (
+      {renderReady ? (
         <Box height='90%'>
           <CarouselComponent
             images={carouselImages}

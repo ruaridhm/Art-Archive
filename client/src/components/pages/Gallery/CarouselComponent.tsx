@@ -4,6 +4,11 @@ import React from 'react';
 import Carousel from 'react-gallery-carousel';
 import 'react-gallery-carousel/dist/index.css';
 
+interface CarouselComponentInterface {
+  images: [];
+  handleCurrentIndex?: () => void;
+}
+
 const CarouselComponent = ({ images, handleCurrentIndex }) => {
   console.log('images inside', images);
   return (

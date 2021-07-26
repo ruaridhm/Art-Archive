@@ -35,6 +35,7 @@ import {
   MediaLinksInterface,
   RecordInterface,
 } from './RecordItem';
+import CarouselComponent from '../../pages/Gallery/CarouselComponent';
 // import EditionSalesDialog from './EditionSalesDialog';
 
 const styles = (theme: Theme) =>
@@ -198,6 +199,14 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
       5,
       7
     )}-${dateStr.substring(0, 4)} `;
+  };
+
+  const getRecordImages = () => {
+    let recordImages = [];
+    image.forEach((image) => {
+      recordImages.push({ src: image.url });
+    });
+    return recordImages;
   };
 
   return (
@@ -578,13 +587,21 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               </ListItem>
             )}
           </List>
-          {image![0].url !== '' && (
+          {image![0].url !== '' && image!.length === 1 && (
             <div style={{ width: '50%' }}>
               <CardMedia
                 component='img'
                 alt={title}
                 image={image![0].url}
                 title={title}
+              />
+            </div>
+          )}
+          {image![0].url !== '' && image!.length > 1 && (
+            <div style={{ width: '50%' }}>
+              <CarouselComponent
+                images={getRecordImages()}
+                handleCurrentIndex={() => {}}
               />
             </div>
           )}
