@@ -35,6 +35,8 @@ import {
   MediaLinksInterface,
   RecordInterface,
 } from './RecordItem';
+import CarouselComponent from '../../pages/Gallery/CarouselComponent';
+// import EditionSalesDialog from './EditionSalesDialog';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -132,9 +134,10 @@ interface RecordItemDialogProps {
 }
 
 const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
+  const [showSalesDialog, setShowSalesDialog] = useState<boolean>(false);
   const [showExhibitionDialog, setShowExhibitionDialog] =
     useState<boolean>(false);
-  const [showSubmissionDialog, setShowSubmissionDialog] =
+  const [showSubmissionsDialog, setShowSubmissionsDialog] =
     useState<boolean>(false);
   const [showMediaQueryDialog, setShowMediaQueryDialog] =
     useState<boolean>(false);
@@ -156,8 +159,8 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
     editions,
     mediaLinks,
     notes,
-    exhibited,
-    submission,
+    exhibitions,
+    submissions,
     sales,
     lastEdited,
   } = record;
@@ -173,6 +176,10 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
     setOpen(false);
   };
 
+  const handleShowSales = () => {
+    setShowSalesDialog(!showSalesDialog);
+  };
+
   const handleShowMediaQuery = () => {
     setShowMediaQueryDialog(!showMediaQueryDialog);
   };
@@ -181,8 +188,8 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
     setShowExhibitionDialog(!showExhibitionDialog);
   };
 
-  const handleShowSubmission = () => {
-    setShowSubmissionDialog(!showSubmissionDialog);
+  const handleShowSubmissions = () => {
+    setShowSubmissionsDialog(!showSubmissionsDialog);
   };
 
   const getFormattedDate = (date: Date) => {
@@ -192,6 +199,14 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
       5,
       7
     )}-${dateStr.substring(0, 4)} `;
+  };
+
+  const getRecordImages = () => {
+    let recordImages = [];
+    image.forEach((image) => {
+      recordImages.push({ src: image.url });
+    });
+    return recordImages;
   };
 
   return (
@@ -370,10 +385,12 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                 })}
               </>
             )}
-            {exhibited !== [] && (
+            {exhibitions !== [] && (
               <>
-                <Typography className={classes.listBold}>Exhibited:</Typography>
-                {exhibited.map((element) => {
+                <Typography className={classes.listBold}>
+                  Exhibitions:
+                </Typography>
+                {exhibitions.map((element) => {
                   return (
                     <ListItem key={element._id}>
                       <ListItemText
@@ -426,12 +443,12 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                 })}
               </>
             )}
-            {submission !== [] && (
+            {submissions !== [] && (
               <>
                 <Typography className={classes.listBold}>
                   Submissions:
                 </Typography>
-                {submission?.map((element: DisplayedInterface) => {
+                {submissions?.map((element: DisplayedInterface) => {
                   return (
                     <ListItem key={element._id}>
                       <ListItemText
@@ -485,7 +502,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               </>
             )}
 
-            {sales?.soldTo !== '' &&
+            {/* {sales?.soldTo !== '' &&
               sales?.soldBy !== '' &&
               sales?.soldDate !== null && (
                 <>
@@ -538,7 +555,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                     />
                   </ListItem>
                 </>
-              )}
+              )} */}
 
             {notes && (
               <ListItem>
@@ -570,13 +587,21 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               </ListItem>
             )}
           </List>
-          {image![0].url !== '' && (
+          {image![0].url !== '' && image!.length === 1 && (
             <div style={{ width: '50%' }}>
               <CardMedia
                 component='img'
                 alt={title}
                 image={image![0].url}
                 title={title}
+              />
+            </div>
+          )}
+          {image![0].url !== '' && image!.length > 1 && (
+            <div style={{ width: '50%' }}>
+              <CarouselComponent
+                images={getRecordImages()}
+                handleCurrentIndex={() => {}}
               />
             </div>
           )}
@@ -592,6 +617,9 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
           >
             Edit Media Links
           </Button>
+          <Button onClick={handleShowSales} color='primary' variant='contained'>
+            Edit Sales
+          </Button>
           <Button
             onClick={handleShowExhibition}
             color='primary'
@@ -600,7 +628,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
             Edit Exhibitions
           </Button>
           <Button
-            onClick={handleShowSubmission}
+            onClick={handleShowSubmissions}
             color='primary'
             variant='contained'
           >
@@ -617,6 +645,19 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
         </DialogActions>
       </Dialog>
 
+      {showSalesDialog && (
+        <Portal>
+          <AddRecordDetailsDialog
+            detail='Sale'
+            record={record}
+            open={showSalesDialog}
+            setOpen={setShowSalesDialog}
+            emptyInput={{ soldTo: '', soldBy: '', date: null }}
+            inputValues={['soldTo', 'soldBy', 'soldDate']}
+          />
+        </Portal>
+      )}
+
       {showExhibitionDialog && (
         <Portal>
           <AddRecordDetailsDialog
@@ -627,13 +668,13 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
           />
         </Portal>
       )}
-      {showSubmissionDialog && (
+      {showSubmissionsDialog && (
         <Portal>
           <AddRecordDetailsDialog
             detail='Submission'
             record={record}
-            open={showSubmissionDialog}
-            setOpen={setShowSubmissionDialog}
+            open={showSubmissionsDialog}
+            setOpen={setShowSubmissionsDialog}
           />
         </Portal>
       )}

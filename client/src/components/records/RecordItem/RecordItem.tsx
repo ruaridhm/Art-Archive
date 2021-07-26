@@ -32,6 +32,9 @@ const useStyles = makeStyles({
   media: {
     height: 140,
   },
+  actionArea: {
+    minHeight: 357,
+  },
   cardContent: {
     paddingTop: 8,
     paddingBottom: 8,
@@ -66,10 +69,11 @@ export interface DisplayedInterface {
   _id: string;
 }
 export interface SalesInterface {
+  edition: number;
   soldTo?: string;
   soldBy?: string;
   soldDate?: Date | null;
-  sold?: Boolean;
+  sold?: boolean;
 }
 
 export interface RecordInterface {
@@ -87,9 +91,9 @@ export interface RecordInterface {
   editions?: number;
   mediaLinks?: any | [];
   notes?: string;
-  exhibited: DisplayedInterface[];
-  submission?: any | [];
-  sales?: SalesInterface;
+  exhibitions: DisplayedInterface[];
+  submissions?: DisplayedInterface[];
+  sales?: SalesInterface[];
   lastEdited?: Date | null;
   [item: string]: any;
 }
@@ -124,7 +128,10 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
   return (
     <>
       <Card className={classes.card}>
-        <CardActionArea onClick={showRecordInfoDialogHandler}>
+        <CardActionArea
+          onClick={showRecordInfoDialogHandler}
+          className={classes.actionArea}
+        >
           {image![0].url !== '' && (
             <CardMedia
               className={classes.media}

@@ -53,16 +53,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface inputState {
   title?: string;
-  date?: Date | string | null;
   address?: string;
+  date?: Date | string | null;
   _id?: string | undefined;
 }
 
-const emptyInput = {
-  title: '',
-  date: null,
-  address: '',
-};
+interface inputState2 {
+  soldTo?: string;
+  soldBy?: string;
+  soldDate?: Date | string | null;
+  _id?: string | undefined;
+}
 
 interface AddRecordDetailsDialogInterface {
   detail: string;
@@ -70,6 +71,8 @@ interface AddRecordDetailsDialogInterface {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   noDate?: boolean;
+  emptyInput?: {};
+  inputValues?: [string, string, string];
 }
 
 const AddRecordDetailsDialog = ({
@@ -78,22 +81,33 @@ const AddRecordDetailsDialog = ({
   open,
   setOpen,
   noDate,
+  emptyInput = {
+    title: '',
+    address: '',
+    date: null,
+  },
+  inputValues = ['title', 'address', 'date'],
 }: AddRecordDetailsDialogInterface) => {
   const recordContext = useContext(RecordContext);
   const { updateRecord } = recordContext;
-  const [state, setState] = useState<inputState | null>(emptyInput);
+  const [state, setState] = useState<inputState | inputState2 | null>(
+    emptyInput
+  );
   const [editMode, setEditMode] = useState(false);
   //Creating a string to use to reference values using bracket notation below and also use detail prop for strings
   let reference = '';
   switch (detail) {
     case 'Exhibition':
-      reference = 'exhibited';
+      reference = 'exhibitions';
       break;
     case 'Submission':
-      reference = 'submission';
+      reference = 'submissions';
       break;
     case 'MediaLink':
       reference = 'mediaLinks';
+      break;
+    case 'Sale':
+      reference = 'sales';
       break;
     default:
       console.log('switch hit default case');
@@ -107,10 +121,20 @@ const AddRecordDetailsDialog = ({
   };
 
   const handleDateChange = (date: Date | null | string) => {
-    if (date === null) {
-      setState({ ...state, date: null });
-    } else {
-      setState({ ...state, date: date.toString() });
+    if (inputValues[2] === 'date') {
+      console.log('if');
+      if (date === null) {
+        setState({ ...state, date: null });
+      } else {
+        setState({ ...state, date: date.toString() });
+      }
+    } else if (inputValues[2] === 'soldDate') {
+      console.log('else');
+      if (date === null) {
+        setState({ ...state, soldDate: null });
+      } else {
+        setState({ ...state, soldDate: date.toString() });
+      }
     }
   };
 
@@ -132,7 +156,7 @@ const AddRecordDetailsDialog = ({
   };
 
   const handleAddItem = () => {
-    if (state?.title === '' && state?.address === '') {
+    if (state?.[inputValues[0]] === '' && state?.[inputValues[1]] === '') {
       //Todo add error alerting user here
       return;
     } else if (
@@ -142,9 +166,13 @@ const AddRecordDetailsDialog = ({
       let itemToEditIndex = modifiedRecord[reference].findIndex(
         (x: { _id: string }) => x._id === state?._id
       );
-      modifiedRecord[reference][itemToEditIndex].title = state?.title;
-      modifiedRecord[reference][itemToEditIndex].date = state?.date;
-      modifiedRecord[reference][itemToEditIndex].address = state?.address;
+      modifiedRecord[reference][itemToEditIndex][inputValues[0]] =
+        state?.[inputValues[0]];
+      modifiedRecord[reference][itemToEditIndex][inputValues[1]] =
+        state?.[inputValues[1]];
+      modifiedRecord[reference][itemToEditIndex][inputValues[2]] =
+        state?.[inputValues[2]];
+
       updateRecord(modifiedRecord);
       setState(emptyInput);
       setEditMode(false);
@@ -191,12 +219,13 @@ const AddRecordDetailsDialog = ({
                   key={element._id}
                 >
                   <CardContent>
-                    <Typography>{element.title}</Typography>
-                    <Typography>{element.address}</Typography>
-                    {element.date && (
+                    <Typography>{element[inputValues[0]]}</Typography>
+                    <Typography>{element[inputValues[0]]}</Typography>
+                    {element[inputValues[2]] && (
                       <Typography>
-                        {element.date.slice(8, 10)} / {element.date.slice(5, 7)}{' '}
-                        /{element.date.slice(0, 4)}
+                        {element[inputValues[2]].slice(8, 10)} /{' '}
+                        {element[inputValues[2]].slice(5, 7)} /
+                        {element[inputValues[2]].slice(0, 4)}
                       </Typography>
                     )}
                   </CardContent>
@@ -227,24 +256,33 @@ const AddRecordDetailsDialog = ({
             )}
           </Paper>
         ) : (
-          <p>No {detail}s saved</p>
+          <p>No {detail} saved</p>
         )}
         <form className={classes.container}>
           <FormControl className={classes.formControl}>
             <TextField
-              label={`${detail} Title`}
+              label={`${detail} ${inputValues[0]}`}
               variant='outlined'
               onChange={handleChange}
-              name='title'
-              value={state?.title}
+              name={`${inputValues[0]}`}
+              value={state?.[inputValues[0]]}
+              margin='normal'
+            />
+            <TextField
+              label={`${detail} ${inputValues[1]}`}
+              variant='outlined'
+              onChange={handleChange}
+              name={`${inputValues[1]}`}
+              value={state?.[inputValues[1]]}
+              margin='normal'
             />
             {!noDate && (
               <KeyboardDatePicker
                 margin='normal'
                 id='date-picker-dialog'
-                label={`${detail} Date`}
+                label={`${detail} date`}
                 format='dd/MM/yyyy'
-                value={state?.date}
+                value={state?.[inputValues[2]]}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
@@ -252,13 +290,6 @@ const AddRecordDetailsDialog = ({
                 inputVariant='outlined'
               />
             )}
-            <TextField
-              label={`${detail} Address`}
-              variant='outlined'
-              onChange={handleChange}
-              name='address'
-              value={state?.address}
-            />
           </FormControl>
         </form>
       </DialogContent>

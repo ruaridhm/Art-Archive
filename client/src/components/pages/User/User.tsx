@@ -65,6 +65,7 @@ const User = () => {
     let earliest = 0;
     // let title: string;
     records?.forEach((elem) => {
+      console.log('!!!!!!!!!!!!!!!!!!', typeof elem.date);
       if (elem.date !== null) {
         let current = new Date(elem.date!).getTime();
         if (earliest > current) {
@@ -79,6 +80,7 @@ const User = () => {
       return new Date(earliest).toDateString();
     }
   };
+
   const calcLatestDate = (value: string) => {
     let latest = 170000000000000;
     // let title: string;
@@ -223,8 +225,8 @@ const User = () => {
     createData('Average Price', calcAvgPrice()),
     createData('Highest Price', calcHighPrice('price')),
     createData('Lowest Price', calcLowPrice()),
-    createData('Total Exhibitions', totalArrTitleCount('exhibited')),
-    createData('Total Submissions', totalArrTitleCount('submission')),
+    createData('Total Exhibitions', totalArrTitleCount('exhibitions')),
+    createData('Total Submissions', totalArrTitleCount('submissions')),
     createData('Latest Sold', calcLatestDate('sales.soldDate')),
     createData('Most Popular Medium', mostPopularCount('medium')),
     createData('Most Popular Size', mostPopularCount('size')),

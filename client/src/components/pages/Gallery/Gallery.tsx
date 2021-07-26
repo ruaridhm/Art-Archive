@@ -14,6 +14,7 @@ import { Button, Box, Portal } from '@material-ui/core';
 //Material-UI Icons
 import InfoIcon from '@material-ui/icons/Info';
 import { RecordInterface } from '../../records/RecordItem/RecordItem';
+import CarouselComponent from './CarouselComponent';
 //https://github.com/yifaneye/react-gallery-carousel
 
 interface carouselImagesStateInterface {
@@ -24,13 +25,13 @@ interface carouselImagesStateInterface {
 const Gallery = () => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
-  const { getRecords, records } = recordContext;
+  const { getRecords, records, loading } = recordContext;
   const [carouselImages, setCarouselImages] = useState<
     carouselImagesStateInterface[] | []
   >([]);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const [foundRecord, setFoundRecord] = useState<RecordInterface>();
-
+  const [renderReady, setRenderReady] = useState(false);
   useEffect(() => {
     authContext.loadUser();
     getRecords();
@@ -40,27 +41,16 @@ const Gallery = () => {
 
   useEffect(() => {
     records &&
-      records.forEach((record: RecordInterface) => {
-        //TS non-null assertion operator (!) used in next line
-        if (record.image![0].url !== '') {
-          if (
-            carouselImages.find(
-              (item: carouselImagesStateInterface) => item._id === record._id
-            ) === undefined
-          ) {
-            setCarouselImages([
-              ...carouselImages,
-              //TS non-null assertion operator (!) used in next line
-              { src: record.image![0].url, _id: record._id! },
-            ]);
-          }
-        }
+      records.forEach((record) => {
+        console.log(carouselImages);
+        setCarouselImages((prevState) => [
+          ...prevState,
+          { src: record.image[0].url, _id: record._id },
+        ]);
       });
-    carouselImages.length >= 1 &&
-      setFoundRecord(
-        records?.find((element) => element._id === carouselImages[0]._id)
-      );
-  }, [carouselImages, records]);
+    console.log('carouselImages', carouselImages);
+    setRenderReady(true);
+  }, [loading]);
 
   const handleShowDialog = () => {
     console.log('handleShowDialog');
@@ -75,14 +65,11 @@ const Gallery = () => {
 
   return (
     <>
-      {carouselImages.length !== 0 ? (
-        <Box height='89.99vh'>
-          <Carousel
+      {renderReady ? (
+        <Box height='90%'>
+          <CarouselComponent
             images={carouselImages}
-            hasThumbnails={false}
-            onIndexChange={(e: { curIndex: number }) => {
-              handleCurrentIndex(e);
-            }}
+            handleCurrentIndex={handleCurrentIndex}
           />
           <Box
             position='absolute'

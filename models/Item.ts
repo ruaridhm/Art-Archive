@@ -56,7 +56,7 @@ const ItemSchema = mongoose.Schema({
     type: String,
   },
 
-  exhibited: [
+  exhibitions: [
     {
       date: {
         type: Date,
@@ -70,8 +70,8 @@ const ItemSchema = mongoose.Schema({
     },
   ],
 
-  //Submission History
-  submission: [
+  //Submissions History
+  submissions: [
     {
       date: {
         type: Date,
@@ -86,20 +86,26 @@ const ItemSchema = mongoose.Schema({
   ],
 
   //Sales History
-  sales: {
-    soldTo: {
-      type: String,
+  sales: [
+    {
+      edition: {
+        type: Number,
+      },
+      soldTo: {
+        type: String,
+      },
+      soldBy: {
+        type: String,
+      },
+      soldDate: {
+        type: Date,
+      },
+      sold: {
+        type: Boolean,
+      },
     },
-    soldBy: {
-      type: String,
-    },
-    soldDate: {
-      type: Date,
-    },
-    sold: {
-      type: Boolean,
-    },
-  },
+  ],
+
   lastEdited: {
     type: Date,
   },

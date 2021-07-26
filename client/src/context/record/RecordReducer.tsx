@@ -135,13 +135,14 @@ const RecordReducer = (state: any, action: Actions) => {
             record?.size?.match(regex) ||
             record?.medium?.match(regex) ||
             record?.currentLocation?.match(regex) ||
-            record?.notes?.match(regex) ||
-            // record.exhibited.title.match(regex) ||
-            // record.exhibited.address.match(regex) ||
-            // record.submission.title.match(regex) ||
-            // record.submission.address.match(regex) ||
-            record?.sales?.soldTo?.match(regex) ||
-            record?.sales?.soldBy?.match(regex)
+            record?.notes?.match(regex)
+            // ||
+            // record.exhibitions.title.match(regex) ||
+            // record.exhibitions.address.match(regex) ||
+            // record.submissions.title.match(regex) ||
+            // record.submissions.address.match(regex) ||
+            // record?.sales?.soldTo?.match(regex) ||
+            // record?.sales?.soldBy?.match(regex)
             // record.price.match(regex) ||
             // record.mediaLinks.title.match(regex) ||
             // record.mediaLinks.address.match(regex)

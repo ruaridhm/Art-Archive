@@ -70,6 +70,16 @@ const AuthReducer = (state: any, action: Actions) => {
       };
     case AUTH_ERROR:
     case LOGIN_FAIL:
+      localStorage.removeItem('token');
+      console.log('auth error');
+      return {
+        ...state,
+        token: null,
+        isAuthenticated: false,
+        loading: false,
+        user: null,
+        error: action.payload,
+      };
     case LOGOUT:
       localStorage.removeItem('token');
       return {

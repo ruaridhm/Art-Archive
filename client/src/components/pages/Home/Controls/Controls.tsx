@@ -65,19 +65,19 @@ const sortOptions = [
   },
   {
     title: 'First Exhibition Title',
-    value: 'exhibited[0].title',
+    value: 'exhibitions[0].title',
   },
   {
     title: 'First Exhibition Date',
-    value: 'exhibited[0].date',
+    value: 'exhibitions[0].date',
   },
   {
-    title: 'Submission Title',
-    value: 'submission[0].title',
+    title: 'Submissions Title',
+    value: 'submissions[0].title',
   },
   {
-    title: 'Submission Date',
-    value: 'submission[0].date',
+    title: 'Submissions Date',
+    value: 'submissions[0].date',
   },
 ];
 

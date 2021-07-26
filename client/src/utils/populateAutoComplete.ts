@@ -2,10 +2,10 @@ import { useContext } from 'react';
 import { RecordInterface } from '../components/records/RecordItem/RecordItem';
 import RecordContext from '../context/record/RecordContext';
 
-interface SalesValueInterface {
-  soldTo: string[] | [];
-  soldBy: string[] | [];
-}
+// interface SalesValueInterface {
+//   soldTo: string[] | [];
+//   soldBy: string[] | [];
+// }
 
 interface ValueArraysInterface {
   title: string[] | [];
@@ -17,9 +17,9 @@ interface ValueInterface {
   size: string[] | [];
   medium: string[] | [];
   currentLocation: string[] | [];
-  exhibited: ValueArraysInterface;
-  submission: ValueArraysInterface;
-  sales: SalesValueInterface;
+  exhibitions: ValueArraysInterface;
+  submissions: ValueArraysInterface;
+  // sales: SalesValueInterface;
   mediaLinks: ValueArraysInterface;
   [item: string]: any;
 }
@@ -34,8 +34,8 @@ const PopulateAutoComplete = (): ValueInterface => {
     size: [],
     medium: [],
     currentLocation: [],
-    exhibited: { title: [], address: [] },
-    submission: { title: [], address: [] },
+    exhibitions: { title: [], address: [] },
+    submissions: { title: [], address: [] },
     sales: { soldTo: [], soldBy: [] },
     mediaLinks: { title: [], address: [] },
   };
@@ -48,7 +48,7 @@ const PopulateAutoComplete = (): ValueInterface => {
     records?.forEach((record: RecordInterface) => {
       if (Array.isArray(record[item])) {
         //item is an Array of Objects
-        //eg: Exhibited, Submission, MediaLinks
+        //eg: exhibitions, Submissions, MediaLinks
 
         record[item].forEach(
           (element: {
@@ -104,12 +104,12 @@ const PopulateAutoComplete = (): ValueInterface => {
   populate(records, 'size');
   populate(records, 'medium');
   populate(records, 'currentLocation');
-  populate(records, 'exhibited', 'title');
-  populate(records, 'exhibited', 'address');
-  populate(records, 'submission', 'title');
-  populate(records, 'submission', 'address');
-  populate(records, 'sales', 'soldTo');
-  populate(records, 'sales', 'soldBy');
+  populate(records, 'exhibitions', 'title');
+  populate(records, 'exhibitions', 'address');
+  populate(records, 'submissions', 'title');
+  populate(records, 'submissions', 'address');
+  // populate(records, 'sales', 'soldTo');
+  // populate(records, 'sales', 'soldBy');
   populate(records, 'mediaLinks', 'title');
   populate(records, 'mediaLinks', 'address');
 

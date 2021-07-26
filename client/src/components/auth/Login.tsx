@@ -114,10 +114,7 @@ const Login = ({ history }: LoginProps) => {
             autoComplete='current-password'
             onChange={handleChange}
           />
-          <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
-          />
+
           <Button
             type='submit'
             fullWidth
