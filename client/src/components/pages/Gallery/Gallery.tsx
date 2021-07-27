@@ -4,7 +4,6 @@ import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
 //Carousel
 // @ts-ignore
-import Carousel from 'react-gallery-carousel';
 import 'react-gallery-carousel/dist/index.css';
 //Custom Components
 import Spinner from '../../layout/Spinner/Spinner';
@@ -26,9 +25,7 @@ const Gallery = () => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
   const { getRecords, records, loading } = recordContext;
-  const [carouselImages, setCarouselImages] = useState<
-    carouselImagesStateInterface[] | []
-  >([]);
+  const [carouselImages, setCarouselImages] = useState<any[]>([]);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const [foundRecord, setFoundRecord] = useState<RecordInterface>();
   const [renderReady, setRenderReady] = useState(false);
@@ -43,9 +40,10 @@ const Gallery = () => {
     records &&
       records.forEach((record) => {
         console.log(carouselImages);
-        setCarouselImages((prevState) => [
+
+        setCarouselImages((prevState: carouselImagesStateInterface[]) => [
           ...prevState,
-          { src: record.image[0].url, _id: record._id },
+          { src: record.image![0].url, _id: record._id },
         ]);
       });
     console.log('carouselImages', carouselImages);

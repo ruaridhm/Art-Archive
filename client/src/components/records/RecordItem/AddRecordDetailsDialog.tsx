@@ -56,6 +56,7 @@ interface inputState {
   address?: string;
   date?: Date | string | null;
   _id?: string | undefined;
+  [index: string]: any;
 }
 
 interface inputState2 {
@@ -63,6 +64,7 @@ interface inputState2 {
   soldBy?: string;
   soldDate?: Date | string | null;
   _id?: string | undefined;
+  [index: string]: any;
 }
 
 interface AddRecordDetailsDialogInterface {
@@ -212,6 +214,7 @@ const AddRecordDetailsDialog = ({
                   | React.ReactFragment
                   | React.ReactPortal;
                 date: string | any[];
+                [index: string]: any;
               }) => (
                 <Card
                   variant='outlined'
