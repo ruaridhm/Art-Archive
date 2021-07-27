@@ -5,20 +5,29 @@ import Carousel from 'react-gallery-carousel';
 import 'react-gallery-carousel/dist/index.css';
 
 interface CarouselComponentInterface {
-  images: [];
-  handleCurrentIndex?: () => void;
+  images: { _id?: string; src: string }[];
+  handleCurrentIndex?: (e: { curIndex: any }) => void;
 }
 
-const CarouselComponent = ({ images, handleCurrentIndex }) => {
+const CarouselComponent = ({
+  images,
+  handleCurrentIndex,
+}: CarouselComponentInterface) => {
   console.log('images inside', images);
   return (
-    <Carousel
-      images={images}
-      hasThumbnails={false}
-      onIndexChange={(e: { curIndex: number }) => {
-        handleCurrentIndex(e);
-      }}
-    />
+    <>
+      {handleCurrentIndex ? (
+        <Carousel
+          images={images}
+          hasThumbnails={false}
+          onIndexChange={(e: { curIndex: number }) => {
+            handleCurrentIndex(e);
+          }}
+        />
+      ) : (
+        <Carousel images={images} hasThumbnails={false} />
+      )}
+    </>
   );
 };
 

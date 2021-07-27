@@ -161,7 +161,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
     notes,
     exhibitions,
     submissions,
-    sales,
+    // sales,
     lastEdited,
   } = record;
 
@@ -194,17 +194,25 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
 
   const getFormattedDate = (date: Date) => {
     const dateStr = date.toString();
-
     return `${dateStr.substring(8, 10)}-${dateStr.substring(
       5,
       7
     )}-${dateStr.substring(0, 4)} `;
   };
 
+  interface imgInterface {
+    url: string;
+    _id?: string;
+  }
+
+  interface recordImagesInterface {
+    src: string;
+  }
+
   const getRecordImages = () => {
-    let recordImages = [];
-    image.forEach((image) => {
-      recordImages.push({ src: image.url });
+    let recordImages: recordImagesInterface[] = [];
+    image!.forEach((img: imgInterface) => {
+      recordImages.push({ src: img.url });
     });
     return recordImages;
   };
@@ -390,7 +398,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                 <Typography className={classes.listBold}>
                   Exhibitions:
                 </Typography>
-                {exhibitions.map((element) => {
+                {exhibitions?.map((element) => {
                   return (
                     <ListItem key={element._id}>
                       <ListItemText

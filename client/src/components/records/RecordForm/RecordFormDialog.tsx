@@ -169,7 +169,7 @@ const RecordFormDialog = ({
   const newCalcSalesArrFcn = (editions: number) => {
     let tempArr: SalesInterface[] = [];
     if (item.sales!.length !== 0) {
-      tempArr = [...item.sales];
+      tempArr = [...item.sales!];
     }
     console.log('newCalcSalesArrFcn called');
 
@@ -298,7 +298,11 @@ const RecordFormDialog = ({
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const newItem = { ...item, sales: newCalcSalesArrFcn(editions) };
+    const newItem: RecordInterface = {
+      ...item,
+      sales: newCalcSalesArrFcn(editions!),
+    };
+    console.log('newItem', newItem);
     setItem({
       ...newItem,
     });
