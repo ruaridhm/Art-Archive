@@ -48,7 +48,8 @@ const Gallery = () => {
       });
     console.log('carouselImages', carouselImages);
     setRenderReady(true);
-  }, [loading]);
+    // eslint-disable-line
+  }, [loading, carouselImages, records]);
 
   const handleShowDialog = () => {
     console.log('handleShowDialog');
