@@ -49,7 +49,7 @@ const Gallery = () => {
     console.log('carouselImages', carouselImages);
     setRenderReady(true);
     // eslint-disable-line
-  }, [loading, carouselImages, records]);
+  }, [loading]);
 
   const handleShowDialog = () => {
     console.log('handleShowDialog');
