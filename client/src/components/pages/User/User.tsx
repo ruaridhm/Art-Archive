@@ -15,6 +15,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { RecordInterface } from '../../records/RecordItem/RecordItem';
 
 const useStyles = makeStyles({
   container: {
@@ -39,7 +40,11 @@ const User = () => {
     // eslint-disable-next-line
   }, []);
 
-  const calcEditionsTotal = () => {
+  const totalItems = (): number => {
+    return records!.length;
+  };
+
+  const totalEditions = () => {
     let total: number = 0;
     records?.forEach((elem) => {
       if (elem.editions) {
@@ -48,7 +53,7 @@ const User = () => {
     });
     return total;
   };
-  const calcCollectionsTotal = () => {
+  const totalCollections = () => {
     let total: string[] = [];
     records?.forEach((elem) => {
       if (elem.collectionName !== '' && elem.collectionName !== undefined) {
@@ -60,101 +65,84 @@ const User = () => {
     return total.length;
   };
 
-  const calcEarliestDate = () => {
-    let earliest = 0;
-    // let title: string;
+  const earliestDate = () => {
+    const dates = records!.map((elem) => {
+      return { title: elem.title, date: elem.date };
+    });
+
+    if (dates.length === 0) return null;
+    let earliestDate = dates[0];
+    for (let i = 1; i < dates.length; i++) {
+      let currentDate = dates[i];
+      if (currentDate.date < earliestDate.date) {
+        earliestDate = currentDate;
+      }
+    }
+    return earliestDate;
+  };
+
+  const latestDate = () => {
+    const dates = records!.map((elem) => {
+      return { title: elem.title, date: elem.date };
+    });
+
+    if (dates.length === 0) return null;
+    let latestDate = dates[0];
+    for (let i = 1; i < dates.length; i++) {
+      let currentDate = dates[i];
+      if (currentDate.date > latestDate.date) {
+        latestDate = currentDate;
+      }
+    }
+    return latestDate;
+  };
+
+  const avgPrice = () => {
+    const prices = records!.map((elem) => {
+      return elem.price;
+    });
+    var average =
+      prices.reduce((total, prices) => total + prices) / prices.length;
+    return average.toFixed(2);
+  };
+
+  const highLowNumb = (value: string, lowest?: boolean) => {
+    let result: { price: number; title: string } = {
+      price: lowest ? 99999999999 : 0,
+      title: '',
+    };
     records?.forEach((elem) => {
-      if (elem.date !== null) {
-        let current = new Date(elem.date!).getTime();
-        if (earliest > current) {
-          earliest = current;
-          // title = elem.title;
+      if (lowest) {
+        if (elem[value] < result[value]) {
+          result = { price: elem.price, title: elem.title };
+        }
+      } else {
+        if (elem[value] > result[value]) {
+          result = { price: elem.price, title: elem.title };
         }
       }
     });
-    if (earliest === 0) {
-      return 'No valid dates set';
-    } else {
-      return new Date(earliest).toDateString();
-    }
-  };
-  const calcLatestDate = (value: string) => {
-    let latest = 170000000000000;
-    // let title: string;
-    records?.forEach((elem) => {
-      if (elem[value] !== null) {
-        let current = new Date(elem[value]).getTime();
-
-        if (latest < current) {
-          latest = current;
-          // title = elem.title;
-        }
+    if (lowest) {
+      if (result.price === 99999999999) {
+        return { price: 0, title: 'No prices set.' };
+      } else {
+        return result;
       }
-    });
-
-    if (latest > Date.now()) {
-      return 'No valid dates set';
     } else {
-      return new Date(latest).toDateString();
-    }
-  };
-
-  const calcAvgPrice = () => {
-    let total = 0;
-    let recordsWithPrice = 0;
-    records?.forEach((elem) => {
-      if (elem.price !== 1 && elem.price !== undefined) {
-        total += elem.price;
-        recordsWithPrice++;
+      if (result.price === 0) {
+        return { price: 0, title: 'No prices set.' };
+      } else {
+        return result;
       }
-    });
-
-    if (total / recordsWithPrice === 0) {
-      return 'No prices set.';
-    } else {
-      return `€ ${total / recordsWithPrice}`;
     }
   };
 
-  const calcHighPrice = (value: string) => {
-    let highest = 0;
-    records?.forEach((elem) => {
-      if (elem[value] !== 0) {
-        if (elem[value] > highest) {
-          highest = elem[value];
-        }
-      }
-    });
-    if (highest === 0) {
-      return 'No prices set.';
-    } else if (value === 'editions') {
-      return highest;
-    } else {
-      return `€ ${highest}`;
-    }
-  };
-  const calcLowPrice = () => {
-    let lowest: number = 9999999;
-
-    records?.forEach((elem) => {
-      if (elem.price !== 0 && elem.price !== undefined) {
-        if (elem.price < lowest) {
-          lowest = elem.price;
-        }
-      }
-    });
-    if ((lowest = 9999999)) {
-      return 'No prices set.';
-    } else {
-      return `€ ${lowest}`;
-    }
-  };
   const totalArrTitleCount = (value: string) => {
     const total: string[] = [];
     records?.forEach((record) => {
       record[value].forEach((elem: { title: string }) => {
         if (
-          total.includes(elem.title) ||
+          (total.includes(elem.title) && elem) ||
           elem.title === undefined ||
           elem.title === ''
         ) {
@@ -176,23 +164,27 @@ const User = () => {
     records?.forEach((elem) => {
       elem[value] !== '' && total.push(elem[value]);
     });
+    console.log('total', total);
     const obj = total.reduce(
       (key: KeyInterface, val) => ({ ...key, [val]: (key[val] | 0) + 1 }),
       {}
     );
-    console.log('obj', obj);
+    console.log('reduce', obj);
 
     let keys = Object.keys(obj);
     let largest = Math.max.apply(
       null,
       keys.map((x) => obj[x])
     );
+    console.log('largest', largest);
     let result = keys.reduce((result, key: string) => {
       if (obj[key] === largest) {
-        result.push();
+        console.log('key', obj[key]);
+        result.push(obj);
       }
       return result;
     }, []);
+    console.log('result', result);
     let ans = ' ';
     for (let i = 0; i < result.length; i++) {
       if (i !== result.length - 1) {
@@ -201,33 +193,46 @@ const User = () => {
         ans += `${result[i]}`;
       }
     }
-
+    console.log(ans);
     return ans;
   };
 
-  const getTotalRecords = (): number => {
-    return records!.length;
-  };
-
-  const createData = (name: string, value: string | number) => {
-    return { name, value };
+  const createData = (name: string, value: any, item?: string) => {
+    return { name, value, item };
   };
 
   const rows = [
-    createData('Total Items: ', getTotalRecords()),
-    createData('Total Items Including Editions:', calcEditionsTotal()),
-    createData('Number of Collections: ', calcCollectionsTotal()),
-    createData('Earliest Item', calcEarliestDate()),
-    createData('Latest Item', calcLatestDate('date')),
-    createData('Average Price', calcAvgPrice()),
-    createData('Highest Price', calcHighPrice('price')),
-    createData('Lowest Price', calcLowPrice()),
-    createData('Total Exhibitions', totalArrTitleCount('exhibited')),
-    createData('Total Submissions', totalArrTitleCount('submission')),
-    createData('Latest Sold', calcLatestDate('sales.soldDate')),
+    createData('Total Items: ', totalItems()),
+    createData('Total Items Including Editions:', totalEditions()),
+    createData('Number of Collections: ', totalCollections()),
+    createData(
+      'Earliest Item',
+      earliestDate().date.toString().slice(0, 10),
+      earliestDate().title
+    ),
+    createData(
+      'Latest Item',
+      latestDate().date.toString().slice(0, 10),
+      latestDate().title
+    ),
+
+    createData(
+      'Highest Price',
+      `€${highLowNumb('price').price}`,
+      highLowNumb('price').title
+    ),
+    createData(
+      'Lowest Price',
+      `€${highLowNumb('price', true).price}`,
+      highLowNumb('price', true).title
+    ),
+    createData('Average Price', `€${avgPrice()}`),
+    createData('Total Exhibitions', totalArrTitleCount('exhibitions')),
+    createData('Total Submissions', totalArrTitleCount('submissions')),
+    //createData('Latest Sold', calcLatestDate('sales.soldDate')),
     createData('Most Popular Medium', mostPopularCount('medium')),
-    createData('Most Popular Size', mostPopularCount('size')),
-    createData('Most Editions', calcHighPrice('editions')),
+    // createData('Most Popular Size', mostPopularCount('size')),
+    //  createData('Most Editions', calcHighPrice('editions')),
   ];
 
   if (!loading && records) {
@@ -252,7 +257,7 @@ const User = () => {
                   {row.name}
                 </TableCell>
                 <TableCell align='right'>{row.value}</TableCell>
-                {/* <TableCell align="right">{row.item}</TableCell> */}
+                <TableCell align='right'>{row.item}</TableCell>
               </TableRow>
             ))}
           </TableBody>
