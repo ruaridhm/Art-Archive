@@ -35,7 +35,7 @@ interface AddRecordDetailsDialogFormInterface {
     };
   }) => void;
   state: inputState | inputState2 | null;
-  noDate: boolean;
+  noDate?: boolean;
   handleDateChange: (date: Date | null | string) => void;
 }
 
