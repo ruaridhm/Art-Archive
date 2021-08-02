@@ -39,20 +39,18 @@ const Gallery = () => {
   useEffect(() => {
     records &&
       records.forEach((record) => {
-        console.log(carouselImages);
-
-        setCarouselImages((prevState: carouselImagesStateInterface[]) => [
-          ...prevState,
-          { src: record.image![0].url, _id: record._id },
-        ]);
+        if (record.image[0].url !== '') {
+          setCarouselImages((prevState: carouselImagesStateInterface[]) => [
+            ...prevState,
+            { src: record.image![0].url, _id: record._id },
+          ]);
+        }
       });
-    console.log('carouselImages', carouselImages);
     setRenderReady(true);
     // eslint-disable-line
   }, [loading]);
 
   const handleShowDialog = () => {
-    console.log('handleShowDialog');
     setShowInfoDialog(!showInfoDialog);
   };
 
