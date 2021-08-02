@@ -26,19 +26,10 @@ import { DialogTitle } from './RecordItemDialog';
 //Context
 import RecordContext from '../../../context/record/RecordContext';
 import { RecordInterface } from './RecordItem';
+import AddRecordDetailsDialogForm from './AddRecordDetailsDialogForm';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      marginTop: '1em',
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
     paper: {
       display: 'flex',
       flexDirection: 'row',
@@ -51,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface inputState {
+export interface inputState {
   title?: string;
   address?: string;
   date?: Date | string | null;
@@ -59,7 +50,7 @@ interface inputState {
   [index: string]: any;
 }
 
-interface inputState2 {
+export interface inputState2 {
   soldTo?: string;
   soldBy?: string;
   soldDate?: Date | string | null;
@@ -261,48 +252,47 @@ const AddRecordDetailsDialog = ({
         ) : (
           <p>No {detail} saved</p>
         )}
-        <form className={classes.container}>
-          <FormControl className={classes.formControl}>
-            <TextField
-              label={`${detail} ${inputValues[0]}`}
-              variant='outlined'
-              onChange={handleChange}
-              name={`${inputValues[0]}`}
-              value={state?.[inputValues[0]]}
-              margin='normal'
-            />
-            <TextField
-              label={`${detail} ${inputValues[1]}`}
-              variant='outlined'
-              onChange={handleChange}
-              name={`${inputValues[1]}`}
-              value={state?.[inputValues[1]]}
-              margin='normal'
-            />
-            {!noDate && (
-              <KeyboardDatePicker
-                margin='normal'
-                id='date-picker-dialog'
-                label={`${detail} date`}
-                format='dd/MM/yyyy'
-                value={state?.[inputValues[2]]}
-                onChange={handleDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-                inputVariant='outlined'
+        {detail !== 'Sale' ? (
+          <AddRecordDetailsDialogForm
+            detail={detail}
+            inputValues={inputValues}
+            handleChange={handleChange}
+            state={state}
+            noDate={noDate}
+            handleDateChange={handleDateChange}
+          />
+        ) : (
+          <>
+            {editMode && (
+              <AddRecordDetailsDialogForm
+                detail={detail}
+                inputValues={inputValues}
+                handleChange={handleChange}
+                state={state}
+                noDate={noDate}
+                handleDateChange={handleDateChange}
               />
             )}
-          </FormControl>
-        </form>
+          </>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color='primary'>
           Close
         </Button>
-        <Button onClick={handleAddItem} color='primary'>
-          {editMode ? 'Update' : 'Add'}
-        </Button>
+        {detail !== 'Sale' ? (
+          <Button onClick={handleAddItem} color='primary'>
+            {editMode ? 'Update' : 'Add'}
+          </Button>
+        ) : (
+          <>
+            {editMode && (
+              <Button onClick={handleAddItem} color='primary'>
+                Update
+              </Button>
+            )}
+          </>
+        )}
       </DialogActions>
     </Dialog>
   );
