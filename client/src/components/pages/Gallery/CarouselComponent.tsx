@@ -13,7 +13,6 @@ const CarouselComponent = ({
   images,
   handleCurrentIndex,
 }: CarouselComponentInterface) => {
-  console.log('images inside', images);
   return (
     <>
       {handleCurrentIndex ? (
