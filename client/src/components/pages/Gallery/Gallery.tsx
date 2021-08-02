@@ -39,7 +39,7 @@ const Gallery = () => {
   useEffect(() => {
     records &&
       records.forEach((record) => {
-        if (record.image[0].url !== '') {
+        if (record.image![0].url !== '') {
           setCarouselImages((prevState: carouselImagesStateInterface[]) => [
             ...prevState,
             { src: record.image![0].url, _id: record._id },

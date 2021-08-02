@@ -28,13 +28,20 @@ const useStyles = makeStyles({
   table: {},
 });
 
+export interface tableRowInterface {
+  item: string | undefined;
+  name: string;
+  value: string | number | Date;
+}
+
 const User = () => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
   const { getRecords, records, loading } = recordContext;
   const classes = useStyles();
   const [renderReady, setRenderReady] = useState<boolean>(false);
-  const [tableRows, setTableRows] = useState([]);
+
+  const [tableRows, setTableRows] = useState<tableRowInterface[] | []>([]);
 
   useEffect(() => {
     authContext.loadUser();
@@ -76,7 +83,7 @@ const User = () => {
     let earliestDate = dates[0];
     for (let i = 1; i < dates.length; i++) {
       let currentDate = dates[i];
-      if (currentDate.date < earliestDate.date) {
+      if (currentDate.date! < earliestDate.date!) {
         earliestDate = currentDate;
       }
     }
@@ -84,14 +91,22 @@ const User = () => {
   };
 
   const latestDate = () => {
-    const dates = [];
+    interface datesInterface {
+      title: string;
+      edition: number;
+      soldDate: Date;
+      dateString?: string;
+    }
+
+    const dates: datesInterface[] = [];
     records!.forEach((elem) => {
-      elem.sales.forEach((item) => {
+      elem.sales!.forEach((item) => {
         item.soldDate !== null &&
+          item.soldDate !== undefined &&
           dates.push({
-            title: elem.title,
+            title: elem.title!,
             edition: item.edition,
-            soldDate: item.soldDate,
+            soldDate: item.soldDate!,
           });
       });
     });
@@ -103,10 +118,11 @@ const User = () => {
         latest = dates[i];
       }
     }
-    latest.soldDate = `${latest.soldDate.substring(
-      8,
-      10
-    )}/${latest.soldDate.substring(5, 7)}/${latest.soldDate.substring(0, 4)}`;
+    latest.dateString = `${latest.soldDate
+      .toString()
+      .substring(8, 10)}/${latest.soldDate
+      .toString()
+      .substring(5, 7)}/${latest.soldDate.toString().substring(0, 4)}`;
 
     return latest;
   };
@@ -115,8 +131,10 @@ const User = () => {
     const prices = records!.map((elem) => {
       return elem.price;
     });
-    var average =
-      prices.reduce((total, prices) => total + prices) / prices.length;
+    console.log(prices);
+    let average =
+      //@ts-ignore
+      prices.reduce((total, prices) => total! + prices!) / prices.length;
     return average.toFixed(2);
   };
 
@@ -128,11 +146,11 @@ const User = () => {
     records?.forEach((elem) => {
       if (lowest) {
         if (elem[value] < result.value) {
-          result = { value: elem[value], title: elem.title };
+          result = { value: elem[value], title: elem.title! };
         }
       } else {
         if (elem[value] > result.value) {
-          result = { value: elem[value], title: elem.title };
+          result = { value: elem[value], title: elem.title! };
         }
       }
     });
@@ -169,15 +187,16 @@ const User = () => {
     return total.length;
   };
 
-  interface KeyInterface {
-    [val: string]: any;
-  }
-
   const mostPopularCount = (value: string) => {
-    let total: any[] = [];
+    interface totalInterface {
+      value: string;
+      count: number;
+    }
+    let total: totalInterface[] = [];
     records?.forEach((elem) => {
       if (elem[value] !== '') {
-        const matched = (element) => element.value === elem[value];
+        const matched = (element: { value: string }) =>
+          element.value === elem[value];
         const matchedIndex = total.findIndex(matched);
         if (matchedIndex === -1) {
           total.push({ value: elem[value], count: 1 });
@@ -193,7 +212,7 @@ const User = () => {
 
     let max = Math.max(...total.map((i) => i.count));
 
-    let result = [];
+    let result: totalInterface[] = [];
 
     total.forEach((item) => {
       if (item.count === max) {
@@ -237,8 +256,8 @@ const User = () => {
       ...prevState,
       createData(
         'Earliest Item',
-        earliestDate().date.toString().slice(0, 10),
-        earliestDate().title
+        earliestDate()!.date!.toString().slice(0, 10),
+        earliestDate()!.title
       ),
     ]);
     // setTableRows((prevState) => [
@@ -279,7 +298,7 @@ const User = () => {
       createData(
         'Latest Sold',
         `${latestDate().title}, edition: ${latestDate().edition}`,
-        latestDate().soldDate
+        latestDate().dateString
       ),
     ]);
     setTableRows((prevState) => [

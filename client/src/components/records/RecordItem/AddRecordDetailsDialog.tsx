@@ -6,10 +6,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  FormControl,
   IconButton,
   makeStyles,
-  TextField,
   Theme,
   Paper,
   Card,
@@ -17,7 +15,6 @@ import {
   CardActions,
   Typography,
 } from '@material-ui/core';
-import { KeyboardDatePicker } from '@material-ui/pickers';
 //Icons
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
