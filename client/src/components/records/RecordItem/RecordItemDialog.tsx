@@ -31,7 +31,8 @@ import AddRecordDetailsDialog from './AddRecordDetailsDialog';
 //Context
 import RecordContext from '../../../context/record/RecordContext';
 import {
-  DisplayedInterface,
+  ExhibitionInterface,
+  SubmissionInterface,
   MediaLinksInterface,
   RecordInterface,
 } from './RecordItem';
@@ -365,7 +366,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                               <Typography className={classes.listBold}>
                                 Title:
                               </Typography>
-                              {element.title}
+                              {element.mediaTitle}
                             </div>
                             <div
                               className={clsx(
@@ -378,11 +379,11 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                               </Typography>
                               <Link
                                 className={classes.mediaLink}
-                                href={element.address}
+                                href={element.mediaAddress}
                                 target='_blank'
                                 rel='noreferrer'
                               >
-                                {element.address}
+                                {element.mediaAddress}
                               </Link>
                             </div>
                           </Paper>
@@ -398,13 +399,13 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                 <Typography className={classes.listBold}>
                   Exhibitions:
                 </Typography>
-                {exhibitions?.map((element) => {
+                {exhibitions?.map((element: ExhibitionInterface) => {
                   return (
                     <ListItem key={element._id}>
                       <ListItemText
                         primary={
                           <Paper elevation={3} className={classes.paper}>
-                            {element.title && (
+                            {element.exhibitionTitle && (
                               <div
                                 className={clsx(
                                   classes.flexInline,
@@ -414,10 +415,10 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                                 <Typography className={classes.listBold}>
                                   Title:
                                 </Typography>
-                                {element.title}
+                                {element.exhibitionTitle}
                               </div>
                             )}
-                            {element.address && (
+                            {element.exhibitionAddress && (
                               <div
                                 className={clsx(
                                   classes.flexInline,
@@ -427,10 +428,10 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                                 <Typography className={classes.listBold}>
                                   Address:
                                 </Typography>
-                                {element.address}
+                                {element.exhibitionAddress}
                               </div>
                             )}
-                            {element.date && (
+                            {element.exhibitionDate && (
                               <div
                                 className={clsx(
                                   classes.flexInline,
@@ -440,7 +441,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                                 <Typography className={classes.listBold}>
                                   Date:
                                 </Typography>
-                                {getFormattedDate(element.date)}
+                                {getFormattedDate(element.exhibitionDate)}
                               </div>
                             )}
                           </Paper>
@@ -456,13 +457,13 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                 <Typography className={classes.listBold}>
                   Submissions:
                 </Typography>
-                {submissions?.map((element: DisplayedInterface) => {
+                {submissions?.map((element: SubmissionInterface) => {
                   return (
                     <ListItem key={element._id}>
                       <ListItemText
                         primary={
                           <Paper elevation={3} className={classes.paper}>
-                            {element.title && (
+                            {element.submissionTitle && (
                               <div
                                 className={clsx(
                                   classes.flexInline,
@@ -472,10 +473,10 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                                 <Typography className={classes.listBold}>
                                   Title:
                                 </Typography>
-                                {element.title}
+                                {element.submissionTitle}
                               </div>
                             )}
-                            {element.address && (
+                            {element.submissionAddress && (
                               <div
                                 className={clsx(
                                   classes.flexInline,
@@ -485,10 +486,10 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                                 <Typography className={classes.listBold}>
                                   Address:
                                 </Typography>
-                                {element.address}
+                                {element.submissionAddress}
                               </div>
                             )}
-                            {element.date && (
+                            {element.submissionDate && (
                               <div
                                 className={clsx(
                                   classes.flexInline,
@@ -498,7 +499,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                                 <Typography className={classes.listBold}>
                                   Date:
                                 </Typography>
-                                {getFormattedDate(element.date)}
+                                {getFormattedDate(element.submissionDate)}
                               </div>
                             )}
                           </Paper>
@@ -673,6 +674,16 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
             record={record}
             open={showExhibitionDialog}
             setOpen={setShowExhibitionDialog}
+            emptyInput={{
+              exhibitionTitle: '',
+              exhibitionAddress: '',
+              exhibitionDate: null,
+            }}
+            inputValues={[
+              'exhibitionTitle',
+              'exhibitionAddress',
+              'exhibitionDate',
+            ]}
           />
         </Portal>
       )}
@@ -683,6 +694,16 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
             record={record}
             open={showSubmissionsDialog}
             setOpen={setShowSubmissionsDialog}
+            emptyInput={{
+              submissionTitle: '',
+              submissionAddress: '',
+              submissionDate: null,
+            }}
+            inputValues={[
+              'submissionTitle',
+              'submissionAddress',
+              'submissionDate',
+            ]}
           />
         </Portal>
       )}
@@ -694,6 +715,8 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
             open={showMediaQueryDialog}
             setOpen={setShowMediaQueryDialog}
             noDate
+            emptyInput={{ mediaTitle: '', mediaAddress: '' }}
+            inputValues={['mediaTitle', 'mediaAddress', '']}
           />
         </Portal>
       )}

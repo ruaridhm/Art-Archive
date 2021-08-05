@@ -12,9 +12,8 @@ import clsx from 'clsx';
 //Material-UI Icons
 import RecordFilter from '../../../records/RecordFilter/RecordFilter';
 import AddRecordButton from '../../../addRecordButton/AddRecordButton';
-import FilterToolTip from '../../../records/RecordFilter/FilterToolTip';
 
-const sortOptions = [
+export const sortOptions = [
   {
     title: 'Title',
     value: 'title',
@@ -64,20 +63,28 @@ const sortOptions = [
     value: 'sales.soldDate',
   },
   {
-    title: 'First Exhibition Title',
-    value: 'exhibitions[0].title',
+    title: ' Exhibition Title',
+    value: 'exhibitionsTitle',
   },
   {
-    title: 'First Exhibition Date',
-    value: 'exhibitions[0].date',
+    title: ' Exhibition Address',
+    value: 'exhibitionsAddress',
+  },
+  {
+    title: ' Exhibition Date',
+    value: 'exhibitionDate',
   },
   {
     title: 'Submissions Title',
-    value: 'submissions[0].title',
+    value: 'submissionTitle',
+  },
+  {
+    title: 'Submissions Address',
+    value: 'submissionAddress',
   },
   {
     title: 'Submissions Date',
-    value: 'submissions[0].date',
+    value: 'submissionDate',
   },
 ];
 
@@ -239,7 +246,6 @@ const Controls = ({
       </div>
       <div className={clsx(classes.gridContainers, classes.filterControls)}>
         <RecordFilter />
-        <FilterToolTip />
       </div>
       <div className={clsx(classes.gridContainers, classes.addButton)}>
         <AddRecordButton setDisplayAddRecord={setDisplayAddRecord} />

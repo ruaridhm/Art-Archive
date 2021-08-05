@@ -5,7 +5,7 @@ import RecordContext from '../../../context/record/RecordContext';
 import RecordItem, { RecordInterface } from '../RecordItem/RecordItem';
 import Spinner from '../../layout/Spinner/Spinner';
 //Material-UI
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Container, Typography } from '@material-ui/core';
 import AddRecordButton from '../../../components/addRecordButton/AddRecordButton';
 
@@ -13,7 +13,7 @@ interface RecordsProps {
   setDisplayAddRecord: Dispatch<SetStateAction<boolean>>;
   sortedRecords: any;
 }
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     recordContainer: {
       display: 'flex',

@@ -131,7 +131,7 @@ const User = () => {
     const prices = records!.map((elem) => {
       return elem.price;
     });
-    console.log(prices);
+
     let average =
       //@ts-ignore
       prices.reduce((total, prices) => total! + prices!) / prices.length;
@@ -223,14 +223,11 @@ const User = () => {
     let resultString = '';
     result.forEach((item) => {
       if (resultString.length === 0) {
-        console.log('if');
         resultString = resultString.concat(item.value);
       } else {
-        console.log('else');
         resultString = resultString.concat(`, ${item.value}`);
       }
     });
-    console.log({ result: resultString, count: max });
     return { result: resultString, count: max };
   };
 
@@ -331,6 +328,7 @@ const User = () => {
 
   useEffect(() => {
     populateRows();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!loading && renderReady) {

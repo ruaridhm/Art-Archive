@@ -7,7 +7,11 @@ import {
   Theme,
 } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import { inputState, inputState2 } from './AddRecordDetailsDialog';
+import {
+  exhibitionsState,
+  submissionsState,
+  soldState,
+} from './AddRecordDetailsDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,13 +32,9 @@ interface AddRecordDetailsDialogFormInterface {
   detail: string;
   inputValues: [string, string, string];
   handleChange: (e: {
-    target: {
-      type: any;
-      name: string;
-      value: string;
-    };
+    target: exhibitionsState | submissionsState | soldState;
   }) => void;
-  state: inputState | inputState2 | null;
+  state: exhibitionsState | submissionsState | soldState | null;
   noDate?: boolean;
   handleDateChange: (date: Date | null | string) => void;
 }
@@ -47,12 +47,29 @@ const AddRecordDetailsDialogForm = ({
   noDate,
   handleDateChange,
 }: AddRecordDetailsDialogFormInterface) => {
+  let inputLabels: string[] = [];
+
+  switch (detail) {
+    case 'Exhibition':
+    case 'Submission':
+      inputLabels = ['Title', 'Address', 'Date'];
+      break;
+    case 'MediaLink':
+      inputLabels = ['Title', 'Link'];
+      break;
+    case 'Sale':
+      inputLabels = ['Sold To', 'Sold By', 'Date'];
+      break;
+    default:
+      break;
+  }
   const classes = useStyles();
+  console.log('detail', detail);
   return (
     <form className={classes.container}>
       <FormControl className={classes.formControl}>
         <TextField
-          label={`${detail} ${inputValues[0]}`}
+          label={inputLabels[0]}
           variant='outlined'
           onChange={handleChange}
           name={`${inputValues[0]}`}
@@ -60,7 +77,7 @@ const AddRecordDetailsDialogForm = ({
           margin='normal'
         />
         <TextField
-          label={`${detail} ${inputValues[1]}`}
+          label={inputLabels[1]}
           variant='outlined'
           onChange={handleChange}
           name={`${inputValues[1]}`}
@@ -71,7 +88,7 @@ const AddRecordDetailsDialogForm = ({
           <KeyboardDatePicker
             margin='normal'
             id='date-picker-dialog'
-            label={`${detail} date`}
+            label={inputLabels[2]}
             format='dd/MM/yyyy'
             value={state?.[inputValues[2]]}
             onChange={handleDateChange}

@@ -43,10 +43,10 @@ const ItemSchema = mongoose.Schema({
   },
   mediaLinks: [
     {
-      title: {
+      mediaTitle: {
         type: String,
       },
-      address: {
+      mediaAddress: {
         type: String,
       },
     },
@@ -58,13 +58,13 @@ const ItemSchema = mongoose.Schema({
 
   exhibitions: [
     {
-      date: {
+      exhibitionDate: {
         type: Date,
       },
-      title: {
+      exhibitionTitle: {
         type: String,
       },
-      address: {
+      exhibitionAddress: {
         type: String,
       },
     },
@@ -73,13 +73,13 @@ const ItemSchema = mongoose.Schema({
   //Submissions History
   submissions: [
     {
-      date: {
+      submissionDate: {
         type: Date,
       },
-      title: {
+      submissionTitle: {
         type: String,
       },
-      address: {
+      submissionAddress: {
         type: String,
       },
     },
