@@ -288,17 +288,21 @@ const AddRecordDetailsDialog = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color='primary'>
+        <Button onClick={handleClose} color='primary' variant='contained'>
           Close
         </Button>
         {detail !== 'Sale' ? (
-          <Button onClick={handleAddItem} color='primary'>
+          <Button onClick={handleAddItem} color='primary' variant='contained'>
             {editMode ? 'Update' : 'Add'}
           </Button>
         ) : (
           <>
             {editMode && (
-              <Button onClick={handleAddItem} color='primary'>
+              <Button
+                onClick={handleAddItem}
+                color='primary'
+                variant='contained'
+              >
                 Update
               </Button>
             )}
