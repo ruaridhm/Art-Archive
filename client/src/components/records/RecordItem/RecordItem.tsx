@@ -57,15 +57,21 @@ const useStyles = makeStyles({
 });
 
 export interface MediaLinksInterface {
-  title?: string;
-  address?: string;
+  mediaTitle?: string;
+  mediaAddress?: string;
   _id: string;
 }
 
-export interface DisplayedInterface {
-  title?: string;
-  date: Date | null;
-  address?: string;
+export interface ExhibitionInterface {
+  exhibitionTitle?: string;
+  exhibitionDate: Date | null;
+  exhibitionAddress?: string;
+  _id: string;
+}
+export interface SubmissionInterface {
+  submissionTitle?: string;
+  submissionDate: Date | null;
+  submissionAddress?: string;
   _id: string;
 }
 export interface SalesInterface {
@@ -89,10 +95,10 @@ export interface RecordInterface {
   price?: number;
   currentLocation?: string;
   editions?: number;
-  mediaLinks?: any | [];
+  mediaLinks?: MediaLinksInterface[];
   notes?: string;
-  exhibitions: DisplayedInterface[];
-  submissions?: DisplayedInterface[];
+  exhibitions: ExhibitionInterface[];
+  submissions?: SubmissionInterface[];
   sales?: SalesInterface[];
   lastEdited?: Date | null;
   [item: string]: any;

@@ -16,7 +16,8 @@
     "jsx": "react-jsx",
     "rootDir": "src",
     "outDir": "build",
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "downlevelIteration": true
   },
   "include": ["src"]
 }

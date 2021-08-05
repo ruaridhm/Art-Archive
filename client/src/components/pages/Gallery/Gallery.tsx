@@ -24,7 +24,7 @@ interface carouselImagesStateInterface {
 const Gallery = () => {
   const authContext = useContext(AuthContext);
   const recordContext = useContext(RecordContext);
-  const { getRecords, records, loading } = recordContext;
+  const { getRecords, records } = recordContext;
   const [carouselImages, setCarouselImages] = useState<any[]>([]);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const [foundRecord, setFoundRecord] = useState<RecordInterface>();
@@ -48,7 +48,7 @@ const Gallery = () => {
       });
     setRenderReady(true);
     // eslint-disable-line
-  }, [loading]);
+  }, [records]);
 
   const handleShowDialog = () => {
     setShowInfoDialog(!showInfoDialog);

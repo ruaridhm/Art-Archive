@@ -12,6 +12,7 @@ import {
   CLEAR_CURRENT,
   UPDATE_RECORD,
   FILTER_RECORDS,
+  FILTER_RECORDS_NEW,
   CLEAR_RECORDS,
   CLEAR_FILTER,
   RECORD_ERROR,
@@ -115,8 +116,18 @@ const RecordState: React.FC = ({ children }) => {
     dispatch({ type: CLEAR_CURRENT });
   };
   //Filter Records
-  const filterRecords = (text: string) => {
-    dispatch({ type: FILTER_RECORDS, payload: text });
+  const filterRecords = (text: string, searchBy: string) => {
+    dispatch({
+      type: FILTER_RECORDS,
+      payload: { text: text, searchBy: searchBy },
+    });
+  };
+  //Filter Records New
+  const filterRecordsNew = (text: string, searchBy: string) => {
+    dispatch({
+      type: FILTER_RECORDS_NEW,
+      payload: { text: text, searchBy: searchBy },
+    });
   };
   //Clear Filter
   const clearFilter = () => {
@@ -139,6 +150,7 @@ const RecordState: React.FC = ({ children }) => {
         clearCurrent,
         updateRecord,
         filterRecords,
+        filterRecordsNew,
         clearFilter,
         getRecords,
         clearRecords,

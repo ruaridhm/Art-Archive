@@ -8,7 +8,6 @@ import {
   DialogContent,
   IconButton,
   makeStyles,
-  Theme,
   Paper,
   Card,
   CardContent,
@@ -25,7 +24,7 @@ import RecordContext from '../../../context/record/RecordContext';
 import { RecordInterface } from './RecordItem';
 import AddRecordDetailsDialogForm from './AddRecordDetailsDialogForm';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     paper: {
       display: 'flex',
@@ -39,15 +38,23 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export interface inputState {
-  title?: string;
-  address?: string;
-  date?: Date | string | null;
+export interface exhibitionsState {
+  exhibitionTitle?: string;
+  exhibitionAddress?: string;
+  exhibitionDate?: Date | string | null;
   _id?: string | undefined;
   [index: string]: any;
 }
 
-export interface inputState2 {
+export interface submissionsState {
+  submissionTitle?: string;
+  submissionAddress?: string;
+  submissionDate?: Date | string | null;
+  _id?: string | undefined;
+  [index: string]: any;
+}
+
+export interface soldState {
   soldTo?: string;
   soldBy?: string;
   soldDate?: Date | string | null;
@@ -61,8 +68,8 @@ interface AddRecordDetailsDialogInterface {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   noDate?: boolean;
-  emptyInput?: {};
-  inputValues?: [string, string, string];
+  emptyInput: {};
+  inputValues: [string, string, string];
 }
 
 const AddRecordDetailsDialog = ({
@@ -71,18 +78,14 @@ const AddRecordDetailsDialog = ({
   open,
   setOpen,
   noDate,
-  emptyInput = {
-    title: '',
-    address: '',
-    date: null,
-  },
-  inputValues = ['title', 'address', 'date'],
+  emptyInput,
+  inputValues,
 }: AddRecordDetailsDialogInterface) => {
   const recordContext = useContext(RecordContext);
   const { updateRecord } = recordContext;
-  const [state, setState] = useState<inputState | inputState2 | null>(
-    emptyInput
-  );
+  const [state, setState] = useState<
+    exhibitionsState | submissionsState | soldState | null
+  >(emptyInput);
   const [editMode, setEditMode] = useState(false);
   //Creating a string to use to reference values using bracket notation below and also use detail prop for strings
   let reference = '';
@@ -105,21 +108,19 @@ const AddRecordDetailsDialog = ({
   const classes = useStyles();
 
   const handleChange = (e: {
-    target: { type: any; name: string; value: string };
+    target: exhibitionsState | submissionsState | soldState;
   }) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
   const handleDateChange = (date: Date | null | string) => {
-    if (inputValues[2] === 'date') {
-      console.log('if');
+    if (inputValues[2] === 'exhibitionDate' || 'submissionDate') {
       if (date === null) {
-        setState({ ...state, date: null });
+        setState({ ...state, [inputValues[2]]: null });
       } else {
-        setState({ ...state, date: date.toString() });
+        setState({ ...state, [inputValues[2]]: date.toString() });
       }
     } else if (inputValues[2] === 'soldDate') {
-      console.log('else');
       if (date === null) {
         setState({ ...state, soldDate: null });
       } else {
@@ -136,7 +137,6 @@ const AddRecordDetailsDialog = ({
     });
     modifiedRecord[reference] = modifiedArr;
     updateRecord(modifiedRecord);
-    console.log('delete item called');
   };
 
   const handleEditItem = (id: string) => {
@@ -146,9 +146,15 @@ const AddRecordDetailsDialog = ({
   };
 
   const handleAddItem = () => {
+    console.log('inputValues[0]', inputValues[0]);
+    console.log('inputValues[1]', inputValues[1]);
+    console.log('reference', reference);
+    //State is incomplete return an alert
     if (state?.[inputValues[0]] === '' && state?.[inputValues[1]] === '') {
+      console.log('return called');
       //Todo add error alerting user here
       return;
+      //if element already exists update existing record
     } else if (
       record[reference].find((x: { _id: string }) => x._id === state?._id)
     ) {
@@ -156,6 +162,13 @@ const AddRecordDetailsDialog = ({
       let itemToEditIndex = modifiedRecord[reference].findIndex(
         (x: { _id: string }) => x._id === state?._id
       );
+      console.log(
+        'found',
+        record[reference].find((x: { _id: string }) => x._id === state?._id)
+      );
+      console.log('itemToEditIndex', itemToEditIndex);
+      console.log('reference', reference);
+
       modifiedRecord[reference][itemToEditIndex][inputValues[0]] =
         state?.[inputValues[0]];
       modifiedRecord[reference][itemToEditIndex][inputValues[1]] =
@@ -163,12 +176,24 @@ const AddRecordDetailsDialog = ({
       modifiedRecord[reference][itemToEditIndex][inputValues[2]] =
         state?.[inputValues[2]];
 
+      console.log('modifiedRecord', modifiedRecord);
       updateRecord(modifiedRecord);
       setState(emptyInput);
       setEditMode(false);
+      //element does not exist create new and add to record
     } else {
+      console.log('else');
       let modifiedRecord = { ...record };
+      let pre = modifiedRecord;
+      console.log('modifiedRecord pre', modifiedRecord);
       modifiedRecord[reference].push(state);
+      let post = modifiedRecord;
+      console.log('modifiedRecord post', modifiedRecord);
+      if (pre === post) {
+        console.log('match');
+      } else {
+        console.log('no match');
+      }
       updateRecord(modifiedRecord);
       setState(emptyInput);
     }
@@ -185,33 +210,39 @@ const AddRecordDetailsDialog = ({
       </DialogTitle>
       <DialogContent>
         {record[reference].length >= 1 &&
-        record[reference][0].title !== '' &&
-        record[reference][0].address !== '' ? (
+        record[reference][0][inputValues[0]] !== '' &&
+        record[reference][0][inputValues[1]] !== '' ? (
           <Paper>
             {record[reference].map(
-              (element: {
-                _id: string;
-                title:
-                  | boolean
-                  | React.ReactChild
-                  | React.ReactFragment
-                  | React.ReactPortal;
-                address:
-                  | boolean
-                  | React.ReactChild
-                  | React.ReactFragment
-                  | React.ReactPortal;
-                date: string | any[];
-                [index: string]: any;
-              }) => (
+              (
+                element: {
+                  _id: string;
+                  title:
+                    | boolean
+                    | React.ReactChild
+                    | React.ReactFragment
+                    | React.ReactPortal;
+                  address:
+                    | boolean
+                    | React.ReactChild
+                    | React.ReactFragment
+                    | React.ReactPortal;
+                  date: string | any[];
+                  [index: string]: any;
+                },
+                index: number
+              ) => (
                 <Card
                   variant='outlined'
                   className={classes.paper}
                   key={element._id}
                 >
                   <CardContent>
+                    {detail === 'Sale' && (
+                      <Typography variant='h6'>Edition {index + 1}</Typography>
+                    )}
                     <Typography>{element[inputValues[0]]}</Typography>
-                    <Typography>{element[inputValues[0]]}</Typography>
+                    <Typography>{element[inputValues[1]]}</Typography>
                     {element[inputValues[2]] && (
                       <Typography>
                         {element[inputValues[2]].slice(8, 10)} /{' '}
@@ -231,16 +262,18 @@ const AddRecordDetailsDialog = ({
                     >
                       <EditIcon />
                     </IconButton>
-                    <IconButton
-                      aria-label='delete'
-                      size='small'
-                      color='secondary'
-                      onClick={() => {
-                        handleDeleteItem(element._id);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    {reference !== 'sales' && (
+                      <IconButton
+                        aria-label='delete'
+                        size='small'
+                        color='secondary'
+                        onClick={() => {
+                          handleDeleteItem(element._id);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    )}
                   </CardActions>
                 </Card>
               )
