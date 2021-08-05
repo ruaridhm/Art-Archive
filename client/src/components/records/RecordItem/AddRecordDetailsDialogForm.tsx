@@ -64,7 +64,6 @@ const AddRecordDetailsDialogForm = ({
       break;
   }
   const classes = useStyles();
-  console.log('detail', detail);
   return (
     <form className={classes.container}>
       <FormControl className={classes.formControl}>

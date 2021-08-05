@@ -27,10 +27,16 @@ import AddRecordDetailsDialogForm from './AddRecordDetailsDialogForm';
 const useStyles = makeStyles(() =>
   createStyles({
     paper: {
+      minWidth: '20rem',
+      padding: '.25rem',
+      paddingTop: '1rem',
+    },
+    card: {
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'nowrap',
       justifyContent: 'space-between',
+      marginBottom: '1em',
     },
     cardActions: {
       justifySelf: 'flex-end',
@@ -146,12 +152,8 @@ const AddRecordDetailsDialog = ({
   };
 
   const handleAddItem = () => {
-    console.log('inputValues[0]', inputValues[0]);
-    console.log('inputValues[1]', inputValues[1]);
-    console.log('reference', reference);
     //State is incomplete return an alert
     if (state?.[inputValues[0]] === '' && state?.[inputValues[1]] === '') {
-      console.log('return called');
       //Todo add error alerting user here
       return;
       //if element already exists update existing record
@@ -162,12 +164,6 @@ const AddRecordDetailsDialog = ({
       let itemToEditIndex = modifiedRecord[reference].findIndex(
         (x: { _id: string }) => x._id === state?._id
       );
-      console.log(
-        'found',
-        record[reference].find((x: { _id: string }) => x._id === state?._id)
-      );
-      console.log('itemToEditIndex', itemToEditIndex);
-      console.log('reference', reference);
 
       modifiedRecord[reference][itemToEditIndex][inputValues[0]] =
         state?.[inputValues[0]];
@@ -176,24 +172,13 @@ const AddRecordDetailsDialog = ({
       modifiedRecord[reference][itemToEditIndex][inputValues[2]] =
         state?.[inputValues[2]];
 
-      console.log('modifiedRecord', modifiedRecord);
       updateRecord(modifiedRecord);
       setState(emptyInput);
       setEditMode(false);
       //element does not exist create new and add to record
     } else {
-      console.log('else');
       let modifiedRecord = { ...record };
-      let pre = modifiedRecord;
-      console.log('modifiedRecord pre', modifiedRecord);
       modifiedRecord[reference].push(state);
-      let post = modifiedRecord;
-      console.log('modifiedRecord post', modifiedRecord);
-      if (pre === post) {
-        console.log('match');
-      } else {
-        console.log('no match');
-      }
       updateRecord(modifiedRecord);
       setState(emptyInput);
     }
@@ -212,7 +197,7 @@ const AddRecordDetailsDialog = ({
         {record[reference].length >= 1 &&
         record[reference][0][inputValues[0]] !== '' &&
         record[reference][0][inputValues[1]] !== '' ? (
-          <Paper>
+          <Paper className={classes.paper} elevation={0}>
             {record[reference].map(
               (
                 element: {
@@ -232,11 +217,7 @@ const AddRecordDetailsDialog = ({
                 },
                 index: number
               ) => (
-                <Card
-                  variant='outlined'
-                  className={classes.paper}
-                  key={element._id}
-                >
+                <Card variant='outlined' className={classes.card} key={index}>
                   <CardContent>
                     {detail === 'Sale' && (
                       <Typography variant='h6'>Edition {index + 1}</Typography>
