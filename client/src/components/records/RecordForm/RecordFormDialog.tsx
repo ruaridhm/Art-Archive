@@ -23,7 +23,7 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 //Material-UI Icons
 import CloseIcon from '@material-ui/icons/Close';
 //Components
-import ImageDialog from './ImageDialog';
+import CloudinaryUploadWidget from './CloudinaryUploadWidget';
 //Util functions
 import PopulateAutoComplete from '../../../utils/populateAutoComplete';
 //Types
@@ -374,7 +374,7 @@ const RecordFormDialog = ({
           </FormGroup>
         </DialogContent>
         <DialogActions>
-          <ImageDialog />
+          {/* <CloudinaryUploadWidget /> */}
           <Button type='submit' variant='contained' color='primary'>
             {current ? 'Update Item' : 'Add Item'}
           </Button>

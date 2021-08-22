@@ -11,7 +11,8 @@ type RecordContextType = {
   setMoveRecord: (record: RecordInterface) => void;
   clearCurrent: () => void;
   filterRecords: (text: string, searchBy: string) => void;
-  filterRecordsNew: (text: string, searchBy: string) => void;
+  filterRecordsAll: (text: string, searchBy: string) => void;
+  filterRecordsArray: (text: string, searchBy: string) => void;
   clearFilter: () => void;
 
   records: Array<RecordInterface> | null;
