@@ -23,13 +23,14 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 //Material-UI Icons
 import CloseIcon from '@material-ui/icons/Close';
 //Components
-import CloudinaryUploadWidget from './CloudinaryUploadWidget';
 //Util functions
+import { openUploadWidget } from '../../../utils/cloudinaryService';
 import PopulateAutoComplete from '../../../utils/populateAutoComplete';
 //Types
 import { RecordInterface, SalesInterface } from '../RecordItem/RecordItem';
 import AutoCompleteTextField from './AutoCompleteTextField';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import ImageList from './ImageList';
 
 interface RecordFormProps {
   displayAddRecord: boolean;
@@ -92,6 +93,7 @@ const RecordFormDialog = ({
   const { setAlert } = alertContext;
   const { addRecord, current, clearCurrent, updateRecord } = recordContext;
   const [item, setItem] = useState(emptyItemObject);
+  const [image, setImage] = useState([]);
   const autoCompleteOptions = PopulateAutoComplete();
 
   const classes = useStyles();
@@ -121,7 +123,41 @@ const RecordFormDialog = ({
     }
   }, [recordContext, current]);
 
+  useEffect(() => {
+    console.log('set images useEffect called');
+    console.log(image);
+    setItem({ ...item, image: [...image] });
+    // eslint-disable-next-line
+  }, [image]);
+
   //Functions
+  interface beginUploadInterface {
+    tag?: any;
+  }
+
+  const beginUpload = ({ tag }: beginUploadInterface) => {
+    const uploadOptions = {
+      cloudName: 'dwtfrbyt5',
+      tags: [tag],
+      uploadPreset: 'w3poao5b',
+    };
+
+    openUploadWidget(uploadOptions, (error, photos) => {
+      if (!error) {
+        console.log(photos);
+        if (photos.event === 'success') {
+          console.log('image', image);
+          // setImage([...image, { url: photos.info.url }]);
+          setImage((prevState) => [
+            ...prevState,
+            { url: photos.info.url, thumbnail: photos.info.thumbnail_url },
+          ]);
+        }
+      } else {
+        console.log(error);
+      }
+    });
+  };
 
   const onChange = (e: { target: { type: any; name: string; value: any } }) => {
     // if (e.target.type !== undefined && e.target.type === 'text') {
@@ -372,9 +408,30 @@ const RecordFormDialog = ({
               onChange={onChange}
             />
           </FormGroup>
+
+          {image.length > 1 && (
+            <ImageList images={image} />
+            // <>
+            //   <Typography>Images</Typography>
+            //   {image.map((img, count) => {
+            //     return (
+            //       <Paper>
+            //         <img src={img.thumbnail} alt={`image ${count}`} />
+            //       </Paper>
+            //     );
+            //   })}
+            // </>
+          )}
         </DialogContent>
         <DialogActions>
-          {/* <CloudinaryUploadWidget /> */}
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => beginUpload({})}
+          >
+            Add Images
+          </Button>
+
           <Button type='submit' variant='contained' color='primary'>
             {current ? 'Update Item' : 'Add Item'}
           </Button>
