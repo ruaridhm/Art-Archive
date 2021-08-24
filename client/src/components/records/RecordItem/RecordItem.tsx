@@ -141,12 +141,12 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
         <CardActionArea
           onClick={showRecordInfoDialogHandler}
           className={
-            image![0].url !== ''
+            image!.length >= 1
               ? classes.actionAreaWithImage
               : classes.actionAreaWithoutImage
           }
         >
-          {image![0].url !== '' && (
+          {image!.length >= 1 && (
             <CardMedia
               className={classes.media}
               component='img'

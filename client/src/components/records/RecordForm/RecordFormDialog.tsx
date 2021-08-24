@@ -24,7 +24,10 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import CloseIcon from '@material-ui/icons/Close';
 //Components
 //Util functions
-import { openUploadWidget } from '../../../utils/cloudinaryService';
+import {
+  // deleteImage,
+  openUploadWidget,
+} from '../../../utils/cloudinaryService';
 import PopulateAutoComplete from '../../../utils/populateAutoComplete';
 //Types
 import { RecordInterface, SalesInterface } from '../RecordItem/RecordItem';
@@ -69,7 +72,7 @@ const emptyItemObject: RecordInterface = {
   artist: 'Ed Miliano',
   reference: '',
   collectionName: '',
-  image: [{ url: '' }],
+  image: [],
   date: null,
   size: '',
   medium: '',
@@ -93,24 +96,22 @@ const RecordFormDialog = ({
   const { setAlert } = alertContext;
   const { addRecord, current, clearCurrent, updateRecord } = recordContext;
   const [item, setItem] = useState(emptyItemObject);
-  const [image, setImage] = useState([]);
+  const [images, setImages] = useState([]);
   const autoCompleteOptions = PopulateAutoComplete();
-
   const classes = useStyles();
-
   //Destructuring of Item object
+
   const {
     title,
     reference,
     collectionName,
-
+    image,
     date,
     size,
     medium,
     price,
     currentLocation,
     editions,
-
     notes,
   } = item;
 
@@ -121,14 +122,14 @@ const RecordFormDialog = ({
     } else {
       setItem(emptyItemObject);
     }
-  }, [recordContext, current]);
+  }, [recordContext, current, image]);
 
   useEffect(() => {
     console.log('set images useEffect called');
-    console.log(image);
-    setItem({ ...item, image: [...image] });
+    console.log(images);
+    setItem({ ...item, image: [...images] });
     // eslint-disable-next-line
-  }, [image]);
+  }, [images]);
 
   //Functions
   interface beginUploadInterface {
@@ -146,17 +147,32 @@ const RecordFormDialog = ({
       if (!error) {
         console.log(photos);
         if (photos.event === 'success') {
-          console.log('image', image);
+          console.log('images', images);
           // setImage([...image, { url: photos.info.url }]);
-          setImage((prevState) => [
+          setImages((prevState) => [
             ...prevState,
-            { url: photos.info.url, thumbnail: photos.info.thumbnail_url },
+            {
+              url: photos.info.url,
+              thumbnail: photos.info.thumbnail_url,
+              public_Id: photos.info.public_id,
+            },
           ]);
         }
       } else {
         console.log(error);
       }
     });
+  };
+
+  const deleteImageHandler = (img, count: number) => {
+    console.log('delete called');
+    console.log('images', images);
+    console.log(count);
+
+    const newImgArr = [...images];
+    newImgArr.splice(count, 1);
+    setImages(newImgArr);
+    // deleteImages(img.public_id);
   };
 
   const onChange = (e: { target: { type: any; name: string; value: any } }) => {
@@ -409,8 +425,11 @@ const RecordFormDialog = ({
             />
           </FormGroup>
 
-          {image.length > 1 && (
-            <ImageList images={image} />
+          {images.length >= 1 && (
+            <ImageList
+              images={images}
+              deleteImageHandler={deleteImageHandler}
+            />
             // <>
             //   <Typography>Images</Typography>
             //   {image.map((img, count) => {

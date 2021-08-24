@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth.ts');
+// const cloudinary = require('cloudinary').v2;
 const { check, validationResult, body } = require('express-validator');
 
 const User = require('../models/User.ts');
@@ -173,5 +174,18 @@ router.delete('/:id', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// @route       Delete api/cloudinaryImage:public_id
+// @desc        Delete cloudinaryImage
+// @access      Private
+// router.delete('/:id', auth, async (req, res) => {
+//   try {
+//     await cloudinary.uploader.destroy(req.public_id);
+//     console.log(res);
+//   } catch (err) {
+//     console.warn(res);
+//     console.error(err);
+//   }
+// });
 
 module.exports = router;

@@ -225,14 +225,14 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
         onClose={handleClose}
         aria-labelledby='dialog-title'
         open={open}
-        fullWidth={image![0].url === '' ? false : true}
+        fullWidth={image!.length >= 1 ? false : true}
         maxWidth='xl'
       >
         <DialogTitle id='dialog-title' onClose={handleClose}>
           {title}
         </DialogTitle>
         <DialogContent dividers>
-          <List style={{ width: image![0].url === '' ? '100%' : '50%' }}>
+          <List style={{ width: image!.length >= 1 ? '100%' : '50%' }}>
             {reference && (
               <ListItem>
                 <ListItemText
@@ -601,7 +601,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               </ListItem>
             )}
           </List>
-          {image![0].url !== '' && image!.length === 1 && (
+          {image!.length === 1 && (
             <div style={{ width: '50%' }}>
               <CardMedia
                 component='img'
@@ -611,7 +611,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               />
             </div>
           )}
-          {image![0].url !== '' && image!.length > 1 && (
+          {image!.length > 1 && (
             <div style={{ width: '50%' }}>
               <CarouselComponent
                 images={getRecordImages()}

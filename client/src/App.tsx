@@ -15,7 +15,7 @@ import setAuthToken from './utils/setAuthToken';
 import { CloudinaryContext } from 'cloudinary-react';
 //Material UI
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 //Date functionality
 import 'date-fns';
@@ -31,7 +31,7 @@ const App = () => {
 
   const theme = React.useMemo(
     () =>
-      createMuiTheme({
+      createTheme({
         typography: {
           fontFamily: 'roboto',
         },
