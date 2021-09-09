@@ -21,7 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
       // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
       transform: 'translateZ(0)',
     },
-    imageListItem: {},
+    imageListItem: {
+      minWidth: 117,
+    },
     button: {
       '&:hover': { opacity: 0.8 },
     },
@@ -52,16 +54,15 @@ const useStyles = makeStyles((theme: Theme) =>
  *   },
  * ];
  */
-export default function SingleLineImageList({ images, deleteImageHandler }) {
+export default function SingleLineImageList({ images, handleDeleteImage }) {
   const classes = useStyles();
-  console.log('images', images);
 
   return (
     <div className={classes.root}>
       <ImageList className={classes.imageList} cols={2.5}>
-        {images.map((item, count) => (
+        {images.map((item, imageIndex: number) => (
           <ImageListItem key={item.url} className={classes.imageListItem}>
-            <img src={item.thumbnail} alt={count} />
+            <img src={item.thumbnail} alt={imageIndex.toString()} />
             <ImageListItemBar
               classes={{
                 root: classes.titleBar,
@@ -71,7 +72,7 @@ export default function SingleLineImageList({ images, deleteImageHandler }) {
                   aria-label='delete'
                   className={classes.button}
                   onClick={() => {
-                    deleteImageHandler(item, count);
+                    handleDeleteImage(imageIndex);
                   }}
                 >
                   <DeleteIcon className={classes.title} />

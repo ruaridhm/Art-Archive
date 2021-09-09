@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
 // Connect Database
@@ -13,6 +14,7 @@ app.use(express.json({ extended: false }));
 app.use('/api/users', require('./routes/users.ts'));
 app.use('/api/auth', require('./routes/auth.ts'));
 app.use('/api/collection', require('./routes/items.ts'));
+app.use('/api/cloudinary', require('./routes/cloudinary.ts'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

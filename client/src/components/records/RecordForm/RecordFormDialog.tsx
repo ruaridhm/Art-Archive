@@ -34,6 +34,7 @@ import { RecordInterface, SalesInterface } from '../RecordItem/RecordItem';
 import AutoCompleteTextField from './AutoCompleteTextField';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import ImageList from './ImageList';
+import { truncate } from 'fs';
 
 interface RecordFormProps {
   displayAddRecord: boolean;
@@ -69,7 +70,7 @@ const useStyles = makeStyles(() => ({
 
 const emptyItemObject: RecordInterface = {
   title: '',
-  artist: 'Ed Miliano',
+  artist: 'Ed',
   reference: '',
   collectionName: '',
   image: [],
@@ -94,7 +95,13 @@ const RecordFormDialog = ({
   const alertContext = useContext(AlertContext);
   const recordContext = useContext(RecordContext);
   const { setAlert } = alertContext;
-  const { addRecord, current, clearCurrent, updateRecord } = recordContext;
+  const {
+    addRecord,
+    current,
+    clearCurrent,
+    updateRecord,
+    deleteCloudinaryImage,
+  } = recordContext;
   const [item, setItem] = useState(emptyItemObject);
   const [images, setImages] = useState([]);
   const autoCompleteOptions = PopulateAutoComplete();
@@ -117,19 +124,14 @@ const RecordFormDialog = ({
 
   //if a record is in current assign current to item else initialize item as an empty object
   useEffect(() => {
+    console.log('useeffect called [ current]');
     if (current !== null) {
       setItem(current);
+      setImages([...current.image]);
     } else {
       setItem(emptyItemObject);
     }
-  }, [recordContext, current, image]);
-
-  useEffect(() => {
-    console.log('set images useEffect called');
-    console.log(images);
-    setItem({ ...item, image: [...images] });
-    // eslint-disable-next-line
-  }, [images]);
+  }, [current]);
 
   //Functions
   interface beginUploadInterface {
@@ -138,17 +140,14 @@ const RecordFormDialog = ({
 
   const beginUpload = ({ tag }: beginUploadInterface) => {
     const uploadOptions = {
-      cloudName: 'dwtfrbyt5',
+      cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
       tags: [tag],
-      uploadPreset: 'w3poao5b',
+      uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET_UNSIGNED,
     };
 
     openUploadWidget(uploadOptions, (error, photos) => {
       if (!error) {
-        console.log(photos);
         if (photos.event === 'success') {
-          console.log('images', images);
-          // setImage([...image, { url: photos.info.url }]);
           setImages((prevState) => [
             ...prevState,
             {
@@ -159,20 +158,30 @@ const RecordFormDialog = ({
           ]);
         }
       } else {
-        console.log(error);
+        console.error(error);
       }
     });
   };
 
-  const deleteImageHandler = (img, count: number) => {
-    console.log('delete called');
-    console.log('images', images);
-    console.log(count);
-
-    const newImgArr = [...images];
-    newImgArr.splice(count, 1);
-    setImages(newImgArr);
-    // deleteImages(img.public_id);
+  const handleDeleteImage = async (imageIndex: number) => {
+    const deleteFromCloudinary = async () => {
+      try {
+        await deleteCloudinaryImage(image[imageIndex].public_Id);
+        return 'true';
+      } catch {
+        console.error('Unable to delete image from Cloudinary');
+      }
+    };
+    if (deleteFromCloudinary()) {
+      const newImgArr = [...images];
+      console.log('newImgArr before splice', newImgArr);
+      newImgArr.splice(imageIndex, 1);
+      console.log('newImgArr after splice', newImgArr);
+      setImages(newImgArr);
+      setItem((prevState) => {
+        return { ...prevState, image: newImgArr };
+      });
+    }
   };
 
   const onChange = (e: { target: { type: any; name: string; value: any } }) => {
@@ -266,10 +275,10 @@ const RecordFormDialog = ({
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
     const newItem: RecordInterface = {
       ...item,
       sales: newCalcSalesArrFcn(editions!),
+      image: [...images],
     };
     setItem({
       ...newItem,
@@ -426,20 +435,7 @@ const RecordFormDialog = ({
           </FormGroup>
 
           {images.length >= 1 && (
-            <ImageList
-              images={images}
-              deleteImageHandler={deleteImageHandler}
-            />
-            // <>
-            //   <Typography>Images</Typography>
-            //   {image.map((img, count) => {
-            //     return (
-            //       <Paper>
-            //         <img src={img.thumbnail} alt={`image ${count}`} />
-            //       </Paper>
-            //     );
-            //   })}
-            // </>
+            <ImageList images={images} handleDeleteImage={handleDeleteImage} />
           )}
         </DialogContent>
         <DialogActions>

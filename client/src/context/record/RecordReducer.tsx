@@ -1,9 +1,12 @@
 import { AxiosResponse } from 'axios';
 import { RecordInterface } from '../../components/records/RecordItem/RecordItem';
+import { ImgInterface } from '../../components/records/RecordItem/RecordItemDialog';
 import {
   GET_RECORDS,
   ADD_RECORD,
   DELETE_RECORD,
+  DELETE_CLOUDINARY_IMAGE,
+  BULK_DELETE_CLOUDINARY_IMAGE,
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_RECORD,
@@ -28,6 +31,14 @@ type Actions =
   | {
       type: 'DELETE_RECORD';
       payload: string;
+    }
+  | {
+      type: 'DELETE_CLOUDINARY_IMAGE';
+      payload: string;
+    }
+  | {
+      type: 'BULK_DELETE_CLOUDINARY_IMAGE';
+      payload: ImgInterface;
     }
   | {
       type: 'SET_CURRENT';
@@ -81,17 +92,13 @@ const RecordReducer = (state: any, action: Actions) => {
       _id: string,
       searchBy: string
     ) => {
-      console.log(searchBy);
       let searchAsRegEx = new RegExp(action.payload.text, 'gi');
 
       if (searchBy === 'all') {
         Object.keys(record).forEach((key) => {
           if (typeof record[key] === 'object') {
-            console.log('its an object');
             if (record[key] === null) {
-              console.log(key, 'is null');
             } else {
-              console.log('recurssion occured');
               searchItem(record[key], _id, searchBy);
             }
           }
@@ -99,12 +106,10 @@ const RecordReducer = (state: any, action: Actions) => {
             typeof record[key] === 'string' &&
             record[key].hasOwnProperty(searchBy)
           ) {
-            console.warn('key is string and object has key');
             if (record[key].match(searchAsRegEx)) {
               result.push(_id!);
             }
           } else if (typeof record[key] === 'string' && searchBy === 'all') {
-            console.error('else if hit');
             let searchAsRegEx = new RegExp(action.payload.text, 'gi');
             if (record[key].match(searchAsRegEx)) {
               result.push(_id!);
@@ -162,7 +167,6 @@ const RecordReducer = (state: any, action: Actions) => {
     records.forEach((record: RecordInterface) => {
       searchItem(record, record._id!, action.payload.searchBy);
     });
-    console.log('result', result);
     // @ts-ignore
     let uniqueResults = [...new Set(result)];
     let computedResult = uniqueResults.map((_id) => {
@@ -198,6 +202,18 @@ const RecordReducer = (state: any, action: Actions) => {
         records: state?.records?.filter(
           (record: RecordInterface) => record._id !== action.payload
         ),
+        loading: false,
+      };
+    case DELETE_CLOUDINARY_IMAGE:
+      return {
+        ...state,
+
+        loading: false,
+      };
+    case BULK_DELETE_CLOUDINARY_IMAGE:
+      return {
+        ...state,
+
         loading: false,
       };
     case CLEAR_RECORDS:

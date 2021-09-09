@@ -92,7 +92,7 @@ export interface RecordInterface {
   artist?: string;
   reference?: string;
   collectionName?: string;
-  image?: { url: string }[] | [];
+  image?: { url: string; thumbnail: string; public_Id: string }[] | [];
   date?: Date | null;
   size?: string;
   medium?: string;

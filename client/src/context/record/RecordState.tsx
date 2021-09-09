@@ -2,11 +2,14 @@ import React, { useReducer } from 'react';
 import RecordContext from './RecordContext';
 import RecordReducer from './RecordReducer';
 import { RecordInterface } from '../../components/records/RecordItem/RecordItem';
+import { ImgInterface } from '../../components/records/RecordItem/RecordItemDialog';
 import axios from 'axios';
 import {
   GET_RECORDS,
   ADD_RECORD,
   DELETE_RECORD,
+  DELETE_CLOUDINARY_IMAGE,
+  BULK_DELETE_CLOUDINARY_IMAGE,
   SET_CURRENT,
   SET_MOVE_RECORD,
   CLEAR_CURRENT,
@@ -76,6 +79,38 @@ const RecordState: React.FC = ({ children }) => {
       });
     }
   };
+  //Delete Image from Cloudinary
+  const deleteCloudinaryImage = async (public_Id: string) => {
+    try {
+      await axios.delete(`/api/cloudinary/${public_Id}`);
+      dispatch({
+        type: DELETE_CLOUDINARY_IMAGE,
+        payload: public_Id,
+      });
+    } catch (err) {
+      dispatch({
+        type: RECORD_ERROR,
+        payload: err.response.msg,
+      });
+    }
+  };
+  const bulkDeleteCloudinaryImage = async (public_Id_Arr) => {
+    console.log('bulkDeleteCloudinaryImage recordState.tsx reached');
+    try {
+      await axios.delete(`/api/cloudinary/bulk/${public_Id_Arr}`);
+      dispatch({
+        type: BULK_DELETE_CLOUDINARY_IMAGE,
+        payload: public_Id_Arr,
+      });
+    } catch (err) {
+      console.log('error');
+      dispatch({
+        type: RECORD_ERROR,
+        payload: err.response.msg,
+      });
+    }
+  };
+
   //Update Record
   const updateRecord = async (record: RecordInterface) => {
     const config = {
@@ -153,6 +188,8 @@ const RecordState: React.FC = ({ children }) => {
         loading: state.loading,
         addRecord,
         deleteRecord,
+        deleteCloudinaryImage,
+        bulkDeleteCloudinaryImage,
         setCurrent,
         setMoveRecord,
         clearCurrent,

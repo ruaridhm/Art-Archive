@@ -1,10 +1,13 @@
 import { createContext } from 'react';
 import { RecordInterface } from '../../components/records/RecordItem/RecordItem';
+import { ImgInterface } from '../../components/records/RecordItem/RecordItemDialog';
 
 type RecordContextType = {
   getRecords: () => Promise<void>;
   addRecord: (record: RecordInterface) => Promise<void>;
   deleteRecord: (id: string) => Promise<void>;
+  deleteCloudinaryImage: (id: string) => Promise<void>;
+  bulkDeleteCloudinaryImage: (public_Id_Arr) => Promise<void>;
   updateRecord: (record: RecordInterface) => Promise<void>;
   clearRecords: () => void;
   setCurrent: (record: RecordInterface) => void;

@@ -175,17 +175,4 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// @route       Delete api/cloudinaryImage:public_id
-// @desc        Delete cloudinaryImage
-// @access      Private
-// router.delete('/:id', auth, async (req, res) => {
-//   try {
-//     await cloudinary.uploader.destroy(req.public_id);
-//     console.log(res);
-//   } catch (err) {
-//     console.warn(res);
-//     console.error(err);
-//   }
-// });
-
 module.exports = router;

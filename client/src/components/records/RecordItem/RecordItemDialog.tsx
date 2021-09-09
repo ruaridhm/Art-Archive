@@ -64,6 +64,12 @@ export interface DialogTitleProps extends WithStyles<typeof styles> {
   onClose: () => void;
 }
 
+export interface ImgInterface {
+  url: string;
+  thumbnail: string;
+  public_Id: string;
+}
+
 export const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   const { children, classes, onClose, ...other } = props;
   return (
@@ -145,7 +151,12 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
     useState<boolean>(false);
   const classes = useStyles();
   const recordContext = useContext(RecordContext);
-  const { deleteRecord, clearCurrent } = recordContext;
+  const {
+    deleteRecord,
+    clearCurrent,
+    deleteCloudinaryImage,
+    bulkDeleteCloudinaryImage,
+  } = recordContext;
 
   const {
     _id,
@@ -169,8 +180,29 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
 
   const handleDelete = () => {
     if (_id !== undefined) {
-      deleteRecord(_id);
-      clearCurrent();
+      // deleteRecord(_id);
+      // clearCurrent();
+
+      console.log(image);
+      //handle bulk delete of cloudinary images
+      if (image.length > 1) {
+        console.log('if');
+        //Bulk Delete
+        const public_Id_Arr = image.map((img) => {
+          return img.public_Id;
+        });
+        console.log('public_Id_Arr', public_Id_Arr);
+        bulkDeleteCloudinaryImage(public_Id_Arr);
+      } else {
+        console.log('else');
+        //single delete
+        try {
+          deleteCloudinaryImage(image[0].public_Id);
+          return 'true';
+        } catch {
+          console.error('Unable to delete image from Cloudinary');
+        }
+      }
     }
   };
 
@@ -202,18 +234,13 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
     )}-${dateStr.substring(0, 4)} `;
   };
 
-  interface imgInterface {
-    url: string;
-    _id?: string;
-  }
-
   interface recordImagesInterface {
     src: string;
   }
 
   const getRecordImages = () => {
     let recordImages: recordImagesInterface[] = [];
-    image!.forEach((img: imgInterface) => {
+    image!.forEach((img: ImgInterface) => {
       recordImages.push({ src: img.url });
     });
     return recordImages;
