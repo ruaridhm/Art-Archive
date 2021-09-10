@@ -22,14 +22,9 @@ router.delete('/:public_Id', auth, async (req, res) => {
 router.delete('/bulk/:public_Ids', auth, async (req, res) => {
   const idArr = req.params.public_Ids.split(',');
   try {
-    //remove v2? install admin api?
-    await cloudinary.api.delete_resources(
-      idArr,
-      //delete next line? needed?
-      function (error, result) {
-        console.error(result, error);
-      }
-    );
+    await cloudinary.api.delete_resources(idArr, function (error, result) {
+      console.error(result, error);
+    });
     res.json({ msg: 'Images Removed' });
   } catch (err) {
     console.log('catch', err);

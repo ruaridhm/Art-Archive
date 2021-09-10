@@ -188,8 +188,8 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
         });
 
         bulkDeleteCloudinaryImage(public_Ids);
-        // deleteRecord(_id);
-        // clearCurrent();
+        deleteRecord(_id);
+        clearCurrent();
       } else if (image.length === 1) {
         //single delete
         try {
