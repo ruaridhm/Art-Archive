@@ -181,19 +181,21 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
   const handleDelete = () => {
     if (_id !== undefined) {
       //handle bulk delete of cloudinary images
-      if (image.length > 1) {
+      if (image!.length > 1) {
         //Bulk Delete
-        const public_Ids: string[] = image.map((img) => {
-          return img.public_Id;
-        });
+        const public_Ids: string[] = image!.map(
+          (img: { public_Id: string }) => {
+            return img.public_Id;
+          }
+        );
 
         bulkDeleteCloudinaryImage(public_Ids);
         deleteRecord(_id);
         clearCurrent();
-      } else if (image.length === 1) {
+      } else if (image!.length === 1) {
         //single delete
         try {
-          deleteCloudinaryImage(image[0].public_Id);
+          deleteCloudinaryImage(image![0].public_Id);
           deleteRecord(_id);
           clearCurrent();
 
