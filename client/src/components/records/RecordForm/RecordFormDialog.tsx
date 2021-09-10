@@ -31,10 +31,10 @@ import {
 import PopulateAutoComplete from '../../../utils/populateAutoComplete';
 //Types
 import { RecordInterface, SalesInterface } from '../RecordItem/RecordItem';
+import { ImgInterface } from '../RecordItem/RecordItemDialog';
 import AutoCompleteTextField from './AutoCompleteTextField';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import ImageList from './ImageList';
-import { truncate } from 'fs';
+import SingleLineImageList from './ImageList';
 
 interface RecordFormProps {
   displayAddRecord: boolean;
@@ -103,7 +103,7 @@ const RecordFormDialog = ({
     deleteCloudinaryImage,
   } = recordContext;
   const [item, setItem] = useState(emptyItemObject);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<ImgInterface[] | []>([]);
   const autoCompleteOptions = PopulateAutoComplete();
   const classes = useStyles();
   //Destructuring of Item object
@@ -127,7 +127,7 @@ const RecordFormDialog = ({
     console.log('useeffect called [ current]');
     if (current !== null) {
       setItem(current);
-      setImages([...current.image]);
+      setImages([...current.image!]);
     } else {
       setItem(emptyItemObject);
     }
@@ -145,28 +145,37 @@ const RecordFormDialog = ({
       uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET_UNSIGNED,
     };
 
-    openUploadWidget(uploadOptions, (error, photos) => {
-      if (!error) {
-        if (photos.event === 'success') {
-          setImages((prevState) => [
-            ...prevState,
-            {
-              url: photos.info.url,
-              thumbnail: photos.info.thumbnail_url,
-              public_Id: photos.info.public_id,
-            },
-          ]);
+    openUploadWidget(
+      uploadOptions,
+      (
+        error: any,
+        photos: {
+          event: string;
+          info: { url: any; thumbnail_url: any; public_id: any };
         }
-      } else {
-        console.error(error);
+      ) => {
+        if (!error) {
+          if (photos.event === 'success') {
+            setImages((prevState) => [
+              ...prevState,
+              {
+                url: photos.info.url,
+                thumbnail: photos.info.thumbnail_url,
+                public_Id: photos.info.public_id,
+              },
+            ]);
+          }
+        } else {
+          console.error(error);
+        }
       }
-    });
+    );
   };
 
   const handleDeleteImage = async (imageIndex: number) => {
     const deleteFromCloudinary = async () => {
       try {
-        await deleteCloudinaryImage(image[imageIndex].public_Id);
+        await deleteCloudinaryImage(image![imageIndex].public_Id);
         return 'true';
       } catch {
         console.error('Unable to delete image from Cloudinary');
@@ -433,7 +442,10 @@ const RecordFormDialog = ({
           </FormGroup>
 
           {images.length >= 1 && (
-            <ImageList images={images} handleDeleteImage={handleDeleteImage} />
+            <SingleLineImageList
+              images={images}
+              handleDeleteImage={handleDeleteImage}
+            />
           )}
         </DialogContent>
         <DialogActions>

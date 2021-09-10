@@ -1,11 +1,11 @@
 import React from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-// import { ImageList } from '@material-ui/core';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { ImgInterface } from '../RecordItem/RecordItemDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,24 +37,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-/**
- * The example data is structured as follows:
- *
- * import image from 'path/to/image.jpg';
- * [etc...]
- *
- * const itemData = [
- *   {
- *     img: image,
- *     title: 'Image',
- *     author: 'author',
- *   },
- *   {
- *     [etc...]
- *   },
- * ];
- */
-export default function SingleLineImageList({ images, handleDeleteImage }) {
+interface SingleLineImageListInterface {
+  images: ImgInterface[];
+  handleDeleteImage: (imageIndex: number) => Promise<void>;
+}
+
+const SingleLineImageList = ({
+  images,
+  handleDeleteImage,
+}: SingleLineImageListInterface) => {
   const classes = useStyles();
 
   return (
@@ -84,4 +75,6 @@ export default function SingleLineImageList({ images, handleDeleteImage }) {
       </ImageList>
     </div>
   );
-}
+};
+
+export default SingleLineImageList;

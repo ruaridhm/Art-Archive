@@ -5,18 +5,30 @@ declare global {
   }
 }
 
-export const url = (publicId, options) => {
+export const url = (publicId: string, options: Object) => {
   const scOptions = Util.withSnakeCaseKeys(options);
   const cl = CoreCloudinary.new({});
   return cl.url(publicId, scOptions);
 };
 
-export const openUploadWidget = (options, callback) => {
+export const openUploadWidget = (
+  options: Object,
+  callback: (
+    error: any,
+    photos: {
+      event: string;
+      info: { url: any; thumbnail_url: any; public_id: any };
+    }
+  ) => void
+) => {
   const scOptions = Util.withSnakeCaseKeys(options);
   window.cloudinary.openUploadWidget(scOptions, callback);
 };
 
-export async function fetchPhotos(imageTag, setter) {
+export async function fetchPhotos(
+  imageTag: { toString: () => string },
+  setter: (arg0: any) => any
+) {
   const options = {
     cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
     format: 'json',
@@ -30,7 +42,11 @@ export async function fetchPhotos(imageTag, setter) {
     .then((res) => res.text())
     .then((text) =>
       text
-        ? setter(JSON.parse(text).resources.map((image) => image.public_id))
+        ? setter(
+            JSON.parse(text).resources.map(
+              (image: { public_id: any }) => image.public_id
+            )
+          )
         : []
     )
     .catch((err) => console.error(err));
