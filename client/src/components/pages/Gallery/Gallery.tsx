@@ -37,15 +37,17 @@ const Gallery = () => {
   }, []);
 
   useEffect(() => {
-    records &&
+    if (records) {
+      console.log(records);
       records.forEach((record) => {
-        if (record.image![0].url !== '') {
+        if (record.image.length >= 1 && record.image![0].url !== '') {
           setCarouselImages((prevState: carouselImagesStateInterface[]) => [
             ...prevState,
             { src: record.image![0].url, _id: record._id },
           ]);
         }
       });
+    }
     setRenderReady(true);
     // eslint-disable-line
   }, [records]);
@@ -62,30 +64,38 @@ const Gallery = () => {
 
   return (
     <>
-      {renderReady ? (
+      {renderReady && records.length >= 1 ? (
         <Box height='90%'>
-          <CarouselComponent
-            images={carouselImages}
-            handleCurrentIndex={handleCurrentIndex}
-          />
-          <Box
-            position='absolute'
-            marginLeft='auto'
-            marginRight='auto'
-            left={0}
-            right={0}
-            bottom={0}
-            textAlign='center'
-          >
-            <Button
-              variant='contained'
-              color='primary'
-              startIcon={<InfoIcon />}
-              onClick={handleShowDialog}
-            >
-              Info
-            </Button>
-          </Box>
+          {carouselImages.length === 0 ? (
+            <Box display='flex' justifyContent='center'>
+              <h2>No images found.</h2>
+            </Box>
+          ) : (
+            <>
+              <CarouselComponent
+                images={carouselImages}
+                handleCurrentIndex={handleCurrentIndex}
+              />
+              <Box
+                position='absolute'
+                marginLeft='auto'
+                marginRight='auto'
+                left={0}
+                right={0}
+                bottom={0}
+                textAlign='center'
+              >
+                <Button
+                  variant='contained'
+                  color='primary'
+                  startIcon={<InfoIcon />}
+                  onClick={handleShowDialog}
+                >
+                  Info
+                </Button>
+              </Box>
+            </>
+          )}
         </Box>
       ) : (
         <Spinner description='Loading Gallery' />
