@@ -109,7 +109,7 @@ const AddRecordDetailsDialog = ({
       reference = 'sales';
       break;
     default:
-      console.log('switch hit default case');
+      console.error('switch hit default case');
   }
   const classes = useStyles();
 

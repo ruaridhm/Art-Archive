@@ -92,7 +92,7 @@ export interface RecordInterface {
   artist?: string;
   reference?: string;
   collectionName?: string;
-  image?: { url: string }[] | [];
+  image?: { url: string; thumbnail: string; public_Id: string }[] | [];
   date?: Date | null;
   size?: string;
   medium?: string;
@@ -141,12 +141,12 @@ const RecordItem = ({ record, setDisplayAddRecord }: RecordItemProps) => {
         <CardActionArea
           onClick={showRecordInfoDialogHandler}
           className={
-            image![0].url !== ''
+            image!.length >= 1
               ? classes.actionAreaWithImage
               : classes.actionAreaWithoutImage
           }
         >
-          {image![0].url !== '' && (
+          {image!.length >= 1 && (
             <CardMedia
               className={classes.media}
               component='img'

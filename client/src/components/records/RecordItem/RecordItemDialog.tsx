@@ -64,6 +64,12 @@ export interface DialogTitleProps extends WithStyles<typeof styles> {
   onClose: () => void;
 }
 
+export interface ImgInterface {
+  url: string;
+  thumbnail: string;
+  public_Id: string;
+}
+
 export const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   const { children, classes, onClose, ...other } = props;
   return (
@@ -145,7 +151,12 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
     useState<boolean>(false);
   const classes = useStyles();
   const recordContext = useContext(RecordContext);
-  const { deleteRecord, clearCurrent } = recordContext;
+  const {
+    deleteRecord,
+    clearCurrent,
+    deleteCloudinaryImage,
+    bulkDeleteCloudinaryImage,
+  } = recordContext;
 
   const {
     _id,
@@ -169,8 +180,31 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
 
   const handleDelete = () => {
     if (_id !== undefined) {
-      deleteRecord(_id);
-      clearCurrent();
+      //handle bulk delete of cloudinary images
+      if (image.length > 1) {
+        //Bulk Delete
+        const public_Ids: string[] = image.map((img) => {
+          return img.public_Id;
+        });
+
+        bulkDeleteCloudinaryImage(public_Ids);
+        // deleteRecord(_id);
+        // clearCurrent();
+      } else if (image.length === 1) {
+        //single delete
+        try {
+          deleteCloudinaryImage(image[0].public_Id);
+          deleteRecord(_id);
+          clearCurrent();
+
+          return 'true';
+        } catch {
+          console.error('Unable to delete image from Cloudinary');
+        }
+      } else {
+        deleteRecord(_id);
+        clearCurrent();
+      }
     }
   };
 
@@ -202,18 +236,13 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
     )}-${dateStr.substring(0, 4)} `;
   };
 
-  interface imgInterface {
-    url: string;
-    _id?: string;
-  }
-
   interface recordImagesInterface {
     src: string;
   }
 
   const getRecordImages = () => {
     let recordImages: recordImagesInterface[] = [];
-    image!.forEach((img: imgInterface) => {
+    image!.forEach((img: ImgInterface) => {
       recordImages.push({ src: img.url });
     });
     return recordImages;
@@ -225,14 +254,14 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
         onClose={handleClose}
         aria-labelledby='dialog-title'
         open={open}
-        fullWidth={image![0].url === '' ? false : true}
+        fullWidth={image!.length >= 1 ? false : true}
         maxWidth='xl'
       >
         <DialogTitle id='dialog-title' onClose={handleClose}>
           {title}
         </DialogTitle>
         <DialogContent dividers>
-          <List style={{ width: image![0].url === '' ? '100%' : '50%' }}>
+          <List style={{ width: image!.length >= 1 ? '100%' : '50%' }}>
             {reference && (
               <ListItem>
                 <ListItemText
@@ -601,7 +630,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               </ListItem>
             )}
           </List>
-          {image![0].url !== '' && image!.length === 1 && (
+          {image!.length === 1 && (
             <div style={{ width: '50%' }}>
               <CardMedia
                 component='img'
@@ -611,7 +640,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               />
             </div>
           )}
-          {image![0].url !== '' && image!.length > 1 && (
+          {image!.length > 1 && (
             <div style={{ width: '50%' }}>
               <CarouselComponent
                 images={getRecordImages()}

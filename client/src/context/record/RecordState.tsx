@@ -2,17 +2,21 @@ import React, { useReducer } from 'react';
 import RecordContext from './RecordContext';
 import RecordReducer from './RecordReducer';
 import { RecordInterface } from '../../components/records/RecordItem/RecordItem';
+import { ImgInterface } from '../../components/records/RecordItem/RecordItemDialog';
 import axios from 'axios';
 import {
   GET_RECORDS,
   ADD_RECORD,
   DELETE_RECORD,
+  DELETE_CLOUDINARY_IMAGE,
+  BULK_DELETE_CLOUDINARY_IMAGE,
   SET_CURRENT,
   SET_MOVE_RECORD,
   CLEAR_CURRENT,
   UPDATE_RECORD,
   FILTER_RECORDS,
-  FILTER_RECORDS_NEW,
+  FILTER_RECORDS_ALL,
+  FILTER_RECORDS_ARRAY,
   CLEAR_RECORDS,
   CLEAR_FILTER,
   RECORD_ERROR,
@@ -75,6 +79,37 @@ const RecordState: React.FC = ({ children }) => {
       });
     }
   };
+  //Delete Image from Cloudinary
+  const deleteCloudinaryImage = async (public_Id: string) => {
+    try {
+      await axios.delete(`/api/cloudinary/${public_Id}`);
+      dispatch({
+        type: DELETE_CLOUDINARY_IMAGE,
+        payload: public_Id,
+      });
+    } catch (err) {
+      dispatch({
+        type: RECORD_ERROR,
+        payload: err.response.msg,
+      });
+    }
+  };
+  const bulkDeleteCloudinaryImage = async (public_Ids: string[]) => {
+    try {
+      await axios.delete(`/api/cloudinary/bulk/${public_Ids}`);
+      dispatch({
+        type: BULK_DELETE_CLOUDINARY_IMAGE,
+        payload: public_Ids,
+      });
+    } catch (err) {
+      console.error('error');
+      dispatch({
+        type: RECORD_ERROR,
+        payload: err.response.msg,
+      });
+    }
+  };
+
   //Update Record
   const updateRecord = async (record: RecordInterface) => {
     const config = {
@@ -122,10 +157,17 @@ const RecordState: React.FC = ({ children }) => {
       payload: { text: text, searchBy: searchBy },
     });
   };
-  //Filter Records New
-  const filterRecordsNew = (text: string, searchBy: string) => {
+  //Filter Records All
+  const filterRecordsAll = (text: string, searchBy: string) => {
     dispatch({
-      type: FILTER_RECORDS_NEW,
+      type: FILTER_RECORDS_ALL,
+      payload: { text: text, searchBy: searchBy },
+    });
+  };
+  //Filter Records All
+  const filterRecordsArray = (text: string, searchBy: string) => {
+    dispatch({
+      type: FILTER_RECORDS_ARRAY,
       payload: { text: text, searchBy: searchBy },
     });
   };
@@ -145,12 +187,15 @@ const RecordState: React.FC = ({ children }) => {
         loading: state.loading,
         addRecord,
         deleteRecord,
+        deleteCloudinaryImage,
+        bulkDeleteCloudinaryImage,
         setCurrent,
         setMoveRecord,
         clearCurrent,
         updateRecord,
         filterRecords,
-        filterRecordsNew,
+        filterRecordsAll,
+        filterRecordsArray,
         clearFilter,
         getRecords,
         clearRecords,

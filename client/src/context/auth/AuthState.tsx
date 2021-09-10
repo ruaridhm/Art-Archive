@@ -56,7 +56,7 @@ const AuthState: React.FC = ({ children }) => {
 
       loadUser();
     } catch (err) {
-      console.log(err);
+      console.error(err);
       dispatch({
         type: LOGIN_FAIL,
         payload: err.response.data.msg,

@@ -16,7 +16,8 @@ import {
 
 const RecordFilter = () => {
   const recordContext = useContext(RecordContext);
-  const { filterRecordsNew, filterRecords, clearFilter } = recordContext;
+  const { filterRecordsAll, filterRecordsArray, filterRecords, clearFilter } =
+    recordContext;
 
   const [searchBy, setSearchBy] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -59,8 +60,15 @@ const RecordFilter = () => {
         searchBy === 'notes'
       ) {
         filterRecords(searchTerm, searchBy);
+      } else if (
+        searchBy === 'exhibited' ||
+        searchBy === 'submission' ||
+        searchBy === 'sales' ||
+        searchBy === 'mediaLinks'
+      ) {
+        filterRecordsArray(searchTerm, searchBy);
       } else {
-        filterRecordsNew(searchTerm, searchBy);
+        filterRecordsAll(searchTerm, searchBy);
       }
     } else {
       clearFilter();

@@ -94,7 +94,7 @@ const PopulateAutoComplete = (): ValueInterface => {
         }
       } else {
         //Handle Error
-        console.error(item, 'PopulateAutoComplete hits else (line 81)');
+        console.error(item, 'PopulateAutoComplete hits else after type check');
       }
     });
   };

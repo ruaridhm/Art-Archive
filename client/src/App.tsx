@@ -12,9 +12,10 @@ import AlertState from './context/alert/AlertState';
 import RecordState from './context/record/RecordState';
 import AuthState from './context/auth/AuthState';
 import setAuthToken from './utils/setAuthToken';
+import { CloudinaryContext } from 'cloudinary-react';
 //Material UI
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 //Date functionality
 import 'date-fns';
@@ -30,7 +31,7 @@ const App = () => {
 
   const theme = React.useMemo(
     () =>
-      createMuiTheme({
+      createTheme({
         typography: {
           fontFamily: 'roboto',
         },
@@ -48,16 +49,22 @@ const App = () => {
         <AuthState>
           <RecordState>
             <AlertState>
-              <Router>
-                <Navbar title='Archive' setTheme={setPalette} theme={palette} />
-                <Alerts />
-                <Switch>
-                  <PrivateRoute exact path='/' component={Home} />
-                  <PrivateRoute exact path='/user' component={User} />
-                  <PrivateRoute exact path='/gallery' component={Gallery} />
-                  <Route exact path='/login' component={Login} />
-                </Switch>
-              </Router>
+              <CloudinaryContext cloudName='dwtfrbyt5'>
+                <Router>
+                  <Navbar
+                    title='Archive'
+                    setTheme={setPalette}
+                    theme={palette}
+                  />
+                  <Alerts />
+                  <Switch>
+                    <PrivateRoute exact path='/' component={Home} />
+                    <PrivateRoute exact path='/user' component={User} />
+                    <PrivateRoute exact path='/gallery' component={Gallery} />
+                    <Route exact path='/login' component={Login} />
+                  </Switch>
+                </Router>
+              </CloudinaryContext>
             </AlertState>
           </RecordState>
         </AuthState>

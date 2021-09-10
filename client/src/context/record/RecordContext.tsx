@@ -5,13 +5,16 @@ type RecordContextType = {
   getRecords: () => Promise<void>;
   addRecord: (record: RecordInterface) => Promise<void>;
   deleteRecord: (id: string) => Promise<void>;
+  deleteCloudinaryImage: (id: string) => Promise<void>;
+  bulkDeleteCloudinaryImage: (public_Ids: string[]) => Promise<void>;
   updateRecord: (record: RecordInterface) => Promise<void>;
   clearRecords: () => void;
   setCurrent: (record: RecordInterface) => void;
   setMoveRecord: (record: RecordInterface) => void;
   clearCurrent: () => void;
   filterRecords: (text: string, searchBy: string) => void;
-  filterRecordsNew: (text: string, searchBy: string) => void;
+  filterRecordsAll: (text: string, searchBy: string) => void;
+  filterRecordsArray: (text: string, searchBy: string) => void;
   clearFilter: () => void;
 
   records: Array<RecordInterface> | null;

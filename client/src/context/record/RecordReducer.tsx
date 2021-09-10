@@ -1,14 +1,18 @@
 import { AxiosResponse } from 'axios';
 import { RecordInterface } from '../../components/records/RecordItem/RecordItem';
+import { ImgInterface } from '../../components/records/RecordItem/RecordItemDialog';
 import {
   GET_RECORDS,
   ADD_RECORD,
   DELETE_RECORD,
+  DELETE_CLOUDINARY_IMAGE,
+  BULK_DELETE_CLOUDINARY_IMAGE,
   SET_CURRENT,
   CLEAR_CURRENT,
   UPDATE_RECORD,
   FILTER_RECORDS,
-  FILTER_RECORDS_NEW,
+  FILTER_RECORDS_ALL,
+  FILTER_RECORDS_ARRAY,
   CLEAR_FILTER,
   RECORD_ERROR,
   CLEAR_RECORDS,
@@ -29,6 +33,14 @@ type Actions =
       payload: string;
     }
   | {
+      type: 'DELETE_CLOUDINARY_IMAGE';
+      payload: string;
+    }
+  | {
+      type: 'BULK_DELETE_CLOUDINARY_IMAGE';
+      payload: string[];
+    }
+  | {
       type: 'SET_CURRENT';
       payload: RecordInterface;
     }
@@ -44,7 +56,11 @@ type Actions =
       payload: { text: string; searchBy: string };
     }
   | {
-      type: 'FILTER_RECORDS_NEW';
+      type: 'FILTER_RECORDS_ALL';
+      payload: { text: string; searchBy: string };
+    }
+  | {
+      type: 'FILTER_RECORDS_ARRAY';
       payload: { text: string; searchBy: string };
     }
   | {
@@ -62,18 +78,103 @@ type Actions =
       payload: RecordInterface;
     };
 
-// interface Record {
-//   records: Array<RecordInterface> | null;
-//   current: RecordInterface | null;
-//   moveRecord: RecordInterface | null;
-//   filtered: Array<RecordInterface> | null;
-//   error: string | null;
-//   loading: boolean;
-// }
-
-// type State = Record;
-
 const RecordReducer = (state: any, action: Actions) => {
+  const getEachItem = (
+    records: RecordInterface[],
+    action: {
+      type: 'FILTER_RECORDS_ALL' | 'FILTER_RECORDS_ARRAY';
+      payload: { text: string; searchBy: string };
+    }
+  ) => {
+    let result: string[] = [];
+    const searchItem = (
+      record: RecordInterface,
+      _id: string,
+      searchBy: string
+    ) => {
+      let searchAsRegEx = new RegExp(action.payload.text, 'gi');
+
+      if (searchBy === 'all') {
+        Object.keys(record).forEach((key) => {
+          if (typeof record[key] === 'object') {
+            if (record[key] === null) {
+            } else {
+              searchItem(record[key], _id, searchBy);
+            }
+          }
+          if (
+            typeof record[key] === 'string' &&
+            record[key].hasOwnProperty(searchBy)
+          ) {
+            if (record[key].match(searchAsRegEx)) {
+              result.push(_id!);
+            }
+          } else if (typeof record[key] === 'string' && searchBy === 'all') {
+            let searchAsRegEx = new RegExp(action.payload.text, 'gi');
+            if (record[key].match(searchAsRegEx)) {
+              result.push(_id!);
+            }
+          }
+        });
+      } else {
+        let searchArray: string = '';
+        switch (searchBy) {
+          case 'exhibitionsTitle':
+          case 'exhibitionsAddress':
+            searchArray = 'exhibitions';
+            break;
+          case 'submissionsTitle':
+          case 'submissionsAddress':
+            searchArray = 'submissions';
+            break;
+          case 'title':
+          case 'link':
+            searchArray = 'mediaLinks';
+            break;
+          case 'soldTo':
+          case 'soldBy':
+            searchArray = 'sales';
+            break;
+          default:
+            console.error('hit default case,something went wrong.....');
+            break;
+        }
+        if (record[searchArray][searchBy].match(searchAsRegEx)) {
+          result.push(_id!);
+        }
+      }
+
+      // Object.keys(record).forEach((key) => {
+      //   if (typeof record[key] === 'object') {
+      //     if (record[key] === null) {
+      //       return;
+      //     } else {
+      //       searchItem(record[key], _id, searchBy);
+      //     }
+      //   }
+      //   if (
+      //     typeof record[key] === 'string' &&
+      //     record[key].hasOwnProperty(searchBy)
+      //   ) {
+
+      //     if (record[key].match(searchAsRegEx)) {
+      //       result.push(_id!);
+      //     }
+      //   }
+
+      // });
+    };
+    records.forEach((record: RecordInterface) => {
+      searchItem(record, record._id!, action.payload.searchBy);
+    });
+    // @ts-ignore
+    let uniqueResults = [...new Set(result)];
+    let computedResult = uniqueResults.map((_id) => {
+      return records.find((record: RecordInterface) => record._id === _id);
+    });
+    return computedResult;
+  };
+
   switch (action.type) {
     case GET_RECORDS:
       return {
@@ -103,6 +204,18 @@ const RecordReducer = (state: any, action: Actions) => {
         ),
         loading: false,
       };
+    case DELETE_CLOUDINARY_IMAGE:
+      return {
+        ...state,
+
+        loading: false,
+      };
+    case BULK_DELETE_CLOUDINARY_IMAGE:
+      return {
+        ...state,
+
+        loading: false,
+      };
     case CLEAR_RECORDS:
       return {
         ...state,
@@ -127,97 +240,17 @@ const RecordReducer = (state: any, action: Actions) => {
         ...state,
         current: null,
       };
-    case FILTER_RECORDS_NEW:
-      const getEachItem = (records: RecordInterface[], searchBy: string) => {
-        let result: string[] = [];
-        const searchItem = (
-          record: RecordInterface,
-          _id: string,
-          searchBy: string
-        ) => {
-          Object.keys(record).forEach((key) => {
-            if (typeof record[key] === 'object') {
-              if (record[key] === null) {
-                return;
-              } else {
-                searchItem(record[key], _id, searchBy);
-              }
-            }
-            console.log(
-              'searchBy =',
-              searchBy,
-              'record[key] =',
-              record[key],
-              'keyName =',
-              record[key].hasOwnProperty(searchBy)
-            );
-            if (
-              typeof record[key] === 'string' &&
-              record[key].hasOwnProperty(searchBy)
-            ) {
-              let searchAsRegEx = new RegExp(action.payload.text, 'gi');
-              if (record[key].match(searchAsRegEx)) {
-                result.push(_id!);
-              }
-            } else if (typeof record[key] === 'string' && searchBy === 'all') {
-              let searchAsRegEx = new RegExp(action.payload.text, 'gi');
-              if (record[key].match(searchAsRegEx)) {
-                result.push(_id!);
-              }
-            }
-          });
-        };
-        records.forEach((record: RecordInterface) => {
-          searchItem(record, record._id!, searchBy);
-        });
-        // @ts-ignore
-        let uniqueResults = [...new Set(result)];
-        let computedResult = uniqueResults.map((_id) => {
-          return records.find((record: RecordInterface) => record._id === _id);
-        });
-        return computedResult;
-      };
-
+    case FILTER_RECORDS_ALL:
       return {
         ...state,
-        filtered: [...getEachItem(state.records, action.payload.searchBy)],
+        filtered: [...getEachItem(state.records, action)],
       };
 
-    // case FILTER_RECORDS_NEW_ORIGINAL:
-    //   const getEachItem = (records: RecordInterface[]) => {
-    //     let result: string[] = [];
-    //     const searchItem = (record: RecordInterface, _id: string) => {
-    //       Object.keys(record).forEach((key) => {
-    //         if (typeof record[key] === 'object') {
-    //           if (record[key] === null) {
-    //             return;
-    //           } else {
-    //             searchItem(record[key], _id);
-    //           }
-    //         }
-    //         if (typeof record[key] === 'string') {
-    //           let searchAsRegEx = new RegExp(action.payload.text, 'gi');
-    //           if (record[key].match(searchAsRegEx)) {
-    //             result.push(_id!);
-    //           }
-    //         }
-    //       });
-    //     };
-    //     records.forEach((record: RecordInterface) => {
-    //       searchItem(record, record._id!);
-    //     });
-    //     // @ts-ignore
-    //     let uniqueResults = [...new Set(result)];
-    //     let computedResult = uniqueResults.map((_id) => {
-    //       return records.find((record: RecordInterface) => record._id === _id);
-    //     });
-    //     return computedResult;
-    //   };
-
-    //   return {
-    //     ...state,
-    //     filtered: [...getEachItem(state.records)],
-    //   };
+    case FILTER_RECORDS_ARRAY:
+      return {
+        ...state,
+        filtered: [...getEachItem(state.records, action)],
+      };
     case FILTER_RECORDS:
       return {
         ...state,

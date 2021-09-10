@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth.ts');
+// const cloudinary = require('cloudinary').v2;
 const { check, validationResult, body } = require('express-validator');
 
 const User = require('../models/User.ts');

@@ -10,7 +10,7 @@ const ItemSchema = mongoose.Schema({
   },
   artist: {
     type: String,
-    default: 'Ed Miliano',
+    default: 'Ed',
   },
   reference: {
     type: String,
@@ -21,6 +21,8 @@ const ItemSchema = mongoose.Schema({
   image: [
     {
       url: { type: String },
+      thumbnail: { type: String },
+      public_Id: { type: String },
     },
   ],
   date: {

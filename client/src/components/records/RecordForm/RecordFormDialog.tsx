@@ -23,13 +23,18 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 //Material-UI Icons
 import CloseIcon from '@material-ui/icons/Close';
 //Components
-import ImageDialog from './ImageDialog';
 //Util functions
+import {
+  // deleteImage,
+  openUploadWidget,
+} from '../../../utils/cloudinaryService';
 import PopulateAutoComplete from '../../../utils/populateAutoComplete';
 //Types
 import { RecordInterface, SalesInterface } from '../RecordItem/RecordItem';
 import AutoCompleteTextField from './AutoCompleteTextField';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import ImageList from './ImageList';
+import { truncate } from 'fs';
 
 interface RecordFormProps {
   displayAddRecord: boolean;
@@ -65,10 +70,10 @@ const useStyles = makeStyles(() => ({
 
 const emptyItemObject: RecordInterface = {
   title: '',
-  artist: 'Ed Miliano',
+  artist: 'Ed',
   reference: '',
   collectionName: '',
-  image: [{ url: '' }],
+  image: [],
   date: null,
   size: '',
   medium: '',
@@ -90,38 +95,92 @@ const RecordFormDialog = ({
   const alertContext = useContext(AlertContext);
   const recordContext = useContext(RecordContext);
   const { setAlert } = alertContext;
-  const { addRecord, current, clearCurrent, updateRecord } = recordContext;
+  const {
+    addRecord,
+    current,
+    clearCurrent,
+    updateRecord,
+    deleteCloudinaryImage,
+  } = recordContext;
   const [item, setItem] = useState(emptyItemObject);
+  const [images, setImages] = useState([]);
   const autoCompleteOptions = PopulateAutoComplete();
-
   const classes = useStyles();
-
   //Destructuring of Item object
+
   const {
     title,
     reference,
     collectionName,
-
+    image,
     date,
     size,
     medium,
     price,
     currentLocation,
     editions,
-
     notes,
   } = item;
 
   //if a record is in current assign current to item else initialize item as an empty object
   useEffect(() => {
+    console.log('useeffect called [ current]');
     if (current !== null) {
       setItem(current);
+      setImages([...current.image]);
     } else {
       setItem(emptyItemObject);
     }
-  }, [recordContext, current]);
+  }, [current]);
 
   //Functions
+  interface beginUploadInterface {
+    tag?: any;
+  }
+
+  const beginUpload = ({ tag }: beginUploadInterface) => {
+    const uploadOptions = {
+      cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+      tags: [tag],
+      uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET_UNSIGNED,
+    };
+
+    openUploadWidget(uploadOptions, (error, photos) => {
+      if (!error) {
+        if (photos.event === 'success') {
+          setImages((prevState) => [
+            ...prevState,
+            {
+              url: photos.info.url,
+              thumbnail: photos.info.thumbnail_url,
+              public_Id: photos.info.public_id,
+            },
+          ]);
+        }
+      } else {
+        console.error(error);
+      }
+    });
+  };
+
+  const handleDeleteImage = async (imageIndex: number) => {
+    const deleteFromCloudinary = async () => {
+      try {
+        await deleteCloudinaryImage(image[imageIndex].public_Id);
+        return 'true';
+      } catch {
+        console.error('Unable to delete image from Cloudinary');
+      }
+    };
+    if (deleteFromCloudinary()) {
+      const newImgArr = [...images];
+      newImgArr.splice(imageIndex, 1);
+      setImages(newImgArr);
+      setItem((prevState) => {
+        return { ...prevState, image: newImgArr };
+      });
+    }
+  };
 
   const onChange = (e: { target: { type: any; name: string; value: any } }) => {
     // if (e.target.type !== undefined && e.target.type === 'text') {
@@ -214,10 +273,10 @@ const RecordFormDialog = ({
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
     const newItem: RecordInterface = {
       ...item,
       sales: newCalcSalesArrFcn(editions!),
+      image: [...images],
     };
     setItem({
       ...newItem,
@@ -372,9 +431,20 @@ const RecordFormDialog = ({
               onChange={onChange}
             />
           </FormGroup>
+
+          {images.length >= 1 && (
+            <ImageList images={images} handleDeleteImage={handleDeleteImage} />
+          )}
         </DialogContent>
         <DialogActions>
-          <ImageDialog />
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => beginUpload({})}
+          >
+            Add Images
+          </Button>
+
           <Button type='submit' variant='contained' color='primary'>
             {current ? 'Update Item' : 'Add Item'}
           </Button>

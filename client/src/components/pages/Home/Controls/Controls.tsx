@@ -202,10 +202,9 @@ const Controls = ({
       spacing={2}
       direction='row'
       className={classes.controlsGrid}
-      justify-content='center'
       alignItems='center'
       alignContent='center'
-      justify='space-between'
+      justifyContent='space-between'
     >
       <div className={clsx(classes.gridContainers, classes.sortControls)}>
         <FormControl variant='outlined' className={classes.formControl}>
