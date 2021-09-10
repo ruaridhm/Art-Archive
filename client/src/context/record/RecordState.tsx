@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import RecordContext from './RecordContext';
 import RecordReducer from './RecordReducer';
 import { RecordInterface } from '../../components/records/RecordItem/RecordItem';
-import { ImgInterface } from '../../components/records/RecordItem/RecordItemDialog';
+
 import axios from 'axios';
 import {
   GET_RECORDS,

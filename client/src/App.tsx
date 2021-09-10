@@ -22,13 +22,14 @@ import 'date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import '@fontsource/roboto';
+import LogRocket from 'logrocket';
 
 localStorage.token && setAuthToken(localStorage.token);
 
 const App = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [palette, setPalette] = useState(prefersDarkMode);
-
+  LogRocket.init('2n9oqs/art-archive');
   const theme = React.useMemo(
     () =>
       createTheme({

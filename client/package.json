@@ -19,6 +19,7 @@
     "cloudinary-react": "^1.7.0",
     "date-fns": "^2.20.3",
     "fontsource-roboto": "^4.0.0",
+    "logrocket": "^2.0.0",
     "material-ui-dropzone": "^3.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
