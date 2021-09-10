@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios';
 import { RecordInterface } from '../../components/records/RecordItem/RecordItem';
-import { ImgInterface } from '../../components/records/RecordItem/RecordItemDialog';
 import {
   GET_RECORDS,
   ADD_RECORD,
