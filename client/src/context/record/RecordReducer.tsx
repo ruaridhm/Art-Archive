@@ -38,7 +38,7 @@ type Actions =
     }
   | {
       type: 'BULK_DELETE_CLOUDINARY_IMAGE';
-      payload: ImgInterface;
+      payload: string[];
     }
   | {
       type: 'SET_CURRENT';

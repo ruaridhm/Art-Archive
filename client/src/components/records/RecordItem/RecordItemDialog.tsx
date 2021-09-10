@@ -180,28 +180,30 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
 
   const handleDelete = () => {
     if (_id !== undefined) {
-      // deleteRecord(_id);
-      // clearCurrent();
-
-      console.log(image);
       //handle bulk delete of cloudinary images
       if (image.length > 1) {
-        console.log('if');
         //Bulk Delete
-        const public_Id_Arr = image.map((img) => {
+        const public_Ids: string[] = image.map((img) => {
           return img.public_Id;
         });
-        console.log('public_Id_Arr', public_Id_Arr);
-        bulkDeleteCloudinaryImage(public_Id_Arr);
-      } else {
-        console.log('else');
+
+        bulkDeleteCloudinaryImage(public_Ids);
+        // deleteRecord(_id);
+        // clearCurrent();
+      } else if (image.length === 1) {
         //single delete
         try {
           deleteCloudinaryImage(image[0].public_Id);
+          deleteRecord(_id);
+          clearCurrent();
+
           return 'true';
         } catch {
           console.error('Unable to delete image from Cloudinary');
         }
+      } else {
+        deleteRecord(_id);
+        clearCurrent();
       }
     }
   };

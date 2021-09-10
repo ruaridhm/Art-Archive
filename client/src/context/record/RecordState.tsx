@@ -94,16 +94,15 @@ const RecordState: React.FC = ({ children }) => {
       });
     }
   };
-  const bulkDeleteCloudinaryImage = async (public_Id_Arr) => {
-    console.log('bulkDeleteCloudinaryImage recordState.tsx reached');
+  const bulkDeleteCloudinaryImage = async (public_Ids: string[]) => {
     try {
-      await axios.delete(`/api/cloudinary/bulk/${public_Id_Arr}`);
+      await axios.delete(`/api/cloudinary/bulk/${public_Ids}`);
       dispatch({
         type: BULK_DELETE_CLOUDINARY_IMAGE,
-        payload: public_Id_Arr,
+        payload: public_Ids,
       });
     } catch (err) {
-      console.log('error');
+      console.error('error');
       dispatch({
         type: RECORD_ERROR,
         payload: err.response.msg,

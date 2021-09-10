@@ -11,7 +11,6 @@ cloudinary.config({
 });
 
 router.delete('/:public_Id', auth, async (req, res) => {
-  console.log('single called in routes!');
   try {
     await cloudinary.uploader.destroy(req.params.public_Id);
     res.json({ msg: 'Image Removed' });
@@ -20,16 +19,15 @@ router.delete('/:public_Id', auth, async (req, res) => {
   }
 });
 
-router.delete('/bulk/:public_Id_Arr', auth, async (req, res) => {
-  console.log('bulk called in routes!');
-  console.log('req.params.public_Id_Arr', req.params.public_Id_Arr);
+router.delete('/bulk/:public_Ids', auth, async (req, res) => {
+  const idArr = req.params.public_Ids.split(',');
   try {
     //remove v2? install admin api?
     await cloudinary.api.delete_resources(
-      ['sld0tteebwidy0oitiwk', 'lsljz8haodb9zea243ed'],
+      idArr,
       //delete next line? needed?
       function (error, result) {
-        console.log(result, error);
+        console.error(result, error);
       }
     );
     res.json({ msg: 'Images Removed' });

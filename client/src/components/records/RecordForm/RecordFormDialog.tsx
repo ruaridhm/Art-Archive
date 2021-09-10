@@ -174,9 +174,7 @@ const RecordFormDialog = ({
     };
     if (deleteFromCloudinary()) {
       const newImgArr = [...images];
-      console.log('newImgArr before splice', newImgArr);
       newImgArr.splice(imageIndex, 1);
-      console.log('newImgArr after splice', newImgArr);
       setImages(newImgArr);
       setItem((prevState) => {
         return { ...prevState, image: newImgArr };
