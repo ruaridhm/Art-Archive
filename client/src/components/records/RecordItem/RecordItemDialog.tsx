@@ -103,7 +103,7 @@ const DialogActions = withStyles((theme: Theme) => ({
   },
 }))(MuiDialogActions);
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   listBold: {
     fontWeight: 600,
     paddingRight: '.25em',
@@ -132,6 +132,9 @@ const useStyles = makeStyles(() => ({
   },
   midAndRightCol: {
     gridColumn: '2/4',
+  },
+  nested: {
+    paddingLeft: theme.spacing(2),
   },
 }));
 
@@ -378,8 +381,8 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               </ListItem>
             )}
 
-            {mediaLinks !== [] && (
-              <>
+            {mediaLinks.length >= 1 && (
+              <List className={classes.nested}>
                 <Typography className={classes.listBold}>
                   Media Links:
                 </Typography>
@@ -426,10 +429,10 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                     );
                   }
                 )}
-              </>
+              </List>
             )}
-            {exhibitions !== [] && (
-              <>
+            {exhibitions.length >= 1 && (
+              <List className={classes.nested}>
                 <Typography className={classes.listBold}>
                   Exhibitions:
                 </Typography>
@@ -486,10 +489,11 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                     );
                   }
                 )}
-              </>
+              </List>
             )}
-            {submissions !== [] && (
-              <>
+
+            {submissions.length >= 1 && (
+              <List className={classes.nested}>
                 <Typography className={classes.listBold}>
                   Submissions:
                 </Typography>
@@ -544,7 +548,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
                     </ListItem>
                   );
                 })}
-              </>
+              </List>
             )}
 
             {/* {sales?.soldTo !== '' &&
