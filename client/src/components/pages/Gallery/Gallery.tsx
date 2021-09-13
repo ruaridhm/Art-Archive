@@ -9,13 +9,21 @@ import 'react-gallery-carousel/dist/index.css';
 import Spinner from '../../layout/Spinner/Spinner';
 import RecordItemDialog from '../../records/RecordItem/RecordItemDialog';
 //Material UI Components
-import { Button, Box, Portal } from '@material-ui/core';
+import { Button, Box, Portal, Container } from '@material-ui/core';
 //Material-UI Icons
 import InfoIcon from '@material-ui/icons/Info';
 import { RecordInterface } from '../../records/RecordItem/RecordItem';
 import CarouselComponent from './CarouselComponent';
 //https://github.com/yifaneye/react-gallery-carousel
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      height: 'calc(100vh - 64px)',
+    },
+  })
+);
 interface carouselImagesStateInterface {
   src: string;
   _id: string;
@@ -29,11 +37,13 @@ const Gallery = () => {
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const [foundRecord, setFoundRecord] = useState<RecordInterface>();
   const [renderReady, setRenderReady] = useState(false);
+  const classes = useStyles();
+
   useEffect(() => {
     authContext.loadUser();
     getRecords();
 
-    // eslint-disable-next-line
+    //   // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -52,6 +62,14 @@ const Gallery = () => {
     // eslint-disable-line
   }, [records]);
 
+  useEffect(() => {
+    if (carouselImages.length >= 1) {
+      setFoundRecord(
+        records?.find((element) => element._id === carouselImages[0]._id)
+      );
+    }
+  }, [carouselImages]);
+
   const handleShowDialog = () => {
     setShowInfoDialog(!showInfoDialog);
   };
@@ -64,8 +82,12 @@ const Gallery = () => {
 
   return (
     <>
-      {renderReady && records!.length >= 1 ? (
-        <Box height='90%'>
+      {renderReady ? (
+        <Container
+          disableGutters={true}
+          maxWidth={false}
+          className={classes.container}
+        >
           {carouselImages.length === 0 ? (
             <Box display='flex' justifyContent='center'>
               <h2>No images found.</h2>
@@ -82,21 +104,23 @@ const Gallery = () => {
                 marginRight='auto'
                 left={0}
                 right={0}
-                bottom={0}
+                bottom='10px'
                 textAlign='center'
               >
-                <Button
-                  variant='contained'
-                  color='primary'
-                  startIcon={<InfoIcon />}
-                  onClick={handleShowDialog}
-                >
-                  Info
-                </Button>
+                {foundRecord && (
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    startIcon={<InfoIcon />}
+                    onClick={handleShowDialog}
+                  >
+                    Info
+                  </Button>
+                )}
               </Box>
             </>
           )}
-        </Box>
+        </Container>
       ) : (
         <Spinner description='Loading Gallery' />
       )}
