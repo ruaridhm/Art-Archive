@@ -84,6 +84,7 @@ export interface SalesInterface {
   soldBy?: string;
   soldDate?: Date | null;
   sold?: boolean;
+  _id?: string;
 }
 
 export interface RecordInterface {
