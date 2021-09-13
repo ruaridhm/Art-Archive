@@ -40,7 +40,7 @@ const Gallery = () => {
     if (records) {
       console.log(records);
       records.forEach((record) => {
-        if (record.image.length >= 1 && record.image![0].url !== '') {
+        if (record.image!.length >= 1 && record.image![0].url !== '') {
           setCarouselImages((prevState: carouselImagesStateInterface[]) => [
             ...prevState,
             { src: record.image![0].url, _id: record._id },
@@ -64,7 +64,7 @@ const Gallery = () => {
 
   return (
     <>
-      {renderReady && records.length >= 1 ? (
+      {renderReady && records!.length >= 1 ? (
         <Box height='90%'>
           {carouselImages.length === 0 ? (
             <Box display='flex' justifyContent='center'>
