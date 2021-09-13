@@ -34,10 +34,10 @@ import {
   ExhibitionInterface,
   SubmissionInterface,
   MediaLinksInterface,
+  SalesInterface,
   RecordInterface,
 } from './RecordItem';
 import CarouselComponent from '../../pages/Gallery/CarouselComponent';
-// import EditionSalesDialog from './EditionSalesDialog';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -177,7 +177,7 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
     notes,
     exhibitions,
     submissions,
-    // sales,
+    sales,
     lastEdited,
   } = record;
 
@@ -551,60 +551,112 @@ const RecordItemDialog = ({ record, open, setOpen }: RecordItemDialogProps) => {
               </List>
             )}
 
-            {/* {sales?.soldTo !== '' &&
-              sales?.soldBy !== '' &&
-              sales?.soldDate !== null && (
-                <>
-                  <Typography className={classes.listBold}>Sales:</Typography>
-                  <ListItem>
-                    <ListItemText
-                      primary={
-                        <Paper elevation={3} className={classes.paper}>
-                          {sales?.soldTo && (
-                            <div
-                              className={clsx(
-                                classes.flexInline,
-                                classes.leftCol
-                              )}
-                            >
-                              <Typography className={classes.listBold}>
-                                Sold To:
-                              </Typography>
-                              {sales.soldTo}
-                            </div>
-                          )}
-                          {sales?.soldBy && (
-                            <div
-                              className={clsx(
-                                classes.flexInline,
-                                classes.midCol
-                              )}
-                            >
-                              <Typography className={classes.listBold}>
-                                Sold By:
-                              </Typography>
-                              {sales?.soldBy}
-                            </div>
-                          )}
-                          {sales?.soldDate && (
-                            <div
-                              className={clsx(
-                                classes.flexInline,
-                                classes.rightCol
-                              )}
-                            >
-                              <Typography className={classes.listBold}>
-                                Date:
-                              </Typography>
-                              {getFormattedDate(sales?.soldDate)}
-                            </div>
-                          )}
-                        </Paper>
-                      }
-                    />
-                  </ListItem>
-                </>
-              )} */}
+            {sales.length >= 1 && (
+              <List className={classes.nested}>
+                <Typography className={classes.listBold}>Sales:</Typography>
+                {sales?.map((element: SalesInterface) => {
+                  return (
+                    <ListItem key={element._id}>
+                      <ListItemText
+                        primary={
+                          <Paper elevation={3} className={classes.paper}>
+                            {element.soldTo && (
+                              <div
+                                className={clsx(
+                                  classes.flexInline,
+                                  classes.leftCol
+                                )}
+                              >
+                                <Typography className={classes.listBold}>
+                                  Sold To:
+                                </Typography>
+                                {element.soldTo}
+                              </div>
+                            )}
+                            {element.soldBy && (
+                              <div
+                                className={clsx(
+                                  classes.flexInline,
+                                  classes.midCol
+                                )}
+                              >
+                                <Typography className={classes.listBold}>
+                                  Sold By:
+                                </Typography>
+                                {element.soldBy}
+                              </div>
+                            )}
+                            {element.soldDate && (
+                              <div
+                                className={clsx(
+                                  classes.flexInline,
+                                  classes.rightCol
+                                )}
+                              >
+                                <Typography className={classes.listBold}>
+                                  Sold Date:
+                                </Typography>
+                                {getFormattedDate(element.soldDate)}
+                              </div>
+                            )}
+                          </Paper>
+                        }
+                      />
+                    </ListItem>
+                  );
+                })}
+              </List>
+              // <List className={classes.nested}>
+              //   <Typography className={classes.listBold}>Sales:</Typography>
+              //   <ListItem>
+              //     <ListItemText
+              //       primary={
+              //         <Paper elevation={3} className={classes.paper}>
+              //           {sales?.soldTo && (
+              //             <div
+              //               className={clsx(
+              //                 classes.flexInline,
+              //                 classes.leftCol
+              //               )}
+              //             >
+              //               <Typography className={classes.listBold}>
+              //                 Sold To:
+              //               </Typography>
+              //               {sales.soldTo}
+              //             </div>
+              //           )}
+              //           {sales?.soldBy && (
+              //             <div
+              //               className={clsx(
+              //                 classes.flexInline,
+              //                 classes.midCol
+              //               )}
+              //             >
+              //               <Typography className={classes.listBold}>
+              //                 Sold By:
+              //               </Typography>
+              //               {sales?.soldBy}
+              //             </div>
+              //           )}
+              //           {sales?.soldDate && (
+              //             <div
+              //               className={clsx(
+              //                 classes.flexInline,
+              //                 classes.rightCol
+              //               )}
+              //             >
+              //               <Typography className={classes.listBold}>
+              //                 Date:
+              //               </Typography>
+              //               {getFormattedDate(sales?.soldDate)}
+              //             </div>
+              //           )}
+              //         </Paper>
+              //       }
+              //     />
+              //   </ListItem>
+              // </List>
+            )}
 
             {notes && (
               <ListItem>
