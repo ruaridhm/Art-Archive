@@ -194,9 +194,7 @@ const AddRecordDetailsDialog = ({
         {detail}s
       </DialogTitle>
       <DialogContent>
-        {record[reference].length >= 1 &&
-        record[reference][0][inputValues[0]] !== '' &&
-        record[reference][0][inputValues[1]] !== '' ? (
+        {record[reference].length >= 1 ? (
           <Paper className={classes.paper} elevation={0}>
             {record[reference].map(
               (
