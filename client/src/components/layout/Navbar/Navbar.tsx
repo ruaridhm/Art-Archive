@@ -30,6 +30,7 @@ const useStyles = makeStyles({
     textDecoration: 'none',
     color: '#fff',
     marginRight: '2em',
+    cursor: 'pointer',
     '&:hover': {
       textDecoration: 'underline',
       opacity: '0.9',
