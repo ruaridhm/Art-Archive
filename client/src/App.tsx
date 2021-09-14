@@ -50,7 +50,7 @@ const App = () => {
         <AuthState>
           <RecordState>
             <AlertState>
-              <CloudinaryContext cloudName='dwtfrbyt5'>
+              <CloudinaryContext cloudName={process.env.CLOUDINARY_CLOUD_NAME}>
                 <Router>
                   <Navbar
                     title='Archive'
