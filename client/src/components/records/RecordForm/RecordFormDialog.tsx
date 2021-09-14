@@ -124,7 +124,6 @@ const RecordFormDialog = ({
 
   //if a record is in current assign current to item else initialize item as an empty object
   useEffect(() => {
-    console.log('useeffect called [ current]');
     if (current !== null) {
       setItem(current);
       setImages([...current.image!]);
