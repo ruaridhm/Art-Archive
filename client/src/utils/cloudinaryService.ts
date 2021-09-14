@@ -30,7 +30,7 @@ export async function fetchPhotos(
   setter: (arg0: any) => any
 ) {
   const options = {
-    cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
     format: 'json',
     type: 'list',
     version: Math.ceil(new Date().getTime() / 1000),
