@@ -139,9 +139,9 @@ const RecordFormDialog = ({
 
   const beginUpload = ({ tag }: beginUploadInterface) => {
     const uploadOptions = {
-      cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME,
       tags: [tag],
-      uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET_UNSIGNED,
+      uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET_UNSIGNED,
     };
 
     openUploadWidget(
@@ -326,6 +326,9 @@ const RecordFormDialog = ({
       <form
         style={{ display: 'flex', flexDirection: 'column' }}
         onSubmit={onSubmit}
+        onKeyPress={(e) => {
+          e.key === 'Enter' && e.preventDefault();
+        }}
       >
         <DialogContent>
           <FormGroup row={true} className={classes.formGroup}>
