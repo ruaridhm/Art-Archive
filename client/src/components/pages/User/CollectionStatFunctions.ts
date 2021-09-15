@@ -25,30 +25,13 @@ export const totalCollections = (records: RecordInterface[]) => {
   return total.length;
 };
 
-export const earliestDate = (records: RecordInterface[]) => {
-  const dates: { title?: string; date?: Date }[] = [];
-  records!.forEach((elem) => {
-    if (elem.date !== null) {
-      dates.push({ title: elem.title, date: elem.date });
-    } else {
-      return;
-    }
-  });
-  if (dates.length === 0) return null;
-  let earliestDate = dates[0];
-  for (let i = 1; i < dates.length; i++) {
-    let currentDate = dates[i];
-    if (currentDate.date! < earliestDate.date!) {
-      earliestDate = currentDate;
-    }
-  }
-  return earliestDate;
-};
-
-export const latestDate = (records: RecordInterface[]) => {
+export const latestEarliestDate = (
+  records: RecordInterface[],
+  range: string
+) => {
   interface datesInterface {
     title: string;
-    edition: number;
+    edition: string;
     soldDate: Date;
     dateString?: string;
   }
@@ -60,26 +43,40 @@ export const latestDate = (records: RecordInterface[]) => {
         item.soldDate !== undefined &&
         dates.push({
           title: elem.title!,
-          edition: item.edition,
+          edition: `edition: ${item.edition}`,
           soldDate: item.soldDate!,
         });
     });
   });
-  let latest = dates[0];
-  for (let i = 1; i < dates.length; i++) {
-    let newDate = new Date(dates[i].soldDate).getTime();
-    let latestDate = new Date(latest.soldDate).getTime();
-    if (newDate > latestDate) {
-      latest = dates[i];
+  if (dates.length === 0) {
+    return {
+      title: '',
+      edition: '',
+      dateString: 'No dates set',
+    };
+  } else {
+    let latest = dates[0];
+    for (let i = 1; i < dates.length; i++) {
+      let newDate = new Date(dates[i].soldDate).getTime();
+      let latestDate = new Date(latest.soldDate).getTime();
+      if (range === 'latest') {
+        if (newDate > latestDate) {
+          latest = dates[i];
+        }
+      } else if (range === 'earliest') {
+        if (newDate < latestDate) {
+          latest = dates[i];
+        }
+      }
     }
-  }
-  latest.dateString = `${latest.soldDate
-    .toString()
-    .substring(8, 10)}/${latest.soldDate
-    .toString()
-    .substring(5, 7)}/${latest.soldDate.toString().substring(0, 4)}`;
+    latest.dateString = `${latest.soldDate
+      .toString()
+      .substring(8, 10)}/${latest.soldDate
+      .toString()
+      .substring(5, 7)}/${latest.soldDate.toString().substring(0, 4)}`;
 
-  return latest;
+    return latest;
+  }
 };
 
 export const avgPrice = (records: RecordInterface[]) => {
@@ -190,5 +187,8 @@ export const mostPopularCount = (records: RecordInterface[], value: string) => {
       resultString = resultString.concat(`, ${item.value}`);
     }
   });
+  if (max < 0) {
+    return { result: resultString, count: '' };
+  }
   return { result: resultString, count: max };
 };
