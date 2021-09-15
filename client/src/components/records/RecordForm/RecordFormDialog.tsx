@@ -139,9 +139,9 @@ const RecordFormDialog = ({
 
   const beginUpload = ({ tag }: beginUploadInterface) => {
     const uploadOptions = {
-      cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
       tags: [tag],
-      uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET_UNSIGNED,
+      uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET_UNSIGNED,
     };
 
     openUploadWidget(
