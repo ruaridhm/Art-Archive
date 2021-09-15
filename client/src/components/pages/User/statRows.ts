@@ -2,12 +2,11 @@ import {
   totalItems,
   totalEditions,
   totalCollections,
-  latestDate,
+  latestEarliestDate,
   avgPrice,
   highLowNumb,
   totalArrTitleCount,
   mostPopularCount,
-  earliestDate,
 } from './CollectionStatFunctions';
 import { RecordInterface } from '../../records/RecordItem/RecordItem';
 import { TableRowInterface } from './StatTable';
@@ -29,8 +28,8 @@ const statRows = (records: RecordInterface[]) => {
   tableRows.push(
     createData(
       'Earliest Item',
-      earliestDate(records)!.date!.toString().slice(0, 10),
-      earliestDate(records)!.title
+      latestEarliestDate(records, 'earliest')!.dateString,
+      latestEarliestDate(records, 'earliest')!.title
     )
   );
   // tableRows.push(createData('Earliest Item', 'No Dates Set'));
@@ -59,8 +58,10 @@ const statRows = (records: RecordInterface[]) => {
   tableRows.push(
     createData(
       'Latest Sold',
-      `${latestDate(records).title}, edition: ${latestDate(records).edition}`,
-      latestDate(records).dateString
+      latestEarliestDate(records, 'latest').dateString,
+      `${latestEarliestDate(records, 'latest').title}  ${
+        latestEarliestDate(records, 'latest').edition
+      }`
     )
   );
   tableRows.push(
