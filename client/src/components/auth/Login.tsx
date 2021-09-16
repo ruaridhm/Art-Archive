@@ -63,7 +63,7 @@ const Login = ({ history }: LoginProps) => {
   const { email, password } = user;
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUser({ ...user, [e.target.name]: e.target.value.trim() });
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
