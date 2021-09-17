@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 //Icons
 import HomeIcon from '@material-ui/icons/Home';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
+import SettingsIcon from '@material-ui/icons//Settings';
 import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
@@ -75,6 +76,12 @@ const Sidebar = ({
                   <PhotoLibraryIcon />
                 </ListItemIcon>
                 <ListItemText primary='Gallery' />
+              </ListItem>
+              <ListItem button component={Link} to='/settings'>
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary='Settings' />
               </ListItem>
             </List>
             <Divider />

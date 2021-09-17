@@ -6,6 +6,7 @@ import Navbar from './components/layout/Navbar/Navbar';
 import Home from './components/pages/Home/Home';
 import User from './components/pages/User/User';
 import Gallery from './components/pages/Gallery/Gallery';
+import Settings from './components/pages/Settings/Settings';
 import Login from './components/auth/Login';
 import Alerts from './components/layout/Alerts/Alerts';
 import AlertState from './context/alert/AlertState';
@@ -64,6 +65,7 @@ const App = () => {
                     <PrivateRoute exact path='/' component={Home} />
                     <PrivateRoute exact path='/user' component={User} />
                     <PrivateRoute exact path='/gallery' component={Gallery} />
+                    <PrivateRoute exact path='/settings' component={Settings} />
                     <Route exact path='/login' component={Login} />
                   </Switch>
                 </Router>

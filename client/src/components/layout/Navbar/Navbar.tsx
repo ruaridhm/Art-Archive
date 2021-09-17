@@ -23,7 +23,7 @@ import NightsStayIcon from '@material-ui/icons/NightsStay';
 import Portal from '@material-ui/core/Portal/Portal';
 import MenuIcon from '@material-ui/icons/Menu';
 
-//Fumctions
+//Functions
 
 const useStyles = makeStyles({
   link: {
@@ -94,6 +94,9 @@ const Navbar = ({ title, theme, setTheme }: NavbarProps) => {
       </Link>
       <Link to='/gallery' className={classes.link}>
         Gallery
+      </Link>
+      <Link to='/settings' className={classes.link}>
+        Settings
       </Link>
       <ThemeToggle />
       <Link
