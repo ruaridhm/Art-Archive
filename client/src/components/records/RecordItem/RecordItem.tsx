@@ -14,13 +14,13 @@ import {
   ListItem,
   ListItemText,
   Portal,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 //Components
 import RecordItemDialog from './RecordItemDialog';
 
 //icons
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from '@mui/icons-material/Edit';
 
 const useStyles = makeStyles({
   card: {

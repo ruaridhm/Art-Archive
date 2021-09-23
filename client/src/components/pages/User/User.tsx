@@ -4,8 +4,7 @@ import Spinner from '../../layout/Spinner/Spinner';
 //Context
 import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
-//Material UI
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Box,
   Paper,
@@ -16,7 +15,7 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import StatTable from './StatTable';
 
 const useStyles = makeStyles({

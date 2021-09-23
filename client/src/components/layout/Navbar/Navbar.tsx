@@ -4,24 +4,24 @@ import { Link } from 'react-router-dom';
 //Context
 import AuthContext from '../../../context/auth/AuthContext';
 
-//Material-UI
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Switch from '@material-ui/core/Switch';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import IconButton from '@material-ui/core/IconButton';
+//MUI
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Switch from '@mui/material/Switch';
+import makeStyles from '@mui/material/styles/makeStyles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import IconButton from '@mui/material/IconButton';
 
 //Components
 import LogoutDialog from './LogoutDialog';
 import Sidebar from '../sidebar/SideBar';
 
-//Material-UI Icons
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import NightsStayIcon from '@material-ui/icons/NightsStay';
-import Portal from '@material-ui/core/Portal/Portal';
-import MenuIcon from '@material-ui/icons/Menu';
+//MUI Icons
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+import Portal from '@mui/material/Portal';
+import MenuIcon from '@mui/icons-material/Menu';
 
 //Functions
 

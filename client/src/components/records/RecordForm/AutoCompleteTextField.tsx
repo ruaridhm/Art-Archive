@@ -1,9 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React, { useState, useEffect } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete, {
-  createFilterOptions,
-} from '@material-ui/lab/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 
 const filter = createFilterOptions<FilterOptionType>();
 
@@ -95,9 +93,7 @@ const AutoCompleteTextField = ({
 
         return option.title;
       }}
-      renderInput={(params) => (
-        <TextField {...params} label={label} variant='outlined' />
-      )}
+      renderInput={(params) => <TextField {...params} label={label} />}
     />
   );
 };

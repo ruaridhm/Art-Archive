@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 //Context
 import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
-//Material-UI
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 //Custom Components
 import RecordFormDialog from '../../records/RecordForm/RecordFormDialog';
 import Records from '../../records/Records/Records';

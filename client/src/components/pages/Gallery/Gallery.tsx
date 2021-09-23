@@ -9,13 +9,16 @@ import 'react-gallery-carousel/dist/index.css';
 import Spinner from '../../layout/Spinner/Spinner';
 import RecordItemDialog from '../../records/RecordItem/RecordItemDialog';
 //Material UI Components
-import { Button, Box, Portal, Container } from '@material-ui/core';
-//Material-UI Icons
-import InfoIcon from '@material-ui/icons/Info';
+import { Button, Box, Portal, Container } from '@mui/material';
+//MUI Icons
+import InfoIcon from '@mui/icons-material/Info';
 import { RecordInterface } from '../../records/RecordItem/RecordItem';
 import CarouselComponent from './CarouselComponent';
 //https://github.com/yifaneye/react-gallery-carousel
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@mui/material/styles';
+
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Divider,
   Drawer,
@@ -7,15 +7,15 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from '@material-ui/core';
+} from '@mui/material';
 import { Link } from 'react-router-dom';
 
 //Icons
-import HomeIcon from '@material-ui/icons/Home';
-import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
-import SettingsIcon from '@material-ui/icons//Settings';
-import BubbleChartIcon from '@material-ui/icons/BubbleChart';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import HomeIcon from '@mui/icons-material/Home';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
+import SettingsIcon from '@mui/icons-material//Settings';
+import BubbleChartIcon from '@mui/icons-material/BubbleChart';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 //Context
 import AuthContext from '../../../context/auth/AuthContext';

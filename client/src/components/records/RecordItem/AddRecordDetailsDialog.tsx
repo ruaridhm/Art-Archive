@@ -2,21 +2,21 @@ import React, { useState, useContext } from 'react';
 //Material Ui
 import {
   Button,
-  createStyles,
   Dialog,
   DialogActions,
   DialogContent,
   IconButton,
-  makeStyles,
   Paper,
   Card,
   CardContent,
   CardActions,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 //Icons
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 //Components
 import { DialogTitle } from './RecordItemDialog';
 //Context

@@ -1,5 +1,7 @@
 import React from 'react';
-import { Container, CircularProgress, makeStyles } from '@material-ui/core';
+import { Container, CircularProgress } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 interface SpinnerProps {
   description: string;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SettingsIcon from '@material-ui/icons//Settings';
+import SettingsIcon from '@mui/icons-material//Settings';
 import {
   Checkbox,
   FormControlLabel,
@@ -7,8 +7,11 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { Theme } from '@mui/material/styles';
+
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 
 const InitialSettingState = {
   title: true,

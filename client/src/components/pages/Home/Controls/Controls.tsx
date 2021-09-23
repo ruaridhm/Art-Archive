@@ -1,15 +1,11 @@
 import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import {
-  Grid,
-  Select,
-  FormControl,
-  InputLabel,
-  MenuItem,
-} from '@material-ui/core';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import { Grid, Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 import clsx from 'clsx';
 
-//Material-UI Icons
+//MUI Icons
 import RecordFilter from '../../../records/RecordFilter/RecordFilter';
 import AddRecordButton from '../../../addRecordButton/AddRecordButton';
 
@@ -107,7 +103,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       padding: theme.spacing(2),
       width: '100%',
-      [theme.breakpoints.down('xs')]: {
+      [theme.breakpoints.down('sm')]: {
         padding: theme.spacing(2),
         margin: 0,
         rowGap: '10px',
@@ -117,10 +113,10 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      [theme.breakpoints.down('md')]: {
+      [theme.breakpoints.down('lg')]: {
         width: '33%',
       },
-      [theme.breakpoints.down('lg')]: {
+      [theme.breakpoints.down('xl')]: {
         width: '33%',
       },
       [theme.breakpoints.down('xl')]: {
@@ -133,7 +129,7 @@ const useStyles = makeStyles((theme: Theme) =>
         marginLeft: '10px',
       },
 
-      [theme.breakpoints.down('xs')]: {
+      [theme.breakpoints.down('sm')]: {
         width: '100%',
         justifyContent: 'space-between',
         marginLeft: 0,
@@ -146,25 +142,25 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     filterControls: {
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('md')]: {
         width: '31%',
       },
-      [theme.breakpoints.down('xs')]: {
+      [theme.breakpoints.down('sm')]: {
         width: '75%',
         justifyContent: 'flex-start',
       },
     },
     addButton: {
-      [theme.breakpoints.down('xs')]: {
+      [theme.breakpoints.down('sm')]: {
         width: '25%',
       },
     },
     formControl: {
       width: 200,
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('md')]: {
         width: 150,
       },
-      [theme.breakpoints.down('xs')]: {
+      [theme.breakpoints.down('sm')]: {
         width: 150,
       },
     },

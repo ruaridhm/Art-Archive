@@ -4,9 +4,9 @@ import RecordContext from '../../../context/record/RecordContext';
 //Components
 import RecordItem, { RecordInterface } from '../RecordItem/RecordItem';
 import Spinner from '../../layout/Spinner/Spinner';
-//Material-UI
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Container, Typography } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import { Container, Typography } from '@mui/material';
 import AddRecordButton from '../../../components/addRecordButton/AddRecordButton';
 
 interface RecordsProps {

@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 //Material UI
-import Button from '@material-ui/core/Button/Button';
-import Dialog from '@material-ui/core/Dialog/Dialog';
-import DialogActions from '@material-ui/core/DialogActions/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle/DialogTitle';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material//DialogActions/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle/DialogTitle';
 
 //Context
 import AuthContext from '../../../context/auth/AuthContext';
 import RecordContext from '../../../context/record/RecordContext';
-import Typography from '@material-ui/core/Typography/Typography';
+import Typography from '@mui/material/Typography';
 
 interface LogoutDialogProps {
   open: boolean;

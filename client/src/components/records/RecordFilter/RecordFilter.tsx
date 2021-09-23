@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import RecordContext from '../../../context/record/RecordContext';
-import TextField from '@material-ui/core/TextField';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import indigo from '@material-ui/core/colors/indigo';
+import TextField from '@mui/material/TextField';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import InputAdornment from '@mui/material/InputAdornment';
+import indigo from '@mui/material/colors/indigo';
 import {
   createStyles,
   FormControl,
@@ -12,7 +12,7 @@ import {
   MenuItem,
   Select,
   IconButton,
-} from '@material-ui/core';
+} from '@mui/material';
 
 const RecordFilter = () => {
   const recordContext = useContext(RecordContext);
@@ -184,7 +184,6 @@ const RecordFilter = () => {
       </FormControl>
       <TextField
         className={classes.filter}
-        variant='outlined'
         label='Filter Records'
         onChange={handleOnChange}
         size='medium'

@@ -1,13 +1,11 @@
 import React, { useContext, useState } from 'react';
 //Material UI
-// import useMediaQuery from '@material-ui/material/useMediaQuery';
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  withStyles,
-  WithStyles,
-} from '@material-ui/core/styles';
+// import useMediaQuery from '@mui/material/useMediaQuery';
+import { Theme } from '@mui/material/styles';
+import { WithStyles } from '@mui/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
 import {
   Button,
   Dialog,
@@ -20,12 +18,12 @@ import {
   Paper,
   Portal,
   Link,
-} from '@material-ui/core';
+} from '@mui/material';
 import clsx from 'clsx';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import CloseIcon from '@material-ui/icons/Close';
+import MuiDialogTitle from '@mui/material/DialogTitle';
+import MuiDialogContent from '@mui/material/DialogContent';
+import MuiDialogActions from '@mui/material/DialogActions';
+import CloseIcon from '@mui/icons-material/Close';
 //Custom Components
 
 import AddRecordDetailsDialog from './AddRecordDetailsDialog';
@@ -81,7 +79,7 @@ export const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
           aria-label='close'
           className={classes.closeButton}
           onClick={onClose}
-        >
+          size="large">
           <CloseIcon />
         </IconButton>
       ) : null}

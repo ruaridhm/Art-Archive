@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { TableCell, TableRow } from '@material-ui/core';
+import { TableCell, TableRow } from '@mui/material';
 import statRows from './statRows';
 import RecordContext from '../../../context/record/RecordContext';
 export interface TableRowInterface {

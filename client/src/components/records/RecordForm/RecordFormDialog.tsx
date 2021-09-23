@@ -8,7 +8,7 @@ import React, {
 //Context
 import RecordContext from '../../../context/record/RecordContext';
 import AlertContext from '../../../context/alert/AlertContext';
-//Material-UI Components
+//MUI Components
 import {
   Button,
   TextField,
@@ -18,10 +18,10 @@ import {
   DialogTitle,
   IconButton,
   FormGroup,
-} from '@material-ui/core';
+} from '@mui/material';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-//Material-UI Icons
-import CloseIcon from '@material-ui/icons/Close';
+//MUI Icons
+import CloseIcon from '@mui/icons-material/Close';
 //Components
 //Util functions
 import {
@@ -33,7 +33,7 @@ import PopulateAutoComplete from '../../../utils/populateAutoComplete';
 import { RecordInterface, SalesInterface } from '../RecordItem/RecordItem';
 import { ImgInterface } from '../RecordItem/RecordItemDialog';
 import AutoCompleteTextField from './AutoCompleteTextField';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import SingleLineImageList from './ImageList';
 
 interface RecordFormProps {
@@ -319,6 +319,7 @@ const RecordFormDialog = ({
         <IconButton
           style={{ right: '12px', top: '8px', position: 'absolute' }}
           onClick={close}
+          size='large'
         >
           <CloseIcon />
         </IconButton>
@@ -344,7 +345,6 @@ const RecordFormDialog = ({
               className={classes.marginTopLeft}
               style={{ width: 300 }}
               label='Reference'
-              variant='outlined'
               margin='normal'
               type='text'
               name='reference'
@@ -408,7 +408,6 @@ const RecordFormDialog = ({
             <TextField
               className={classes.widthAndVerticalMargins}
               label='Price'
-              variant='outlined'
               margin='normal'
               type='number'
               name='price'
@@ -420,7 +419,6 @@ const RecordFormDialog = ({
               style={{ width: 300 }}
               className={`${classes.marginLeft} ${classes.widthAndVerticalMargins}`}
               label='Editions'
-              variant='outlined'
               margin='normal'
               type='number'
               name='editions'
@@ -434,7 +432,6 @@ const RecordFormDialog = ({
               className={classes.verticalMargins}
               fullWidth={true}
               label='Notes'
-              variant='outlined'
               margin='normal'
               type='text'
               name='notes'

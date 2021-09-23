@@ -1,11 +1,7 @@
 import React from 'react';
-import {
-  FormControl,
-  createStyles,
-  TextField,
-  makeStyles,
-  Theme,
-} from '@material-ui/core';
+import { FormControl, TextField, Theme } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import {
   exhibitionsState,
@@ -69,7 +65,6 @@ const AddRecordDetailsDialogForm = ({
       <FormControl className={classes.formControl}>
         <TextField
           label={inputLabels[0]}
-          variant='outlined'
           onChange={handleChange}
           name={`${inputValues[0]}`}
           value={state?.[inputValues[0]]}
@@ -77,7 +72,6 @@ const AddRecordDetailsDialogForm = ({
         />
         <TextField
           label={inputLabels[1]}
-          variant='outlined'
           onChange={handleChange}
           name={`${inputValues[1]}`}
           value={state?.[inputValues[1]]}

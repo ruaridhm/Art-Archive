@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import AlertContext from '../../../context/alert/AlertContext';
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Container } from '@material-ui/core';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import { Container } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

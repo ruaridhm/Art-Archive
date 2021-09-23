@@ -1,10 +1,12 @@
 import React from 'react';
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import ImageList from '@material-ui/core/ImageList';
-import ImageListItem from '@material-ui/core/ImageListItem';
-import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { ImgInterface } from '../RecordItem/RecordItemDialog';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,7 +67,7 @@ const SingleLineImageList = ({
                   onClick={() => {
                     handleDeleteImage(imageIndex);
                   }}
-                >
+                  size="large">
                   <DeleteIcon className={classes.title} />
                 </IconButton>
               }
